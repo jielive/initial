@@ -27,7 +27,7 @@
 ), '', ' - '); ?><?php $this->options->title(); ?></title>
 <?php $this->header('generator=&template=&pingback=&xmlrpc=&wlw=&commentReply=&rss1=&rss2=&antiSpam=&atom='); ?>
 <link rel="stylesheet" href="//cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
-<link rel="stylesheet" href="<?php if ($this->options->cjcdnAddress): $this->options->cjcdnAddress() ?>/style.css<?php else: $this->options->themeUrl('style.css'); endif; ?>">
+<link rel="stylesheet" href="<?php if ($this->options->cjcdnAddress): $this->options->cjcdnAddress(); ?>/style.css<?php else: $this->options->themeUrl('style.css'); endif; ?>">
 <!--[if lt IE 9]>
 <script src="//cdn.bootcss.com/html5shiv/r29/html5.min.js"></script>
 <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>

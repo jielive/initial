@@ -6,7 +6,7 @@
  * @package Initial
  * @author JIElive
  * @version 1.2.1
- * @link http://www.offodd.com/
+ * @link http://www.offodd.com
  */
 ?>
 <?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>

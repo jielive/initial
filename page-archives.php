@@ -21,7 +21,7 @@ while($archives->next()){
 	}
 	if ($year != $year_tmp) {
 		$year = $year_tmp;
-		$output .= '<div>'.date('Y 年',$archives->created).'</div><ul>';
+		$output .= '<h2>'.date('Y 年',$archives->created).'</h2><ul>';
 	}
 	$output .= '<li>'.date('m/d：',$archives->created).'<a href="'.$archives->permalink .'">'. $archives->title .'</a></li>';
 }

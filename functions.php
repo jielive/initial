@@ -59,10 +59,11 @@ function themeConfig($form) {
 	$sidebarBlock = new Typecho_Widget_Helper_Form_Element_Checkbox('sidebarBlock', 
 	array('ShowRecentPosts' => _t('显示最新文章'),
 	'ShowRecentComments' => _t('显示最近回复'),
+	'ShowTag' => _t('显示标签'),
 	'ShowCategory' => _t('显示分类'),
 	'ShowArchive' => _t('显示归档'),
 	'ShowOther' => _t('显示其它杂项')),
-	array('ShowRecentPosts', 'ShowRecentComments', 'ShowCategory', 'ShowArchive', 'ShowOther'), _t('侧边栏显示'));
+	array('ShowRecentPosts', 'ShowRecentComments', 'ShowTag', 'ShowCategory', 'ShowArchive', 'ShowOther'), _t('侧边栏显示'));
 	$form->addInput($sidebarBlock->multiMode());
 
 	$ICPbeian = new Typecho_Widget_Helper_Form_Element_Text('ICPbeian', NULL, NULL, _t('ICP备案号'), _t('在这里输入ICP备案号,留空则不显示'));
