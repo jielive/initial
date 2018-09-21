@@ -37,7 +37,8 @@
 <?php if ($this->options->MusicSet == 'able' && $this->options->MusicUrl): ?>
 <script>document.getElementById("music").onclick=function(){var a=document.getElementById("audio");var b=document.getElementById("music");if(a.canPlayType("audio/mp3")!==""){<?php if($this->options->MusicVol): ?>if(a.paused){var d=<?php $this->options->MusicVol(); ?>;if(d>=0&&d<=1){a.volume=d}<?php endif; ?>a.play();b.setAttribute("class","play")}else{a.pause();b.setAttribute("class","pause")}}else{alert("对不起，您的浏览器不支持HTML5音频播放，请升级您的浏览器。")}}</script>
 <?php endif; ?>
-<?php if ($this->options->CustomContent): $this->options->CustomContent(); endif; ?>
+<?php if ($this->options->CustomContent): $this->options->CustomContent(); ?>
 
+<?php endif; ?>
 </body>
 </html>
