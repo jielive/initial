@@ -19,7 +19,7 @@
 <?php if ($this->options->MusicSet == 'able' && $this->options->MusicUrl): ?>
 <li id="music" class="pause">
 <a></a>
-<audio src="<?php $this->options->MusicUrl(); ?>" id="audio" loop></audio>
+<audio id="audio" preload="none"></audio>
 </li>
 <?php endif; ?>
 </ul>
@@ -35,10 +35,10 @@
 <script>window.onscroll=function(){var a=document.getElementById("scrolltop");if((document.documentElement.scrollTop||document.body.scrollTop)>=200){a.style.display="block";a.onclick=function c(){var b=document.documentElement.scrollTop||document.body.scrollTop;if(b>0){requestAnimationFrame(c);window.scrollTo(0,b-(b/5))}else{cancelAnimationFrame(c)}}}else{a.style.display="none"}}</script>
 <?php endif; ?>
 <?php if ($this->options->MusicSet == 'able' && $this->options->MusicUrl): ?>
-<script>document.getElementById("music").onclick=function(){var a=document.getElementById("audio");var b=document.getElementById("music");if(a.canPlayType("audio/mp3")!==""){<?php if($this->options->MusicVol): ?>if(a.paused){var d=<?php $this->options->MusicVol(); ?>;if(d>=0&&d<=1){a.volume=d}<?php endif; ?>a.play();b.setAttribute("class","play")}else{a.pause();b.setAttribute("class","pause")}}else{alert("对不起，您的浏览器不支持HTML5音频播放，请升级您的浏览器。")}}</script>
+<script>window.onload=function(){var a=document.getElementById("audio");var b=document.getElementById("music");var c="<?php echo Playlist() ?>";var d=c.split("|");a.src=d.shift();<?php if($this->options->MusicVol): ?>var e=<?php $this->options->MusicVol(); ?>;if(e>=0&&e<=1){a.volume=e}<?php endif; ?>a.addEventListener('play',g);a.addEventListener('pause',h);a.addEventListener('ended',f);a.addEventListener('error',f);a.addEventListener('canplay',j);function f(){if(!d.length){a.removeEventListener('play',g);a.removeEventListener('pause',h);a.removeEventListener('ended',f);a.removeEventListener('error',f);a.removeEventListener('canplay',j);b.setAttribute("style","display:none");alert("本站的背景音乐好像有问题了，希望您可以通过留言等方式通知管理员，谢谢您的帮助。")}else{a.src=d.shift();a.play()}}function g(){b.setAttribute("class","play")}function h(){b.setAttribute("class","pause")}function j(){d.push(a.src)}b.onclick=function(){if(a.canPlayType("audio/mp3")!==""){if(a.paused){if(a.error){f()}else{a.play()}}else{a.pause()}}else{alert("对不起，您的浏览器不支持HTML5音频播放，请升级您的浏览器。")}}}</script>
 <?php endif; ?>
 <?php if ($this->options->CustomContent): $this->options->CustomContent(); ?>
 
 <?php endif; ?>
 </body>
-</html>
+</html><?php if ($this->options->compressHtml == 'able'): $html_source = ob_get_contents(); ob_clean(); print compressHtml($html_source); ob_end_flush(); endif; ?>

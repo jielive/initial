@@ -2,22 +2,22 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<meta charset="<?php $this->options->charset(); ?>">
+<meta charset="<?php $this->options->charset(); ?>" />
 <?php if ($this->options->DNSPrefetch == 'able'): ?>
-<meta http-equiv="x-dns-prefetch-control" content="on">
+<meta http-equiv="x-dns-prefetch-control" content="on" />
 <link rel="dns-prefetch" href="//cdn.bootcss.com" />
 <link rel="dns-prefetch" href="//secure.gravatar.com" />
 <?php if ($this->options->cjcdnAddress): ?>
 <link rel="dns-prefetch" href="<?php $this->options->cjcdnAddress(); ?>" />
 <?php endif; ?>
 <?php endif; ?>
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="renderer" content="webkit">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 <?php if ($this->options->favicon): ?>
-<link rel="shortcut icon" href="<?php $this->options->favicon(); ?>">
+<link rel="shortcut icon" href="<?php $this->options->favicon(); ?>" />
 <?php endif; if($this->options->iosicon): ?>
-<link rel="apple-touch-icon" href="<?php $this->options->iosicon();?>">
+<link rel="apple-touch-icon" href="<?php $this->options->iosicon();?>" />
 <?php endif; ?>
 <title><?php $this->archiveTitle(array(
 'category'  =>  _t('分类 %s 下的文章'),
@@ -26,8 +26,8 @@
 'author'    =>  _t('%s 发布的文章')
 ), '', ' - '); ?><?php $this->options->title(); ?></title>
 <?php $this->header('generator=&template=&pingback=&xmlrpc=&wlw=&commentReply=&rss1=&rss2=&antiSpam=&atom='); ?>
-<link rel="stylesheet" href="//cdn.bootcss.com/normalize/8.0.0/normalize.min.css">
-<link rel="stylesheet" href="<?php if ($this->options->cjcdnAddress): $this->options->cjcdnAddress(); ?>/style.css<?php else: $this->options->themeUrl('style.css'); endif; ?>">
+<link rel="stylesheet" href="//cdn.bootcss.com/normalize/8.0.0/normalize.min.css" />
+<link rel="stylesheet" href="<?php if ($this->options->cjcdnAddress): $this->options->cjcdnAddress(); ?>/style.min.css<?php else: $this->options->themeUrl('style.min.css'); endif; ?>" />
 <!--[if lt IE 9]>
 <script src="//cdn.bootcss.com/html5shiv/r29/html5.min.js"></script>
 <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
@@ -35,9 +35,9 @@
 </head>
 <body>
 <!--[if lt IE 8]>
-<div class="browsehappy"><?php _e('当前网页 <strong>不支持</strong> 你正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/">升级你的浏览器</a>'); ?>.</div>
+<div class="browsehappy"><?php _e('当前网页可能 <strong>不支持</strong> 您正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/">升级您的浏览器</a>'); ?>.</div>
 <![endif]-->
-<header id="header" class="clearfix">
+<header id="header">
 <div class="container">
 <div class="row">
 <div class="col site-name">

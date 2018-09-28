@@ -9,6 +9,7 @@
 <?php $this->need('header.php'); ?>
 <div class="col" id="main">
 <article class="post">
+<h1 class="post-title"><a href="<?php $this->permalink() ?>"><?php $this->title() ?></a></h1>
 <?php
 $stat = Typecho_Widget::widget('Widget_Stat');
 $this->widget('Widget_Contents_Post_Recent', 'pageSize='.$stat->publishedPostsNum)->to($archives);
@@ -21,7 +22,7 @@ while($archives->next()){
 	}
 	if ($year != $year_tmp) {
 		$year = $year_tmp;
-		$output .= '<h2>'.date('Y 年',$archives->created).'</h2><ul>';
+		$output .= '<h3>'.date('Y 年',$archives->created).'</h3><ul>';
 	}
 	$output .= '<li>'.date('m/d：',$archives->created).'<a href="'.$archives->permalink .'">'. $archives->title .'</a></li>';
 }

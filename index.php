@@ -1,11 +1,11 @@
 <?php
 /**
- * 基于默认主题深度优化，做到最大化精简的同时，添加一些实用功能
- * 还原本质，不忘初心
+ * 基于默认主题深度优化并添加一些实用功能，希望做到简约而不简单。
+ * 还原本质，不忘初心。
  * 
  * @package Initial
  * @author JIElive
- * @version 1.2.1
+ * @version 1.3
  * @link http://www.offodd.com
  */
 ?>
@@ -16,12 +16,16 @@
 <article class="post">
 <h2 class="post-title"><a href="<?php $this->permalink() ?>"><?php $this->title() ?></a></h2>
 <ul class="post-meta">
-<li><?php _e('时间: '); ?><time datetime="<?php $this->date('c'); ?>"><?php $this->date(); ?></time></li>
-<li><?php _e('分类: '); ?><?php $this->category(','); ?></li>
+<li><time datetime="<?php $this->date('c'); ?>"><?php $this->date(); ?></time></li>
+<li><?php $this->category(','); ?></li>
 <li><a href="<?php $this->permalink() ?>#comments"><?php $this->commentsNum('评论', '1 条评论', '%d 条评论'); ?></a></li>
 </ul>
 <div class="post-content">
-<?php $this->content('- 阅读剩余部分 -'); ?>
+<?php if (postThumb($this) != ""): ?>
+<p class="thumb"><?php echo postThumb($this); ?></p>
+<?php endif; ?>
+<p><?php $this->excerpt(200, ''); ?></p>
+<p class="more"><a href="<?php $this->permalink() ?>" title="<?php $this->title() ?>"><?php _e('- 阅读全文 -'); ?></a></p>
 </div>
 </article>
 <?php endwhile; ?>
