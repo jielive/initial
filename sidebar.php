@@ -1,5 +1,13 @@
 <?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
 <div class="col" id="secondary">
+<?php if (!empty($this->options->sidebarBlock) && in_array('ShowHotPosts', $this->options->sidebarBlock)): ?>
+<section class="widget">
+<h3 class="widget-title"><?php _e('热门文章'); ?></h3>
+<ul class="widget-list">
+<?php Contents_Post_Hot('10');?>
+</ul>
+</section>
+<?php endif; ?>
 <?php if (!empty($this->options->sidebarBlock) && in_array('ShowRecentPosts', $this->options->sidebarBlock)): ?>
 <section class="widget">
 <h3 class="widget-title"><?php _e('最新文章'); ?></h3>

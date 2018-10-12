@@ -1,12 +1,17 @@
 <?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
 <?php $this->need('header.php'); ?>
 <div class="col" id="main">
+<?php if (!empty($this->options->Breadcrumbs) && in_array('Postshow', $this->options->Breadcrumbs)): ?>
+<div class="breadcrumbs">
+<a href="<?php $this->options->siteUrl(); ?>">首页</a> &raquo; <?php $this->category(); ?> &raquo; <?php if (!empty($this->options->Breadcrumbs) && in_array('Text', $this->options->Breadcrumbs)): ?>正文<?php else: $this->title(); endif; ?>
+</div>
+<?php endif; ?>
 <article class="post">
 <h1 class="post-title"><a href="<?php $this->permalink() ?>"><?php $this->title() ?></a></h1>
 <ul class="post-meta">
 <li><time datetime="<?php $this->date('c'); ?>"><?php $this->date(); ?></time></li>
 <li><?php $this->category(','); ?></li>
-<li><a href="<?php $this->permalink() ?>#comments"><?php $this->commentsNum('评论', '1 条评论', '%d 条评论'); ?></a></li>
+<li><a href="<?php $this->permalink() ?>#comments"><?php $this->commentsNum('评论', '%d 条评论'); ?></a></li>
 </ul>
 <div class="post-content">
 <?php $this->content(); ?>

@@ -5,11 +5,11 @@
 <meta charset="<?php $this->options->charset(); ?>" />
 <?php if ($this->options->DNSPrefetch == 'able'): ?>
 <meta http-equiv="x-dns-prefetch-control" content="on" />
-<link rel="dns-prefetch" href="//cdn.bootcss.com" />
-<link rel="dns-prefetch" href="//secure.gravatar.com" />
 <?php if ($this->options->cjcdnAddress): ?>
 <link rel="dns-prefetch" href="<?php $this->options->cjcdnAddress(); ?>" />
 <?php endif; ?>
+<link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
+<link rel="dns-prefetch" href="//secure.gravatar.com" />
 <?php endif; ?>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="renderer" content="webkit" />
@@ -24,23 +24,22 @@
 'search'    =>  _t('包含关键字 %s 的文章'),
 'tag'       =>  _t('标签 %s 下的文章'),
 'author'    =>  _t('%s 发布的文章')
-), '', ' - '); ?><?php $this->options->title(); ?></title>
+), '', ' - '); ?><?php $this->options->title(); if ($this->is('index') && $this->options->subtitle): ?> - <?php $this->options->subtitle(); endif; ?></title>
 <?php $this->header('generator=&template=&pingback=&xmlrpc=&wlw=&commentReply=&rss1=&rss2=&antiSpam=&atom='); ?>
-<link rel="stylesheet" href="//cdn.bootcss.com/normalize/8.0.0/normalize.min.css" />
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css" />
 <link rel="stylesheet" href="<?php if ($this->options->cjcdnAddress): $this->options->cjcdnAddress(); ?>/style.min.css<?php else: $this->options->themeUrl('style.min.css'); endif; ?>" />
 <!--[if lt IE 9]>
-<script src="//cdn.bootcss.com/html5shiv/r29/html5.min.js"></script>
-<script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/r29/html5.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body>
+<body <?php if ($this->options->HeadFixed == 'able'): ?>class="head-fixed"<?php endif; ?>>
 <!--[if lt IE 8]>
 <div class="browsehappy"><?php _e('当前网页可能 <strong>不支持</strong> 您正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/">升级您的浏览器</a>'); ?>.</div>
 <![endif]-->
 <header id="header">
-<div class="container">
-<div class="row">
-<div class="col site-name">
+<div class="container clearfix">
+<div class="site-name">
 <?php if ($this->options->logoUrl): ?>
 <h1>
 <a id="logo" href="<?php $this->options->siteUrl(); ?>">
@@ -51,30 +50,47 @@
 <h1>
 <a id="logo" href="<?php $this->options->siteUrl(); ?>"><?php if ($this->options->customtitle): $this->options->customtitle(); else: $this->options->title(); endif; ?></a>
 </h1>
-<p class="description"><?php if ($this->options->customdescription): $this->options->customdescription(); else: $this->options->description(); endif; ?></p>
 <?php endif; ?>
 </div>
-<div class="col site-search">
+<button id="nav-swith"><span></span></button>
+<div id="nav">
+<div id="site-search">
 <form id="search" method="post" action="<?php $this->options->siteUrl(); ?>">
 <input type="text" id="s" name="s" class="text" placeholder="<?php _e('输入关键字搜索'); ?>" required />
 <button type="submit"></button>
 </form>
 </div>
-<div class="col nav">
-<nav id="nav-menu" class="clearfix">
-<a href="<?php $this->options->siteUrl(); ?>"><?php _e('首页'); ?></a>
+<ul class="nav-menu">
+<li><a href="<?php $this->options->siteUrl(); ?>"><?php _e('首页'); ?></a></li>
+<?php if (!empty($this->options->Navset) && in_array('ShowCategory', $this->options->Navset)): ?>
+<?php if (!empty($this->options->Navset) && in_array('AggCategory', $this->options->Navset)): ?>
+<li class="nav-menu-2"><a><?php if ($this->options->CategoryText): $this->options->CategoryText(); else: ?>分类<?php endif; ?></a>
+<ul>
+<?php endif; ?>
+<?php $this->widget('Widget_Metas_Category_List')->to($categorys); ?>
+<?php while($categorys->next()): ?>
+<li><a href="<?php $categorys->permalink(); ?>" title="<?php $categorys->name(); ?>"><?php $categorys->name(); ?></a></li>
+<?php endwhile; ?>
+<?php if (!empty($this->options->Navset) && in_array('AggCategory', $this->options->Navset)): ?>
+</ul>
+<?php endif; ?>
+<?php endif; ?>
+<?php if (!empty($this->options->Navset) && in_array('ShowPage', $this->options->Navset)): ?>
+<?php if (!empty($this->options->Navset) && in_array('AggPage', $this->options->Navset)): ?>
+<li class="nav-menu-2"><a><?php if ($this->options->PageText): $this->options->PageText(); else: ?>其他<?php endif; ?></a>
+<ul>
+<?php endif; ?>
 <?php $this->widget('Widget_Contents_Page_List')->to($pages); ?>
 <?php while($pages->next()): ?>
-<a href="<?php $pages->permalink(); ?>" title="<?php $pages->title(); ?>"><?php $pages->title(); ?></a>
+<li><a href="<?php $pages->permalink(); ?>" title="<?php $pages->title(); ?>"><?php $pages->title(); ?></a></li>
 <?php endwhile; ?>
-</nav>
-</div>
-<?php if ($this->options->PjaxOption == 'able'): ?>
-<div id="loadingbar"></div>
+<?php if (!empty($this->options->Navset) && in_array('AggPage', $this->options->Navset)): ?>
+</ul>
 <?php endif; ?>
+<?php endif; ?>
+</ul>
 </div>
 </div>
 </header>
 <div id="body">
-<div class="container">
-<div class="row">
+<div class="container clearfix">

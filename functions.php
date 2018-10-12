@@ -5,11 +5,11 @@ function themeConfig($form) {
 	$logoUrl = new Typecho_Widget_Helper_Form_Element_Text('logoUrl', NULL, NULL, _t('站点 LOGO 地址'), _t('在这里填入一个图片 URL 地址, 以在网站标题前加上一个 LOGO'));
 	$form->addInput($logoUrl);
 
+	$subtitle = new Typecho_Widget_Helper_Form_Element_Text('subtitle', NULL, NULL, _t('自定义站点副标题'), _t('浏览器副标题，仅在当前页面为首页时显示，显示格式为：<strong>标题 - 副标题</strong>，留空则不显示副标题'));
+	$form->addInput($subtitle);
+
 	$customtitle = new Typecho_Widget_Helper_Form_Element_Text('customtitle', NULL, NULL, _t('自定义头部站点标题'), _t('仅在页面头部标题位置显示，和Typecho后台设置的站点名称不冲突，留空则显示默认站点名称'));
 	$form->addInput($customtitle);
-
-	$customdescription = new Typecho_Widget_Helper_Form_Element_Text('customdescription', NULL, NULL, _t('自定义头部站点描述'), _t('仅在页面头部站点描述位置显示，和Typecho后台设置的站点描述不冲突，留空则显示默认站点描述'));
-	$form->addInput($customdescription);
 
 	$favicon = new Typecho_Widget_Helper_Form_Element_Text('favicon', NULL, NULL, _t('Favicon 地址'), _t('在这里填入一个图片 URL 地址, 以添加一个Favicon，留空则不单独设置Favicon'));
 	$form->addInput($favicon);
@@ -17,17 +17,44 @@ function themeConfig($form) {
 	$iosicon = new Typecho_Widget_Helper_Form_Element_Text('iosicon', NULL, NULL, _t('Apple Touch Icon 地址'), _t('在这里填入一个图片 URL 地址, 以添加一个Apple Touch Icon，留空则不设置Apple Touch Icon'));
 	$form->addInput($iosicon);
 
+	$cjcdnAddress = new Typecho_Widget_Helper_Form_Element_Text('cjcdnAddress', NULL, NULL, _t('CSS文件的链接地址替换（结尾不用加斜杠“/”）'), _t('即你的CDN云存储地址，例如：http://cdn.example.com，支持绝大部分有镜像功能的CDN服务<br><strong>被替换的原地址为主题地址，即：http://www.example.com/usr/themes/initial</strong>'));
+	$form->addInput($cjcdnAddress);
+
+	$AttUrlReplace = new Typecho_Widget_Helper_Form_Element_Textarea('AttUrlReplace', NULL, NULL, _t('文章内的链接地址替换（建议用在图片等静态资源的链接上）'), _t('按照格式输入你的CDN链接以替换原链接，<strong>格式：原地址=替换地址</strong>，原地址与新地址之间用等号“=”分隔，例如：http://www.example.com/usr/uploads/=http://cdn.example.com/usr/uploads/，支持绝大部分有镜像功能的CDN服务，可设置多个规则，换行即可，一行一个'));
+	$form->addInput($AttUrlReplace);
+
+	$Navset = new Typecho_Widget_Helper_Form_Element_Checkbox('Navset', 
+	array('ShowCategory' => _t('显示分类'),
+	'AggCategory' => _t('↪合并分类'),
+	'ShowPage' => _t('显示页面'),
+	'AggPage' => _t('↪合并页面')),
+	array('ShowCategory', 'AggCategory', 'ShowPage'), _t('导航栏显示'), _t('默认显示合并的分类，显示页面'));
+	$form->addInput($Navset->multiMode());
+
+	$CategoryText = new Typecho_Widget_Helper_Form_Element_Text('CategoryText', NULL, NULL, _t('导航栏-分类 下拉菜单显示名称（使用“导航栏显示-合并分类”时生效）'), _t('在这里输入导航栏<strong>分类</strong>下拉菜单的显示名称,留空则默认显示为“分类”'));
+	$form->addInput($CategoryText);
+
+	$PageText = new Typecho_Widget_Helper_Form_Element_Text('PageText', NULL, NULL, _t('导航栏-页面 下拉菜单显示名称（使用“导航栏显示-合并页面”时生效）'), _t('在这里输入导航栏<strong>页面</strong>下拉菜单的显示名称,留空则默认显示为“其他”'));
+	$form->addInput($PageText);
+
+	$Breadcrumbs = new Typecho_Widget_Helper_Form_Element_Checkbox('Breadcrumbs', 
+	array('Postshow' => _t('文章内显示'),
+	'Text' => _t('↪文章标题替换为“正文”'),
+	'Pageshow' => _t('页面内显示')),
+	array('Postshow', 'Text', 'Pageshow'), _t('面包屑导航显示'), _t('默认在文章与页面内显示，并将文章标题替换为“正文”'));
+	$form->addInput($Breadcrumbs->multiMode());
+
 	$WeChat = new Typecho_Widget_Helper_Form_Element_Text('WeChat', NULL, NULL, _t('微信打赏二维码（建议像素300*300）'), _t('在这里填入一个图片 URL 地址, 以添加一个微信打赏二维码，留空则不设置微信打赏'));
 	$form->addInput($WeChat);
 
 	$Alipay = new Typecho_Widget_Helper_Form_Element_Text('Alipay', NULL, NULL, _t('支付宝打赏二维码（建议像素300*300）'), _t('在这里填入一个图片 URL 地址, 以添加一个支付宝打赏二维码，留空则不设置支付宝打赏'));
 	$form->addInput($Alipay);
 
-	$cjcdnAddress = new Typecho_Widget_Helper_Form_Element_Text('cjcdnAddress', NULL, NULL, _t('CSS文件的链接地址替换（结尾不用加斜杠“/”）'), _t('即你的CDN云存储地址，例如：http://cdn.example.com，支持绝大部分有镜像功能的CDN服务<br><strong>被替换的原地址为主题地址，即：http://www.example.com/usr/themes/initial</strong>'));
-	$form->addInput($cjcdnAddress);
-
-	$AttUrlReplace = new Typecho_Widget_Helper_Form_Element_Textarea('AttUrlReplace', NULL, NULL, _t('文章内的链接地址替换（建议用在图片等静态资源的链接上）'), _t('按照格式输入你的CDN链接以替换原链接，<strong>格式：原地址=替换地址</strong>，原地址与新地址之间用等号“=”分隔，例如：http://www.example.com/usr/uploads/=http://cdn.example.com/usr/uploads/，支持绝大部分有镜像功能的CDN服务，可设置多个规则，换行即可，一行一个'));
-	$form->addInput($AttUrlReplace);
+	$HeadFixed = new Typecho_Widget_Helper_Form_Element_Radio('HeadFixed', 
+	array('able' => _t('启用'),
+	'disable' => _t('关闭')),
+	'disable', _t('固定显示头部'), _t('默认关闭'));
+	$form->addInput($HeadFixed);
 
 	$DNSPrefetch = new Typecho_Widget_Helper_Form_Element_Radio('DNSPrefetch', 
 	array('able' => _t('启用'),
@@ -66,13 +93,14 @@ function themeConfig($form) {
 	$form->addInput($MusicVol->addRule('isInteger', _t('请填入一个0~1内的数字')));
 
 	$sidebarBlock = new Typecho_Widget_Helper_Form_Element_Checkbox('sidebarBlock', 
-	array('ShowRecentPosts' => _t('显示最新文章'),
+	array('ShowHotPosts' => _t('显示热门文章（根据评论数量排序）'),
+	'ShowRecentPosts' => _t('显示最新文章'),
 	'ShowRecentComments' => _t('显示最近回复'),
 	'ShowCategory' => _t('显示分类'),
 	'ShowTag' => _t('显示标签'),
 	'ShowArchive' => _t('显示归档'),
 	'ShowOther' => _t('显示其它杂项')),
-	array('ShowRecentPosts', 'ShowRecentComments', 'ShowCategory', 'ShowTag', 'ShowArchive', 'ShowOther'), _t('侧边栏显示'));
+	array('ShowHotPosts', 'ShowRecentPosts', 'ShowRecentComments', 'ShowCategory', 'ShowTag', 'ShowArchive', 'ShowOther'), _t('侧边栏显示'));
 	$form->addInput($sidebarBlock->multiMode());
 
 	$ICPbeian = new Typecho_Widget_Helper_Form_Element_Text('ICPbeian', NULL, NULL, _t('ICP备案号'), _t('在这里输入ICP备案号,留空则不显示'));
@@ -131,6 +159,25 @@ function postThumb($obj) {
 				$thumb = AttUrlReplace($thumb);
 			}
 			return '<img src="'.$thumb.'" />';
+		}
+	}
+}
+
+function Contents_Post_Hot($limit = 10) {
+	$db = Typecho_Db::get();
+	$result = $db->fetchAll($db->select()->from('table.contents')
+		->where('status = ?','publish')
+		->where('type = ?', 'post')
+		->where('created <= unix_timestamp(now())', 'post')
+		->limit($limit)
+		->order('commentsNum', Typecho_Db::SORT_DESC)
+	);
+	if($result) {
+		foreach($result as $val) {
+			$val = Typecho_Widget::widget('Widget_Abstract_Contents')->push($val);
+			$post_title = htmlspecialchars($val['title']);
+			$permalink = $val['permalink'];
+			echo '<li><a href="'.$permalink.'">'.$post_title.'</a></li>';
 		}
 	}
 }
