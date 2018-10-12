@@ -1,4 +1,4 @@
-# Typecho主题 - Initial 简约而不简单（v1.3）
+# Typecho主题 - Initial 简约而不简单（v2.0）
 
 ![主题封面][1]
 
