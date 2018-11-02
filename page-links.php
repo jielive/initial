@@ -1,3 +1,10 @@
+<?php
+/**
+ * 链接
+ *
+ * @package custom
+ */
+?>
 <?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
 <?php $this->need('header.php'); ?>
 <div id="main">
@@ -10,6 +17,10 @@
 <h1 class="post-title"><a href="<?php $this->permalink() ?>"><?php $this->title() ?></a></h1>
 <div class="post-content">
 <?php $this->content(); ?>
+<h2><?php _e('链接'); ?></h2>
+<ul class="links">
+<?php Links($this->options->InsideLinksSort); ?>
+</ul>
 </div>
 </article>
 <?php $this->need('comments.php'); ?>

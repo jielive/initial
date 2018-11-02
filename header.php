@@ -8,7 +8,7 @@
 <?php if ($this->options->cjcdnAddress): ?>
 <link rel="dns-prefetch" href="<?php $this->options->cjcdnAddress(); ?>" />
 <?php endif; ?>
-<link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
+<link rel="dns-prefetch" href="//<?php if ($this->options->cjCDN == 'bc'): ?>cdn.bootcss.com<?php elseif ($this->options->cjCDN == 'cf'): ?>cdnjs.cloudflare.com<?php else: ?>cdn.jsdelivr.net<?php endif; ?>" />
 <link rel="dns-prefetch" href="//secure.gravatar.com" />
 <?php endif; ?>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -24,13 +24,12 @@
 'search'    =>  _t('包含关键字 %s 的文章'),
 'tag'       =>  _t('标签 %s 下的文章'),
 'author'    =>  _t('%s 发布的文章')
-), '', ' - '); ?><?php $this->options->title(); if ($this->is('index') && $this->options->subtitle): ?> - <?php $this->options->subtitle(); endif; ?></title>
+), '', ' - '); ?><?php $this->options->title(); if ($this->is('index') && $this->options->subTitle): ?> - <?php $this->options->subTitle(); endif; ?></title>
 <?php $this->header('generator=&template=&pingback=&xmlrpc=&wlw=&commentReply=&rss1=&rss2=&antiSpam=&atom='); ?>
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css" />
 <link rel="stylesheet" href="<?php if ($this->options->cjcdnAddress): $this->options->cjcdnAddress(); ?>/style.min.css<?php else: $this->options->themeUrl('style.min.css'); endif; ?>" />
 <!--[if lt IE 9]>
-<script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/r29/html5.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+<script src="//<?php if ($this->options->cjCDN == 'bc'): ?>cdn.bootcss.com/html5shiv/r29/html5.min.js<?php elseif ($this->options->cjCDN == 'cf'): ?>cdnjs.cloudflare.com/ajax/libs/html5shiv/r29/html5.min.js<?php else: ?>cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js<?php endif; ?>"></script>
+<script src="//<?php if ($this->options->cjCDN == 'bc'): ?>cdn.bootcss.com/respond.js/1.4.2/respond.min.js<?php elseif ($this->options->cjCDN == 'cf'): ?>cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js<?php else: ?>cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js<?php endif; ?>"></script>
 <![endif]-->
 </head>
 <body <?php if ($this->options->HeadFixed == 'able'): ?>class="head-fixed"<?php endif; ?>>
@@ -48,7 +47,7 @@
 </h1>
 <?php else: ?>
 <h1>
-<a id="logo" href="<?php $this->options->siteUrl(); ?>"><?php if ($this->options->customtitle): $this->options->customtitle(); else: $this->options->title(); endif; ?></a>
+<a id="logo" href="<?php $this->options->siteUrl(); ?>"><?php if ($this->options->customTitle): $this->options->customTitle(); else: $this->options->title(); endif; ?></a>
 </h1>
 <?php endif; ?>
 </div>

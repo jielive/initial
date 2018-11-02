@@ -5,31 +5,41 @@
  * 
  * @package Initial
  * @author JIElive
- * @version 2.0
- * @link http://www.offodd.com
+ * @version 2.1
+ * @link http://www.offodd.com/
  */
 ?>
 <?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
 <?php $this->need('header.php'); ?>
-<div class="col" id="main">
+<div id="main">
 <?php while($this->next()): ?>
-<article class="post">
+<article class="post"<?php if ($this->options->PjaxOption == 'able' && isset($this->password) && $this->password !== Typecho_Cookie::get('protectPassword') && $this->authorId !== $this->user->uid && !$this->user->pass('editor', true)): ?> id="protected"<?php endif; ?>>
 <h2 class="post-title"><a href="<?php $this->permalink() ?>"><?php $this->title() ?></a></h2>
 <ul class="post-meta">
-<li><time datetime="<?php $this->date('c'); ?>"><?php $this->date(); ?></time></li>
-<li><?php $this->category(','); ?></li>
-<li><a href="<?php $this->permalink() ?>#comments"><?php $this->commentsNum('评论', '%d 条评论'); ?></a></li>
+<li><?php $this->date(); ?></li>
+<li><?php $this->category(',', false); ?></li>
+<li><?php $this->commentsNum('暂无评论', '%d 条评论'); ?></li>
 </ul>
 <div class="post-content">
+<?php if ($this->options->PjaxOption == 'able' && isset($this->password) && $this->password !== Typecho_Cookie::get('protectPassword') && $this->authorId !== $this->user->uid && !$this->user->pass('editor', true)): ?>
+<form class="protected" action="<?php echo Typecho_Widget::widget('Widget_Security')->getTokenUrl($this->permalink()); ?>" method="post">
+<p class="word"><?php _e('请输入密码访问'); ?></p>
+<p>
+<input type="password" class="text" name="protectPassword" />
+<input type="submit" class="submit" value="提交" />
+</p>
+</form>
+<?php else: ?>
 <?php if (postThumb($this) != ""): ?>
 <p class="thumb"><?php echo postThumb($this); ?></p>
 <?php endif; ?>
 <p><?php $this->excerpt(200, ''); ?></p>
+<?php endif; ?>
 </div>
 <p class="more"><a href="<?php $this->permalink() ?>" title="<?php $this->title() ?>"><?php _e('- 阅读全文 -'); ?></a></p>
 </article>
 <?php endwhile; ?>
-<?php $this->pageNav('上一页', '下一页', 1); ?>
+<?php $this->pageNav('上一页', '下一页', 0); ?>
 </div>
 <?php $this->need('sidebar.php'); ?>
 <?php $this->need('footer.php'); ?>

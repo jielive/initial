@@ -5,11 +5,11 @@ function themeConfig($form) {
 	$logoUrl = new Typecho_Widget_Helper_Form_Element_Text('logoUrl', NULL, NULL, _t('站点 LOGO 地址'), _t('在这里填入一个图片 URL 地址, 以在网站标题前加上一个 LOGO'));
 	$form->addInput($logoUrl);
 
-	$subtitle = new Typecho_Widget_Helper_Form_Element_Text('subtitle', NULL, NULL, _t('自定义站点副标题'), _t('浏览器副标题，仅在当前页面为首页时显示，显示格式为：<strong>标题 - 副标题</strong>，留空则不显示副标题'));
-	$form->addInput($subtitle);
+	$subTitle = new Typecho_Widget_Helper_Form_Element_Text('subTitle', NULL, NULL, _t('自定义站点副标题'), _t('浏览器副标题，仅在当前页面为首页时显示，显示格式为：<strong>标题 - 副标题</strong>，留空则不显示副标题'));
+	$form->addInput($subTitle);
 
-	$customtitle = new Typecho_Widget_Helper_Form_Element_Text('customtitle', NULL, NULL, _t('自定义头部站点标题'), _t('仅在页面头部标题位置显示，和Typecho后台设置的站点名称不冲突，留空则显示默认站点名称'));
-	$form->addInput($customtitle);
+	$customTitle = new Typecho_Widget_Helper_Form_Element_Text('customTitle', NULL, NULL, _t('自定义头部站点标题'), _t('仅在页面头部标题位置显示，和Typecho后台设置的站点名称不冲突，留空则显示默认站点名称'));
+	$form->addInput($customTitle);
 
 	$favicon = new Typecho_Widget_Helper_Form_Element_Text('favicon', NULL, NULL, _t('Favicon 地址'), _t('在这里填入一个图片 URL 地址, 以添加一个Favicon，留空则不单独设置Favicon'));
 	$form->addInput($favicon);
@@ -44,10 +44,10 @@ function themeConfig($form) {
 	array('Postshow', 'Text', 'Pageshow'), _t('面包屑导航显示'), _t('默认在文章与页面内显示，并将文章标题替换为“正文”'));
 	$form->addInput($Breadcrumbs->multiMode());
 
-	$WeChat = new Typecho_Widget_Helper_Form_Element_Text('WeChat', NULL, NULL, _t('微信打赏二维码（建议像素300*300）'), _t('在这里填入一个图片 URL 地址, 以添加一个微信打赏二维码，留空则不设置微信打赏'));
+	$WeChat = new Typecho_Widget_Helper_Form_Element_Text('WeChat', NULL, NULL, _t('微信打赏二维码（建议图片尺寸不低于240*240）'), _t('在这里填入一个图片 URL 地址, 以添加一个微信打赏二维码，留空则不设置微信打赏'));
 	$form->addInput($WeChat);
 
-	$Alipay = new Typecho_Widget_Helper_Form_Element_Text('Alipay', NULL, NULL, _t('支付宝打赏二维码（建议像素300*300）'), _t('在这里填入一个图片 URL 地址, 以添加一个支付宝打赏二维码，留空则不设置支付宝打赏'));
+	$Alipay = new Typecho_Widget_Helper_Form_Element_Text('Alipay', NULL, NULL, _t('支付宝打赏二维码（建议图片尺寸不低于240*240）'), _t('在这里填入一个图片 URL 地址, 以添加一个支付宝打赏二维码，留空则不设置支付宝打赏'));
 	$form->addInput($Alipay);
 
 	$HeadFixed = new Typecho_Widget_Helper_Form_Element_Radio('HeadFixed', 
@@ -61,6 +61,13 @@ function themeConfig($form) {
 	'disable' => _t('关闭')),
 	'disable', _t('DNS预获取'), _t('默认关闭，启用则会对CDN资源和Gravatar头像进行预获取加速'));
 	$form->addInput($DNSPrefetch);
+
+	$cjCDN = new Typecho_Widget_Helper_Form_Element_Radio('cjCDN', 
+	array('bc' => _t('BootCDN'),
+	'cf' => _t('CDNJS'),
+	'jd' => _t('jsDelivr')),
+	'bc', _t('公共静态资源来源'), _t('默认BootCDN，请根据实际情况选择合适来源'));
+	$form->addInput($cjCDN);
 
 	$compressHtml = new Typecho_Widget_Helper_Form_Element_Radio('compressHtml', 
 	array('able' => _t('启用'),
@@ -92,15 +99,29 @@ function themeConfig($form) {
 	$MusicVol = new Typecho_Widget_Helper_Form_Element_Text('MusicVol', NULL, NULL, _t('背景音乐播放音量（输入范围：0~1）'), _t('请输入一个0到1之间的小数（0为静音  0.5为50%音量  1为100%最大音量）输入错误内容或留空则使用默认音量100%'));
 	$form->addInput($MusicVol->addRule('isInteger', _t('请填入一个0~1内的数字')));
 
+	$Links = new Typecho_Widget_Helper_Form_Element_Textarea('Links', NULL, NULL, _t('链接列表（注意：切换主题会被清空，注意备份！）'), _t('按照格式输入链接信息，格式：<br><strong>链接名称*,链接地址*,链接描述,链接分类</strong><br>不同信息之间用英文逗号“,”分隔，例如：<br><strong>OFFODD,http://www.offodd.com/,JIElive的博客 | 有点不同,Myself</strong><br>若中间有暂时不想填的信息，请留空，例如暂时不想填写链接描述：<br><strong>OFFODD,http://www.offodd.com/,,Myself</strong><br>多个链接换行即可，一行一个'));
+	$Links->input->setAttribute('style', 'height:200px');
+	$form->addInput($Links);
+
+	$ShowLinks = new Typecho_Widget_Helper_Form_Element_Checkbox('ShowLinks', array('sidebar' => _t('侧边栏'), 'footer' => _t('页脚')), NULL, _t('首页链接显示位置'));
+	$form->addInput($ShowLinks->multiMode());
+
+	$IndexLinksSort = new Typecho_Widget_Helper_Form_Element_Text('IndexLinksSort', NULL, NULL, _t('首页显示的链接分类（支持多分类，请用英文逗号“,”分隔）'), _t('若只需显示某分类下的链接，请输入链接分类名（建议使用字母形式的分类名），留空则默认显示全部链接'));
+	$form->addInput($IndexLinksSort);
+
+	$InsideLinksSort = new Typecho_Widget_Helper_Form_Element_Text('InsideLinksSort', NULL, NULL, _t('内页（链接模板）显示的链接分类（支持多分类，请用英文逗号“,”分隔）'), _t('若只需显示某分类下的链接，请输入链接分类名（建议使用字母形式的分类名），留空则默认显示全部链接'));
+	$form->addInput($InsideLinksSort);
+
 	$sidebarBlock = new Typecho_Widget_Helper_Form_Element_Checkbox('sidebarBlock', 
 	array('ShowHotPosts' => _t('显示热门文章（根据评论数量排序）'),
 	'ShowRecentPosts' => _t('显示最新文章'),
 	'ShowRecentComments' => _t('显示最近回复'),
+	'IgnoreAuthor' => _t('↪不显示作者回复'),
 	'ShowCategory' => _t('显示分类'),
 	'ShowTag' => _t('显示标签'),
 	'ShowArchive' => _t('显示归档'),
 	'ShowOther' => _t('显示其它杂项')),
-	array('ShowHotPosts', 'ShowRecentPosts', 'ShowRecentComments', 'ShowCategory', 'ShowTag', 'ShowArchive', 'ShowOther'), _t('侧边栏显示'));
+	array('ShowRecentPosts', 'ShowRecentComments', 'ShowCategory', 'ShowTag', 'ShowArchive', 'ShowOther'), _t('侧边栏显示'));
 	$form->addInput($sidebarBlock->multiMode());
 
 	$ICPbeian = new Typecho_Widget_Helper_Form_Element_Text('ICPbeian', NULL, NULL, _t('ICP备案号'), _t('在这里输入ICP备案号,留空则不显示'));
@@ -168,6 +189,7 @@ function Contents_Post_Hot($limit = 10) {
 	$result = $db->fetchAll($db->select()->from('table.contents')
 		->where('status = ?','publish')
 		->where('type = ?', 'post')
+		->where('password is NULL', 'post')
 		->where('created <= unix_timestamp(now())', 'post')
 		->limit($limit)
 		->order('commentsNum', Typecho_Db::SORT_DESC)
@@ -182,10 +204,35 @@ function Contents_Post_Hot($limit = 10) {
 	}
 }
 
+function Links($sorts = NULL) {
+	$options = Typecho_Widget::widget('Widget_Options');
+	$list = explode("\r\n", $options->Links);
+	foreach ($list as $tmp) {
+		list($name, $url, $description, $sort) = explode(',', $tmp);
+		if (!isset($sorts) || $sorts == "") {
+			echo '<li><a href="'.$url.'" title="'.$description.'" target="_blank">'.$name.'</a></li>';
+		} else {
+			$arr = explode(",", $sorts);
+			for($i = 0; $i < count($arr); $i++) {
+				if($arr[$i] === $sort) {
+					echo '<li><a href="'.$url.'" title="'.$description.'" target="_blank">'.$name.'</a></li>';
+				}
+			}
+		}
+	}
+}
+
 function Playlist() {
 	$options = Typecho_Widget::widget('Widget_Options');
-	$arr = str_replace("\r\n", "|", $options->MusicUrl);
-	return $arr;
+	$arr = explode("\r\n", $options->MusicUrl);
+	echo '[';
+	for($i = 0; $i < count($arr); $i++) {
+		if ($i == count($arr) - 1) {
+			echo '"'.$arr[$i].'"]';
+		} else {
+			echo '"'.$arr[$i].'",';
+		}
+	}
 }
 
 function compressHtml($html_source) {
@@ -238,6 +285,7 @@ function compressHtml($html_source) {
 }
 
 function themeFields($layout) {
-	$thumb = new Typecho_Widget_Helper_Form_Element_Text('thumb', NULL, NULL, _t('自定义缩略图'), _t('在这里填入一个图片 URL 地址, 以添加本文的缩略图，填入数字 <strong>1</strong> 则使用文章第一章图片作为缩略图（文章无图则不显示缩略图），留空则默认不显示缩略图<style>input[name="fields[thumb]"]{width:100%}</style>'));
+	$thumb = new Typecho_Widget_Helper_Form_Element_Text('thumb', NULL, NULL, _t('自定义缩略图'), _t('在这里填入一个图片 URL 地址, 以添加本文的缩略图，填入数字 <strong>1</strong> 则使用文章第一章图片作为缩略图（文章无图则不显示缩略图），留空则默认不显示缩略图'));
+	$thumb->input->setAttribute('class', 'w-100');
 	$layout->addItem($thumb);
 }
