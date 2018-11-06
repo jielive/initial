@@ -206,19 +206,23 @@ function Contents_Post_Hot($limit = 10) {
 
 function Links($sorts = NULL) {
 	$options = Typecho_Widget::widget('Widget_Options');
-	$list = explode("\r\n", $options->Links);
-	foreach ($list as $tmp) {
-		list($name, $url, $description, $sort) = explode(',', $tmp);
-		if (!isset($sorts) || $sorts == "") {
-			echo '<li><a href="'.$url.'" title="'.$description.'" target="_blank">'.$name.'</a></li>';
-		} else {
-			$arr = explode(",", $sorts);
-			for($i = 0; $i < count($arr); $i++) {
-				if($arr[$i] === $sort) {
-					echo '<li><a href="'.$url.'" title="'.$description.'" target="_blank">'.$name.'</a></li>';
+	if ($options->Links) {
+		$list = explode("\r\n", $options->Links);
+		foreach ($list as $tmp) {
+			list($name, $url, $description, $sort) = explode(',', $tmp);
+			if (!isset($sorts) || $sorts == "") {
+				echo '<li><a href="'.$url.'" title="'.$description.'" target="_blank">'.$name.'</a></li>';
+			} else {
+				$arr = explode(",", $sorts);
+				for($i = 0; $i < count($arr); $i++) {
+					if($arr[$i] === $sort) {
+						echo '<li><a href="'.$url.'" title="'.$description.'" target="_blank">'.$name.'</a></li>';
+					}
 				}
 			}
 		}
+	} else {
+		echo '<li>暂无链接</li>';
 	}
 }
 
