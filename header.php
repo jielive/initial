@@ -34,7 +34,7 @@
 </head>
 <body <?php if ($this->options->HeadFixed == 'able'): ?>class="head-fixed"<?php endif; ?>>
 <!--[if lt IE 8]>
-<div class="browsehappy"><?php _e('当前网页可能 <strong>不支持</strong> 您正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/">升级您的浏览器</a>'); ?>.</div>
+<div class="browsehappy">当前网页可能 <strong>不支持</strong> 您正在使用的浏览器. 为了正常的访问, 请 <a href="http://browsehappy.com/">升级您的浏览器</a>.</div>
 <![endif]-->
 <header id="header">
 <div class="container clearfix">
@@ -55,12 +55,12 @@
 <div id="nav">
 <div id="site-search">
 <form id="search" method="post" action="<?php $this->options->siteUrl(); ?>">
-<input type="text" id="s" name="s" class="text" placeholder="<?php _e('输入关键字搜索'); ?>" required />
+<input type="text" id="s" name="s" class="text" placeholder="输入关键字搜索" required />
 <button type="submit"></button>
 </form>
 </div>
 <ul class="nav-menu">
-<li><a href="<?php $this->options->siteUrl(); ?>"><?php _e('首页'); ?></a></li>
+<li><a href="<?php $this->options->siteUrl(); ?>">首页</a></li>
 <?php if (!empty($this->options->Navset) && in_array('ShowCategory', $this->options->Navset)): ?>
 <?php if (!empty($this->options->Navset) && in_array('AggCategory', $this->options->Navset)): ?>
 <li class="nav-menu-2"><a><?php if ($this->options->CategoryText): $this->options->CategoryText(); else: ?>分类<?php endif; ?></a>

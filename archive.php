@@ -19,7 +19,7 @@
 <div class="post-content">
 <?php if ($this->options->PjaxOption == 'able' && isset($this->password) && $this->password !== Typecho_Cookie::get('protectPassword') && $this->authorId !== $this->user->uid && !$this->user->pass('editor', true)): ?>
 <form class="protected" action="<?php echo Typecho_Widget::widget('Widget_Security')->getTokenUrl($this->permalink()); ?>" method="post">
-<p class="word"><?php _e('请输入密码访问'); ?></p>
+<p class="word">请输入密码访问</p>
 <p>
 <input type="password" class="text" name="protectPassword" />
 <input type="submit" class="submit" value="提交" />
@@ -32,12 +32,12 @@
 <p><?php $this->excerpt(200, ''); ?></p>
 <?php endif; ?>
 </div>
-<p class="more"><a href="<?php $this->permalink() ?>" title="<?php $this->title() ?>"><?php _e('- 阅读全文 -'); ?></a></p>
+<p class="more"><a href="<?php $this->permalink() ?>" title="<?php $this->title() ?>">- 阅读全文 -</a></p>
 </article>
 <?php endwhile; ?>
 <?php else: ?>
 <article class="post">
-<h2 class="post-title"><?php _e('没有找到内容'); ?></h2>
+<h2 class="post-title">没有找到内容</h2>
 </article>
 <?php endif; ?>
 <?php $this->pageNav('上一页', '下一页', 0); ?>

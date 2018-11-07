@@ -17,9 +17,11 @@
 <h1 class="post-title"><a href="<?php $this->permalink() ?>"><?php $this->title() ?></a></h1>
 <div class="post-content">
 <?php $this->content(); ?>
-<h2><?php _e('链接'); ?></h2>
+<h2>链接</h2>
 <ul class="links">
-<?php Links($this->options->InsideLinksSort); ?>
+<?php if (Links($this->options->InsideLinksSort)): echo Links($this->options->InsideLinksSort); else: ?>
+<li>暂无链接</li>
+<?php endif; ?>
 </ul>
 </div>
 </article>

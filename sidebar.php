@@ -2,7 +2,7 @@
 <div id="secondary">
 <?php if (!empty($this->options->sidebarBlock) && in_array('ShowHotPosts', $this->options->sidebarBlock)): ?>
 <section class="widget">
-<h3 class="widget-title"><?php _e('热门文章'); ?></h3>
+<h3 class="widget-title">热门文章</h3>
 <ul class="widget-list">
 <?php Contents_Post_Hot($this->options->postsListSize);?>
 </ul>
@@ -10,7 +10,7 @@
 <?php endif; ?>
 <?php if (!empty($this->options->sidebarBlock) && in_array('ShowRecentPosts', $this->options->sidebarBlock)): ?>
 <section class="widget">
-<h3 class="widget-title"><?php _e('最新文章'); ?></h3>
+<h3 class="widget-title">最新文章</h3>
 <ul class="widget-list">
 <?php $this->widget('Widget_Contents_Post_Recent')->to($posts); ?>
 <?php while($posts->next()): ?>
@@ -25,7 +25,7 @@
 <?php endif; ?>
 <?php if (!empty($this->options->sidebarBlock) && in_array('ShowRecentComments', $this->options->sidebarBlock)): ?>
 <section class="widget">
-<h3 class="widget-title"><?php _e('最近回复'); ?></h3>
+<h3 class="widget-title">最近回复</h3>
 <ul class="widget-list">
 <?php if (in_array('IgnoreAuthor', $this->options->sidebarBlock)): $this->widget('Widget_Comments_Recent', 'ignoreAuthor=true')->to($comments); else: $this->widget('Widget_Comments_Recent')->to($comments); endif; ?>
 <?php while($comments->next()): ?>
@@ -40,7 +40,7 @@
 <?php endif; ?>
 <?php if (!empty($this->options->sidebarBlock) && in_array('ShowCategory', $this->options->sidebarBlock)): ?>
 <section class="widget">
-<h3 class="widget-title"><?php _e('分类'); ?></h3>
+<h3 class="widget-title">分类</h3>
 <ul class="widget-tile">
 <?php $this->widget('Widget_Metas_Category_List')
 ->parse('<li><a href="{permalink}">{name}</a></li>'); ?>
@@ -49,7 +49,7 @@
 <?php endif; ?>
 <?php if (!empty($this->options->sidebarBlock) && in_array('ShowTag', $this->options->sidebarBlock)): ?>
 <section class="widget">
-<h3 class="widget-title"><?php _e('标签'); ?></h3>
+<h3 class="widget-title">标签</h3>
 <ul class="widget-tile">
 <?php $this->widget('Widget_Metas_Tag_Cloud', 'ignoreZeroCount=1&desc=1&limit=30')->to($tags); ?>
 <?php if($tags->have()): ?>
@@ -57,14 +57,14 @@
 <li><a href="<?php $tags->permalink(); ?>"><?php $tags->name(); ?></a></li>
 <?php endwhile; ?>
 <?php else: ?>
-<li><?php _e('没有任何标签'); ?></li>
+<li>没有任何标签</li>
 <?php endif; ?>
 </ul>
 </section>
 <?php endif; ?>
 <?php if (!empty($this->options->sidebarBlock) && in_array('ShowArchive', $this->options->sidebarBlock)): ?>
 <section class="widget">
-<h3 class="widget-title"><?php _e('归档'); ?></h3>
+<h3 class="widget-title">归档</h3>
 <ul class="widget-list">
 <?php $this->widget('Widget_Contents_Post_Date', 'type=month&format=Y 年 n 月')
 ->parse('<li><a href="{permalink}">{date}</a></li>'); ?>
@@ -73,21 +73,23 @@
 <?php endif; ?>
 <?php if (!empty($this->options->ShowLinks) && in_array('sidebar', $this->options->ShowLinks)): ?>
 <section class="widget">
-<h3 class="widget-title"><?php _e('链接'); ?></h3>
+<h3 class="widget-title">链接</h3>
 <ul class="widget-tile">
-<?php Links($this->options->IndexLinksSort); ?>
+<?php if (Links($this->options->IndexLinksSort)): echo Links($this->options->IndexLinksSort); else: ?>
+<li>暂无链接</li>
+<?php endif; ?>
 </ul>
 </section>
 <?php endif; ?>
 <?php if (!empty($this->options->sidebarBlock) && in_array('ShowOther', $this->options->sidebarBlock)): ?>
 <section class="widget">
-<h3 class="widget-title"><?php _e('其它'); ?></h3>
+<h3 class="widget-title">其它</h3>
 <ul class="widget-list">
-<li><a href="<?php $this->options->feedUrl(); ?>" target="_blank"><?php _e('文章 RSS'); ?></a></li>
-<li><a href="<?php $this->options->commentsFeedUrl(); ?>" target="_blank"><?php _e('评论 RSS'); ?></a></li>
+<li><a href="<?php $this->options->feedUrl(); ?>" target="_blank">文章 RSS</a></li>
+<li><a href="<?php $this->options->commentsFeedUrl(); ?>" target="_blank">评论 RSS</a></li>
 <?php if($this->user->hasLogin()): ?>
-<li class="last"><a href="<?php $this->options->adminUrl(); ?>" target="_blank"><?php _e('进入后台'); ?> (<?php $this->user->screenName(); ?>)</a></li>
-<li><a href="<?php $this->options->logoutUrl(); ?>"<?php if ($this->options->PjaxOption == 'able'): ?> no-pjax <?php endif; ?>><?php _e('退出'); ?></a></li>
+<li class="last"><a href="<?php $this->options->adminUrl(); ?>" target="_blank">进入后台 (<?php $this->user->screenName(); ?>)</a></li>
+<li><a href="<?php $this->options->logoutUrl(); ?>"<?php if ($this->options->PjaxOption == 'able'): ?> no-pjax <?php endif; ?>>退出</a></li>
 <?php endif; ?>
 </ul>
 </section>

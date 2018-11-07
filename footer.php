@@ -5,10 +5,12 @@
 <div class="container">
 <?php if (!empty($this->options->ShowLinks) && in_array('footer', $this->options->ShowLinks)): ?>
 <ul class="links">
-<?php Links($this->options->IndexLinksSort); ?>
+<?php if (Links($this->options->IndexLinksSort)): echo Links($this->options->IndexLinksSort); else: ?>
+<li>暂无链接</li>
+<?php endif; ?>
 </ul>
 <?php endif; ?>
-<p>&copy; <?php echo date('Y'); ?> <a href="<?php $this->options->siteUrl(); ?>"><?php $this->options->title(); ?></a>.<?php _e('由 <a href="http://www.typecho.org" target="_blank">Typecho</a> 强力驱动'); ?>.<?php _e('使用 <a href="https://github.com/jielive/initial" target="_blank">Initial</a> 主题'); ?>.</p>
+<p>&copy; <?php echo date('Y'); ?> <a href="<?php $this->options->siteUrl(); ?>"><?php $this->options->title(); ?></a> Powered By <a href="http://www.typecho.org" target="_blank">Typecho</a> &amp; <a href="https://www.offodd.com/17.html" target="_blank">Initial</a></p>
 <?php if ($this->options->ICPbeian): ?>
 <p><a href="http://www.miitbeian.gov.cn" class="icpnum" target="_blank" rel="nofollow"><?php $this->options->ICPbeian(); ?></a></p>
 <?php endif; ?>
