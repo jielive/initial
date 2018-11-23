@@ -53,8 +53,14 @@ function themeConfig($form) {
 	$HeadFixed = new Typecho_Widget_Helper_Form_Element_Radio('HeadFixed', 
 	array('able' => _t('启用'),
 	'disable' => _t('关闭')),
-	'disable', _t('固定显示头部'), _t('默认关闭'));
+	'disable', _t('浮动显示头部'), _t('默认关闭'));
 	$form->addInput($HeadFixed);
+
+	$SidebarFixed = new Typecho_Widget_Helper_Form_Element_Radio('SidebarFixed', 
+	array('able' => _t('启用'),
+	'disable' => _t('关闭')),
+	'disable', _t('动态显示侧边栏'), _t('默认关闭'));
+	$form->addInput($SidebarFixed);
 
 	$DNSPrefetch = new Typecho_Widget_Helper_Form_Element_Radio('DNSPrefetch', 
 	array('able' => _t('启用'),
@@ -66,7 +72,7 @@ function themeConfig($form) {
 	array('bc' => _t('BootCDN'),
 	'cf' => _t('CDNJS'),
 	'jd' => _t('jsDelivr')),
-	'bc', _t('公共静态资源来源'), _t('默认BootCDN，请根据实际情况选择合适来源'));
+	'bc', _t('公共静态资源来源'), _t('默认BootCDN，请根据需求选择合适来源'));
 	$form->addInput($cjCDN);
 
 	$compressHtml = new Typecho_Widget_Helper_Form_Element_Radio('compressHtml', 
@@ -209,7 +215,7 @@ function Links($sorts = NULL) {
 	if ($options->Links) {
 		$list = explode("\r\n", $options->Links);
 		foreach ($list as $tmp) {
-			list($name, $url, $description, $sort) = explode(',', $tmp);
+			list($name, $url, $description, $sort) = explode(",", $tmp);
 			if ($sorts) {
 				$arr = explode(",", $sorts);
 				if (in_array($sort, $arr)) {

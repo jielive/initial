@@ -5,7 +5,7 @@
  * 
  * @package Initial
  * @author JIElive
- * @version 2.1
+ * @version 2.2
  * @link http://www.offodd.com/
  */
 ?>

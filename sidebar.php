@@ -57,7 +57,7 @@
 <li><a href="<?php $tags->permalink(); ?>"><?php $tags->name(); ?></a></li>
 <?php endwhile; ?>
 <?php else: ?>
-<li>没有任何标签</li>
+<li>暂无标签</li>
 <?php endif; ?>
 </ul>
 </section>
