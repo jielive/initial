@@ -15,13 +15,13 @@
 <?php endif; ?>
 <article class="post">
 <h1 class="post-title"><a href="<?php $this->permalink() ?>"><?php $this->title() ?></a></h1>
+<?php if ($this->options->InsideLinksIcon == 'able'): ?>
+<script>function erroricon(obj){var a=obj.parentNode;var i=document.createElement("i");var icon=document.createTextNode("★");i.appendChild(icon);a.removeChild(obj);a.insertBefore(i,a.childNodes[0])}</script>
+<?php endif; ?>
 <div class="post-content">
 <?php $this->content(); ?>
-<h2>链接</h2>
 <ul class="links">
-<?php if (Links($this->options->InsideLinksSort)): echo Links($this->options->InsideLinksSort); else: ?>
-<li>暂无链接</li>
-<?php endif; ?>
+<?php Links($this->options->InsideLinksSort, $this->options->InsideLinksIcon == 'able' ? 1 : 0); ?>
 </ul>
 </div>
 </article>

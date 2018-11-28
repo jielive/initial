@@ -34,7 +34,7 @@
 </head>
 <body <?php if ($this->options->HeadFixed == 'able'): ?>class="head-fixed"<?php endif; ?>>
 <!--[if lt IE 8]>
-<div class="browsehappy">当前网页可能 <strong>不支持</strong> 您正在使用的浏览器，为了正常的访问，请<strong>升级您的浏览器</strong>。</div>
+<div class="browsehappy">当前网页可能 <strong>不支持</strong> 您正在使用的浏览器. 为了正常的访问, 请 <a href="https://browsehappy.com/">升级您的浏览器</a>.</div>
 <![endif]-->
 <header id="header">
 <div class="container clearfix">

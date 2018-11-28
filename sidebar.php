@@ -75,9 +75,7 @@
 <section class="widget">
 <h3 class="widget-title">链接</h3>
 <ul class="widget-tile">
-<?php if (Links($this->options->IndexLinksSort)): echo Links($this->options->IndexLinksSort); else: ?>
-<li>暂无链接</li>
-<?php endif; ?>
+<?php Links($this->options->IndexLinksSort); ?>
 </ul>
 </section>
 <?php endif; ?>

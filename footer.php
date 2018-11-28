@@ -5,9 +5,7 @@
 <div class="container">
 <?php if (!empty($this->options->ShowLinks) && in_array('footer', $this->options->ShowLinks)): ?>
 <ul class="links">
-<?php if (Links($this->options->IndexLinksSort)): echo Links($this->options->IndexLinksSort); else: ?>
-<li>暂无链接</li>
-<?php endif; ?>
+<?php Links($this->options->IndexLinksSort); ?>
 </ul>
 <?php endif; ?>
 <p>&copy; <?php echo date('Y'); ?> <a href="<?php $this->options->siteUrl(); ?>"><?php $this->options->title(); ?></a>. Powered By <a href="http://www.typecho.org" target="_blank">Typecho</a> &amp; <a href="http://www.offodd.com/17.html" target="_blank">Initial</a>.</p>

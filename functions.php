@@ -105,12 +105,18 @@ function themeConfig($form) {
 	$MusicVol = new Typecho_Widget_Helper_Form_Element_Text('MusicVol', NULL, NULL, _t('背景音乐播放音量（输入范围：0~1）'), _t('请输入一个0到1之间的小数（0为静音  0.5为50%音量  1为100%最大音量）输入错误内容或留空则使用默认音量100%'));
 	$form->addInput($MusicVol->addRule('isInteger', _t('请填入一个0~1内的数字')));
 
-	$Links = new Typecho_Widget_Helper_Form_Element_Textarea('Links', NULL, NULL, _t('链接列表（注意：切换主题会被清空，注意备份！）'), _t('按照格式输入链接信息，格式：<br><strong>链接名称*,链接地址*,链接描述,链接分类</strong><br>不同信息之间用英文逗号“,”分隔，例如：<br><strong>OFFODD,http://www.offodd.com/,JIElive的博客 | 有点不同,Myself</strong><br>若中间有暂时不想填的信息，请留空，例如暂时不想填写链接描述：<br><strong>OFFODD,http://www.offodd.com/,,Myself</strong><br>多个链接换行即可，一行一个'));
+	$Links = new Typecho_Widget_Helper_Form_Element_Textarea('Links', NULL, NULL, _t('链接列表（注意：切换主题会被清空，注意备份！）'), _t('按照格式输入链接信息，格式：<br><strong>链接名称*,链接地址*,链接描述,连接图标,链接分类</strong><br>不同信息之间用英文逗号“,”分隔，例如：<br><strong>OFFODD,http://www.offodd.com/,JIElive的博客 | 有点不同,https://www.offodd.com/logo.png,Myself</strong><br>若中间有暂时不想填的信息，请留空，例如暂时不想填写链接描述和链接图标：<br><strong>OFFODD,http://www.offodd.com/,,,Myself</strong><br>多个链接换行即可，一行一个'));
 	$Links->input->setAttribute('style', 'height:200px');
 	$form->addInput($Links);
 
 	$ShowLinks = new Typecho_Widget_Helper_Form_Element_Checkbox('ShowLinks', array('sidebar' => _t('侧边栏'), 'footer' => _t('页脚')), NULL, _t('首页链接显示位置'));
 	$form->addInput($ShowLinks->multiMode());
+
+	$InsideLinksIcon = new Typecho_Widget_Helper_Form_Element_Radio('InsideLinksIcon', 
+	array('able' => _t('启用'),
+	'disable' => _t('关闭')),
+	'disable', _t('显示链接图标（内页）'), _t('默认关闭，启用后内页（链接模板）链接将显示链接图标'));
+	$form->addInput($InsideLinksIcon);
 
 	$IndexLinksSort = new Typecho_Widget_Helper_Form_Element_Text('IndexLinksSort', NULL, NULL, _t('首页显示的链接分类（支持多分类，请用英文逗号“,”分隔）'), _t('若只需显示某分类下的链接，请输入链接分类名（建议使用字母形式的分类名），留空则默认显示全部链接'));
 	$form->addInput($IndexLinksSort);
@@ -147,10 +153,8 @@ function themeInit($archive) {
 	if ($archive->is('archive')) {
 		$archive->parameter->pageSize = 10;
 	}
-	if ($options->AttUrlReplace) {
-		if ($archive->is('single')) {
-			$archive->content = AttUrlReplace($archive->content);
-		}
+	if ($archive->is('single') && $options->AttUrlReplace) {
+		$archive->content = AttUrlReplace($archive->content);
 	}
 }
 
@@ -210,23 +214,23 @@ function Contents_Post_Hot($limit = 10) {
 	}
 }
 
-function Links($sorts = NULL) {
+function Links($sorts = NULL, $icon = 0) {
 	$options = Typecho_Widget::widget('Widget_Options');
 	if ($options->Links) {
 		$list = explode("\r\n", $options->Links);
 		foreach ($list as $tmp) {
-			list($name, $url, $description, $sort) = explode(",", $tmp);
+			list($name, $url, $description, $logo, $sort) = explode(",", $tmp);
 			if ($sorts) {
 				$arr = explode(",", $sorts);
 				if (in_array($sort, $arr)) {
-					$Links .= $url ? '<li><a href="'.$url.'" title="'.$description.'" target="_blank">'.$name.'</a></li>' : '<li><a title="'.$description.'"><del>'.$name.'</del></a></li>';
+					$Links .= '<li><a' .($url ? ' href="'.$url.'"' : '') .($icon==1&&$url ? ' class="l_logo"' : '') .' title="' .$description .'" target="_blank">' .($icon==1&&$url ? '<img src="' .($logo ? $logo : $url .'/favicon.ico') .'" onerror="erroricon(this)">' : '') .'<span>' .($url ? $name : '<del>' .$name .'</del>') .'</span></a></li>';
 				}
 			} else {
-				$Links .= $url ? '<li><a href="'.$url.'" title="'.$description.'" target="_blank">'.$name.'</a></li>' : '<li><a title="'.$description.'"><del>'.$name.'</del></a></li>';
+				$Links .= '<li><a' .($url ? ' href="'.$url.'"' : '') .($icon==1&&$url ? ' class="l_logo"' : '') .' title="' .$description .'" target="_blank">' .($icon==1&&$url ? '<img src="' .($logo ? $logo : $url .'/favicon.ico') .'" onerror="erroricon(this)">' : '') .'<span>' .($url ? $name : '<del>' .$name .'</del>') .'</span></a></li>';
 			}
 		}
 	}
-	return $Links;
+	echo $Links ? $Links : '<li>暂无链接</li>';
 }
 
 function Playlist() {
