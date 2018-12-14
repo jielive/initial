@@ -401,7 +401,7 @@ function compressHtml($html_source) {
 }
 
 function themeFields($layout) {
-	$thumb = new Typecho_Widget_Helper_Form_Element_Text('thumb', NULL, NULL, _t('自定义缩略图'), _t('在这里填入一个图片 URL 地址, 以添加本文的缩略图，填入数字 <b>1</b> 则使用文章第一章图片作为缩略图（文章无图则不显示缩略图），留空则默认不显示缩略图'));
+	$thumb = new Typecho_Widget_Helper_Form_Element_Text('thumb', NULL, NULL, _t('自定义缩略图'), _t('在这里填入一个图片 URL 地址, 以添加本文的缩略图，若填入纯数字，例如 <b>3</b> ，则使用文章第三张图片作为缩略图（对应位置无图则不显示缩略图），留空则默认不显示缩略图'));
 	$thumb->input->setAttribute('class', 'w-100');
 	$layout->addItem($thumb);
 }
