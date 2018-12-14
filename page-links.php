@@ -16,7 +16,7 @@
 <article class="post">
 <h1 class="post-title"><a href="<?php $this->permalink() ?>"><?php $this->title() ?></a></h1>
 <?php if ($this->options->InsideLinksIcon == 'able'): ?>
-<script>function erroricon(obj){var a=obj.parentNode;var i=document.createElement("i");var icon=document.createTextNode("★");i.appendChild(icon);a.removeChild(obj);a.insertBefore(i,a.childNodes[0])}</script>
+<script>function erroricon(obj){var a=obj.parentNode;var i=document.createElement("i");i.appendChild(document.createTextNode("★"));a.removeChild(obj);a.insertBefore(i,a.childNodes[0])}</script>
 <?php endif; ?>
 <div class="post-content">
 <?php $this->content(); ?>

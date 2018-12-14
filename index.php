@@ -1,19 +1,31 @@
 <?php
 /**
- * 基于默认主题深度优化并添加一些实用功能，希望做到简约而不简单。
- * 还原本质，不忘初心。
+ * Initial - 简约而不简单
+ * 还原本质 勿忘初心
  * 
  * @package Initial
  * @author JIElive
- * @version 2.2.1
+ * @version 2.3
  * @link http://www.offodd.com/
  */
 ?>
 <?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
 <?php $this->need('header.php'); ?>
 <div id="main">
+<?php if (!empty($this->options->ShowWhisper) && in_array('index', $this->options->ShowWhisper)): ?>
+<?php if ($this->_currentPage == 1): ?>
+<article class="post whisper">
+<div class="post-content">
+<?php Whisper(); ?>
+<?php if ($this->user->pass('editor', true) && (!FindContents('page-whisper.php') || FindContents('page-whisper.php')[1])): ?>
+<p class="notice"><b>仅管理员可见: </b><br><?php echo FindContents('page-whisper.php') ? '发现多个"轻语"模板页面，已自动选取内容最多的页面作为展示，请删除多余模板页面。' : '未找到"轻语"模板页面，请检查是否创建模板页面。'; ?></p>
+<?php endif; ?>
+</div>
+</article>
+<?php endif; ?>
+<?php endif; ?>
 <?php while($this->next()): ?>
-<article class="post"<?php if ($this->options->PjaxOption == 'able' && isset($this->password) && $this->password !== Typecho_Cookie::get('protectPassword') && $this->authorId !== $this->user->uid && !$this->user->pass('editor', true)): ?> id="protected"<?php endif; ?>>
+<article class="post<?php if ($this->options->PjaxOption == 'able' && isset($this->password) && $this->password !== Typecho_Cookie::get('protectPassword') && $this->authorId !== $this->user->uid && !$this->user->pass('editor', true)): ?> protected<?php endif; ?>">
 <h2 class="post-title"><a href="<?php $this->permalink() ?>"><?php $this->title() ?></a></h2>
 <ul class="post-meta">
 <li><?php $this->date(); ?></li>
@@ -22,7 +34,7 @@
 </ul>
 <div class="post-content">
 <?php if ($this->options->PjaxOption == 'able' && isset($this->password) && $this->password !== Typecho_Cookie::get('protectPassword') && $this->authorId !== $this->user->uid && !$this->user->pass('editor', true)): ?>
-<form class="protected" action="<?php echo Typecho_Widget::widget('Widget_Security')->getTokenUrl($this->permalink()); ?>" method="post">
+<form action="<?php echo Typecho_Widget::widget('Widget_Security')->getTokenUrl($this->permalink()); ?>" method="post">
 <p class="word">请输入密码访问</p>
 <p>
 <input type="password" class="text" name="protectPassword" />
@@ -30,16 +42,16 @@
 </p>
 </form>
 <?php else: ?>
-<?php if (postThumb($this) != ""): ?>
+<?php if (postThumb($this)): ?>
 <p class="thumb"><?php echo postThumb($this); ?></p>
 <?php endif; ?>
 <p><?php $this->excerpt(200, ''); ?></p>
 <?php endif; ?>
-</div>
 <p class="more"><a href="<?php $this->permalink() ?>" title="<?php $this->title() ?>">- 阅读全文 -</a></p>
+</div>
 </article>
 <?php endwhile; ?>
-<?php $this->pageNav('上一页', '下一页', 0); ?>
+<?php $this->pageNav('上一页', $this->options->AjaxLoad == 'able' ? '查看更多' : '下一页', 0, '..', $this->options->AjaxLoad == 'able' ? array('wrapClass' => 'page-navigator ajaxload') : ''); ?>
 </div>
 <?php $this->need('sidebar.php'); ?>
 <?php $this->need('footer.php'); ?>
