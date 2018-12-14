@@ -156,8 +156,10 @@ function themeInit($archive) {
 	$options = Typecho_Widget::widget('Widget_Options');
 	if ($options->PjaxOption == 'able') {
 		Helper::options()->commentsAntiSpam = false;
-		Helper::options()->commentsOrder = 'DESC';
 		Helper::options()->commentsPageDisplay = 'first';
+	}
+	if ($options->PjaxOption == 'able' || FindContents('page-whisper.php', 'commentsNum', 'd')) {
+		Helper::options()->commentsOrder = 'DESC';
 	}
 	if ($archive->is('single') && $options->AttUrlReplace) {
 		$archive->content = AttUrlReplace($archive->content);
