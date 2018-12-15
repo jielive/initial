@@ -26,26 +26,26 @@ function threadedComments($comments, $options) {
 	$comments->alt(' comment-odd', ' comment-even');
 echo $commentClass;
 ?>">
-	<div class="comment-author">
-		<?php $comments->gravatar('32'); ?>
-		<cite><?php $comments->author(); ?></cite>
-	<?php if ($comments->status == 'waiting') { ?>
-		<em class="comment-awaiting-moderation">您的评论正等待审核！</em>
-	<?php } ?>
-	</div>
-	<div class="comment-content">
-		<?php echo strip_tags(Markdown::convert($comments->text), '<p><br><a><img><pre><code>' . Typecho_Widget::widget('Widget_Options')->commentsHTMLTagAllowed); ?>
-	</div>
-	<div class="comment-meta">
-		<time><?php $comments->dateWord(); ?></time>
-	</div>
-	<div class="comment-reply">
-		<?php $comments->reply('评论'); ?>
-	</div>
+<div class="comment-author">
+<?php $comments->gravatar('32'); ?>
+<cite><?php $comments->author(); ?></cite>
+<?php if ($comments->status == 'waiting') { ?>
+<em class="comment-awaiting-moderation">您的评论正等待审核！</em>
+<?php } ?>
+</div>
+<div class="comment-content">
+<?php echo strip_tags(Markdown::convert($comments->text), '<p><br><a><img><pre><code>' . Typecho_Widget::widget('Widget_Options')->commentsHTMLTagAllowed); ?>
+</div>
+<div class="comment-meta">
+<time><?php $comments->dateWord(); ?></time>
+</div>
+<div class="comment-reply">
+<?php $comments->reply('评论'); ?>
+</div>
 <?php if ($comments->children) { ?>
-	<div class="comment-children">
-		<?php $comments->threadedComments($options); ?>
-	</div>
+<div class="comment-children">
+<?php $comments->threadedComments($options); ?>
+</div>
 <?php } ?>
 </li>
 <?php } ?>

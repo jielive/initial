@@ -19,29 +19,29 @@ function threadedComments($comments, $options) {
 	$comments->alt(' comment-odd', ' comment-even');
 echo $commentClass;
 ?>">
-	<div class="comment-author">
-		<?php $comments->gravatar('32'); ?>
-		<cite><?php $comments->author(); ?></cite>
-	<?php if ($comments->authorId == $comments->ownerId) { ?>
-		<span class="author-icon">Author</span>
-	<?php } ?>
-	<?php if ($comments->status == 'waiting') { ?>
-		<em class="comment-awaiting-moderation">您的评论正等待审核！</em>
-	<?php } ?>
-	</div>
-	<div class="comment-meta">
-		<time><?php $comments->date(); ?></time>
-	</div>
-	<div class="comment-content">
-		<?php $comments->content(); ?>
-	</div>
-	<div class="comment-reply">
-		<?php $comments->reply(); ?>
-	</div>
+<div class="comment-author">
+<?php $comments->gravatar('32'); ?>
+<cite><?php $comments->author(); ?></cite>
+<?php if ($comments->authorId == $comments->ownerId) { ?>
+<span class="author-icon">Author</span>
+<?php } ?>
+<?php if ($comments->status == 'waiting') { ?>
+<em class="comment-awaiting-moderation">您的评论正等待审核！</em>
+<?php } ?>
+</div>
+<div class="comment-meta">
+<time><?php $comments->date(); ?></time>
+</div>
+<div class="comment-content">
+<?php $comments->content(); ?>
+</div>
+<div class="comment-reply">
+<?php $comments->reply(); ?>
+</div>
 <?php if ($comments->children) { ?>
-	<div class="comment-children">
-		<?php $comments->threadedComments($options); ?>
-	</div>
+<div class="comment-children">
+<?php $comments->threadedComments($options); ?>
+</div>
 <?php } ?>
 </li>
 <?php } ?>

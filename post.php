@@ -20,9 +20,7 @@
 <p class="rewards">打赏: 
 <?php if ($this->options->WeChat): ?>
 <a><img src="<?php $this->options->WeChat(); ?>" alt="微信收款二维码" />微信</a>
-<?php endif; ?>
-<?php if ($this->options->WeChat && $this->options->Alipay): ?>, <?php endif; ?>
-<?php if ($this->options->Alipay): ?>
+<?php endif; if ($this->options->WeChat && $this->options->Alipay): ?>, <?php endif; if ($this->options->Alipay): ?>
 <a><img src="<?php $this->options->Alipay(); ?>" alt="支付宝收款二维码" />支付宝</a>
 <?php endif; ?>
 </p>

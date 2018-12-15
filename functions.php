@@ -127,7 +127,7 @@ function themeConfig($form) {
 	$InsideLinksSort = new Typecho_Widget_Helper_Form_Element_Text('InsideLinksSort', NULL, NULL, _t('内页（链接模板）显示的链接分类（支持多分类，请用英文逗号“,”分隔）'), _t('若只需显示某分类下的链接，请输入链接分类名（建议使用字母形式的分类名），留空则默认显示全部链接'));
 	$form->addInput($InsideLinksSort);
 
-	$ShowLinks = new Typecho_Widget_Helper_Form_Element_Checkbox('ShowLinks', array('sidebar' => _t('侧边栏'), 'footer' => _t('页脚')), NULL, _t('首页显示链接'));
+	$ShowLinks = new Typecho_Widget_Helper_Form_Element_Checkbox('ShowLinks', array('footer' => _t('页脚'), 'sidebar' => _t('侧边栏')), NULL, _t('首页显示链接'));
 	$form->addInput($ShowLinks->multiMode());
 
 	$ShowWhisper = new Typecho_Widget_Helper_Form_Element_Checkbox('ShowWhisper', array('index' => _t('首页'), 'sidebar' => _t('侧边栏')), NULL, _t('显示最新的“轻语”'));
@@ -220,7 +220,7 @@ function Contents_Post_Initial($limit = 10, $order = NULL) {
 		foreach($posts as $post) {
 			$post = Typecho_Widget::widget('Widget_Abstract_Contents')->push($post);
 			$title = htmlspecialchars($post['title']);
-			echo '<li><a'.($post['hidden'] && $options->PjaxOption == 'able' ? '' : ' href="'.$post['permalink'].'"').'>'.$title.'</a></li>';
+			echo '<li><a'.($post['hidden'] && $options->PjaxOption == 'able' ? '' : ' href="'.$post['permalink'].'"').'>'.$title.'</a></li>'."\n";
 		}
 	}
 }
@@ -233,7 +233,7 @@ function Contents_Comments_Initial($limit = 10, $ignoreAuthor = 0) {
 		->where('created < ?', $options->time)
 		->order('coid', Typecho_Db::SORT_DESC)
 		->limit($limit);
-	if ($ptions->commentsShowCommentOnly) {
+	if ($options->commentsShowCommentOnly) {
 		$select->where('type = ?', 'comment');
 	}
 	if ($ignoreAuthor == 1) {
@@ -247,7 +247,7 @@ function Contents_Comments_Initial($limit = 10, $ignoreAuthor = 0) {
 	if($comments) {
 		foreach($comments as $comment) {
 			$parent = ParentContent($comment['cid']);
-			echo '<li><a'.($parent['hidden'] && $options->PjaxOption == 'able' ? '' : ' href="'.$parent['permalink'].'"').' title="来自: '.$parent['title'].'">'.$comment['author'].'</a>: '.($parent['hidden'] && $options->PjaxOption == 'able' ? '内容被隐藏' : Typecho_Common::subStr(strip_tags($comment['text']), 0, 35, '...')).'</li>';
+			echo '<li><a'.($parent['hidden'] && $options->PjaxOption == 'able' ? '' : ' href="'.$parent['permalink'].'"').' title="来自: '.$parent['title'].'">'.$comment['author'].'</a>: '.($parent['hidden'] && $options->PjaxOption == 'able' ? '内容被隐藏' : Typecho_Common::subStr(strip_tags($comment['text']), 0, 35, '...')).'</li>'."\n";
 		}
 	}
 }
@@ -288,10 +288,10 @@ function Whisper($sidebar = NULL) {
 	$pages = FindContents('page-whisper.php', 'commentsNum', 'd');
 	$p = $sidebar ? 'li' : 'p';
 	if (!$pages) {
-		echo ($sidebar ? '' : '<h2 class="post-title">轻语</h2>').'<'.$p.'>暂无内容</'.$p.'>';
+		echo ($sidebar ? '' : '<h2 class="post-title">轻语</h2>'."\n").'<'.$p.'>暂无内容</'.$p.'>'."\n";
 	}
 	if ($pages[0]) {
-		$title = $sidebar ? '' : '<h2 class="post-title"><a href="'.$pages[0]['permalink'].'">'.$pages[0]['title'].'</a></h2>';
+		$title = $sidebar ? '' : '<h2 class="post-title"><a href="'.$pages[0]['permalink'].'">'.$pages[0]['title'].'</a></h2>'."\n";
 		$comments = $db->fetchAll($db->select()->from('table.comments')
 			->where('cid = ?', $pages[0]['cid'])
 			->where('status = ?', 'approved')
@@ -305,13 +305,13 @@ function Whisper($sidebar = NULL) {
 				if ($options->AttUrlReplace) {
 					$content = AttUrlReplace($content);
 				}
-				echo $title.strip_tags($content, '<p><br><a><img><pre><code>' . $options->commentsHTMLTagAllowed);
+				echo $title.strip_tags($content, '<p><br><a><img><pre><code>' . $options->commentsHTMLTagAllowed)."\n";
 			}
 			if ($sidebar && $comments[1]) {
-				echo '<li class="more"><a href="'.$pages[0]['permalink'].'">查看更多...</a></li>';
+				echo '<li class="more"><a href="'.$pages[0]['permalink'].'">查看更多...</a></li>'."\n";
 			}
 		} else {
-			echo $title.'<'.$p.'>暂无内容</'.$p.'>';
+			echo $title.'<'.$p.'>暂无内容</'.$p.'>'."\n";
 		}
 	}
 }
@@ -325,14 +325,14 @@ function Links($sorts = NULL, $icon = 0) {
 			if ($sorts) {
 				$arr = explode(",", $sorts);
 				if (in_array($sort, $arr)) {
-					$Links .= '<li><a' .($url ? ' href="'.$url.'"' : '') .($icon==1&&$url ? ' class="l_logo"' : '') .' title="' .$description .'" target="_blank">' .($icon==1&&$url ? '<img src="' .($logo ? $logo : $url .'/favicon.ico') .'" onerror="erroricon(this)">' : '') .'<span>' .($url ? $name : '<del>' .$name .'</del>') .'</span></a></li>';
+					$Links .= '<li><a' .($url ? ' href="'.$url.'"' : '') .($icon==1&&$url ? ' class="l_logo"' : '') .' title="' .$description .'" target="_blank">' .($icon==1&&$url ? '<img src="' .($logo ? $logo : $url .'/favicon.ico') .'" onerror="erroricon(this)">' : '') .'<span>' .($url ? $name : '<del>' .$name .'</del>') .'</span></a></li>'."\n";
 				}
 			} else {
-				$Links .= '<li><a' .($url ? ' href="'.$url.'"' : '') .($icon==1&&$url ? ' class="l_logo"' : '') .' title="' .$description .'" target="_blank">' .($icon==1&&$url ? '<img src="' .($logo ? $logo : $url .'/favicon.ico') .'" onerror="erroricon(this)">' : '') .'<span>' .($url ? $name : '<del>' .$name .'</del>') .'</span></a></li>';
+				$Links .= '<li><a' .($url ? ' href="'.$url.'"' : '') .($icon==1&&$url ? ' class="l_logo"' : '') .' title="' .$description .'" target="_blank">' .($icon==1&&$url ? '<img src="' .($logo ? $logo : $url .'/favicon.ico') .'" onerror="erroricon(this)">' : '') .'<span>' .($url ? $name : '<del>' .$name .'</del>') .'</span></a></li>'."\n";
 			}
 		}
 	}
-	echo $Links ? $Links : '<li>暂无链接</li>';
+	echo $Links ? $Links : '<li>暂无链接</li>'."\n";
 }
 
 function getToken_Initial() {
