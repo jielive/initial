@@ -34,7 +34,7 @@ echo $commentClass;
 <?php } ?>
 </div>
 <div class="comment-content">
-<?php echo strip_tags(Markdown::convert($comments->text), '<p><br><a><img><pre><code>' . Typecho_Widget::widget('Widget_Options')->commentsHTMLTagAllowed); ?>
+<?php echo strip_tags(Markdown::convert($comments->text), '<p><br><strong><a><img><pre><code>' . Typecho_Widget::widget('Widget_Options')->commentsHTMLTagAllowed); ?>
 </div>
 <div class="comment-meta">
 <time><?php $comments->dateWord(); ?></time>

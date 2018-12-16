@@ -286,7 +286,7 @@ function Whisper($sidebar = NULL) {
 	$pages = FindContents('page-whisper.php', 'commentsNum', 'd');
 	$p = $sidebar ? 'li' : 'p';
 	if (!$pages) {
-		echo ($sidebar ? '' : '<h2 class="post-title">轻语</h2>'."\n").'<'.$p.'>暂无内容</'.$p.'>'."\n";
+		echo ($sidebar ? '' : '<h2 class="post-title"><a>轻语</a></h2>'."\n").'<'.$p.'>暂无内容</'.$p.'>'."\n";
 	}
 	if ($pages[0]) {
 		$title = $sidebar ? '' : '<h2 class="post-title"><a href="'.$pages[0]['permalink'].'">'.$pages[0]['title'].'</a></h2>'."\n";
@@ -303,7 +303,7 @@ function Whisper($sidebar = NULL) {
 				if ($options->AttUrlReplace) {
 					$content = AttUrlReplace($content);
 				}
-				echo $title.strip_tags($content, '<p><br><a><img><pre><code>' . $options->commentsHTMLTagAllowed)."\n";
+				echo $title.strip_tags($content, '<p><br><strong><a><img><pre><code>' . $options->commentsHTMLTagAllowed)."\n";
 			}
 			if ($sidebar && $comments[1]) {
 				echo '<li class="more"><a href="'.$pages[0]['permalink'].'">查看更多...</a></li>'."\n";
