@@ -2,11 +2,11 @@
 <div id="secondary">
 <?php if (!empty($this->options->ShowWhisper) && in_array('sidebar', $this->options->ShowWhisper)): ?>
 <section class="widget">
-<h3 class="widget-title"><?php echo FindContents('page-whisper.php') ? FindContents('page-whisper.php', 'commentsNum', 'd')[0]['title'] : '轻语'; ?></h3>
+<h3 class="widget-title"><?php echo FindContents('page-whisper.php') ? FindContents('page-whisper.php', 'commentsNum', 'd')[0]['title'] : '轻语' ?></h3>
 <ul class="widget-list whisper">
 <?php Whisper(1); ?>
 <?php if ($this->user->pass('editor', true) && (!FindContents('page-whisper.php') || FindContents('page-whisper.php')[1])): ?>
-<li class="notice"><b>仅管理员可见: </b><br><?php echo FindContents('page-whisper.php') ? '发现多个"轻语"模板页面，已自动选取内容最多的页面作为展示，请删除多余模板页面。' : '未找到"轻语"模板页面，请检查是否创建模板页面。'; ?></li>
+<li class="notice"><b>仅管理员可见: </b><br><?php echo FindContents('page-whisper.php') ? '发现多个"轻语"模板页面，已自动选取内容最多的页面作为展示，请删除多余模板页面。' : '未找到"轻语"模板页面，请检查是否创建模板页面。' ?></li>
 <?php endif; ?>
 </ul>
 </section>
@@ -31,7 +31,7 @@
 <section class="widget">
 <h3 class="widget-title">最近回复</h3>
 <ul class="widget-list">
-<?php Contents_Comments_Initial($this->options->commentsListSize, in_array('IgnoreAuthor', $this->options->sidebarBlock) ? 1 : '');?>
+<?php Contents_Comments_Initial($this->options->commentsListSize, in_array('IgnoreAuthor', $this->options->sidebarBlock) ? 1 : ''); ?>
 </ul>
 </section>
 <?php endif; ?>
@@ -48,7 +48,7 @@
 <section class="widget">
 <h3 class="widget-title">标签</h3>
 <ul class="widget-tile">
-<?php $this->widget('Widget_Metas_Tag_Cloud', 'ignoreZeroCount=1&desc=1&limit=30')->to($tags); ?>
+<?php $this->widget('Widget_Metas_Tag_Cloud', 'ignoreZeroCount=1&limit=30')->to($tags); ?>
 <?php if($tags->have()): ?>
 <?php while($tags->next()): ?>
 <li><a href="<?php $tags->permalink(); ?>"><?php $tags->name(); ?></a></li>
@@ -86,7 +86,7 @@
 <li><a href="<?php $this->options->feedUrl(); ?>" target="_blank">文章 RSS</a></li>
 <li><a href="<?php $this->options->commentsFeedUrl(); ?>" target="_blank">评论 RSS</a></li>
 <?php if($this->user->hasLogin()): ?>
-<li class="last"><a href="<?php $this->options->adminUrl(); ?>" target="_blank">进入后台 (<?php $this->user->screenName(); ?>)</a></li>
+<li><a href="<?php $this->options->adminUrl(); ?>" target="_blank">进入后台 (<?php $this->user->screenName(); ?>)</a></li>
 <li><a href="<?php $this->options->logoutUrl(); ?>"<?php if ($this->options->PjaxOption == 'able'): ?> no-pjax <?php endif; ?>>退出</a></li>
 <?php endif; ?>
 </ul>

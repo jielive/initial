@@ -9,7 +9,7 @@
 ), '', ''); ?></div>
 <?php if ($this->have()): ?>
 <?php while($this->next()): ?>
-<article class="post<?php if ($this->options->PjaxOption == 'able' && isset($this->password) && $this->password !== Typecho_Cookie::get('protectPassword') && $this->authorId !== $this->user->uid && !$this->user->pass('editor', true)): ?> protected<?php endif; ?>">
+<article class="post<?php if ($this->options->PjaxOption == 'able' && $this->hidden): ?> protected<?php endif; ?>">
 <h2 class="post-title"><a href="<?php $this->permalink() ?>"><?php $this->title() ?></a></h2>
 <ul class="post-meta">
 <li><?php $this->date(); ?></li>
@@ -17,7 +17,7 @@
 <li><?php $this->commentsNum('暂无评论', '%d 条评论'); ?></li>
 </ul>
 <div class="post-content">
-<?php if ($this->options->PjaxOption == 'able' && isset($this->password) && $this->password !== Typecho_Cookie::get('protectPassword') && $this->authorId !== $this->user->uid && !$this->user->pass('editor', true)): ?>
+<?php if ($this->options->PjaxOption == 'able' && $this->hidden): ?>
 <form action="<?php echo Typecho_Widget::widget('Widget_Security')->getTokenUrl($this->permalink()); ?>" method="post">
 <p class="word">请输入密码访问</p>
 <p>
@@ -40,7 +40,7 @@
 <h2 class="post-title">没有找到内容</h2>
 </article>
 <?php endif; ?>
-<?php $this->pageNav('上一页', $this->options->AjaxLoad == 'able' ? '查看更多' : '下一页', 0, '..', $this->options->AjaxLoad == 'able' ? array('wrapClass' => 'page-navigator ajaxload') : ''); ?>
+<?php $this->pageNav('上一页', $this->options->AjaxLoad != 'disable' ? '查看更多' : '下一页', 0, '..', $this->options->AjaxLoad != 'disable' ? array('wrapClass' => 'page-navigator ajaxload') : ''); ?>
 </div>
 <?php $this->need('sidebar.php'); ?>
 <?php $this->need('footer.php'); ?>

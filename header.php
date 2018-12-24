@@ -1,23 +1,12 @@
 <?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="<?php $this->options->charset(); ?>" />
-<?php if ($this->options->DNSPrefetch == 'able'): ?>
-<meta http-equiv="x-dns-prefetch-control" content="on" />
-<?php if ($this->options->cjcdnAddress): ?>
-<link rel="dns-prefetch" href="<?php $this->options->cjcdnAddress(); ?>" />
-<?php endif; ?>
-<link rel="dns-prefetch" href="//<?php if ($this->options->cjCDN == 'bc'): ?>cdn.bootcss.com<?php elseif ($this->options->cjCDN == 'cf'): ?>cdnjs.cloudflare.com<?php else: ?>cdn.jsdelivr.net<?php endif; ?>" />
-<link rel="dns-prefetch" href="//secure.gravatar.com" />
-<?php endif; ?>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 <?php if ($this->options->favicon): ?>
 <link rel="shortcut icon" href="<?php $this->options->favicon(); ?>" />
-<?php endif; if($this->options->iosicon): ?>
-<link rel="apple-touch-icon" href="<?php $this->options->iosicon();?>" />
 <?php endif; ?>
 <title><?php $this->archiveTitle(array(
 'category'  =>  _t('分类 %s 下的文章'),
@@ -26,14 +15,10 @@
 'author'    =>  _t('%s 发布的文章')
 ), '', ' - '); ?><?php $this->options->title(); if ($this->is('index') && $this->options->subTitle): ?> - <?php $this->options->subTitle(); endif; ?></title>
 <?php $this->header('generator=&template=&pingback=&xmlrpc=&wlw=&commentReply=&rss1=&rss2=&antiSpam=&atom='); ?>
-<link rel="stylesheet" href="<?php if ($this->options->cjcdnAddress): $this->options->cjcdnAddress(); ?>/style.min.css<?php else: $this->options->themeUrl('style.min.css'); endif; ?>" />
-<!--[if lt IE 9]>
-<script src="//<?php if ($this->options->cjCDN == 'bc'): ?>cdn.bootcss.com/html5shiv/r29/html5.min.js<?php elseif ($this->options->cjCDN == 'cf'): ?>cdnjs.cloudflare.com/ajax/libs/html5shiv/r29/html5.min.js<?php else: ?>cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js<?php endif; ?>"></script>
-<script src="//<?php if ($this->options->cjCDN == 'bc'): ?>cdn.bootcss.com/respond.js/1.4.2/respond.min.js<?php elseif ($this->options->cjCDN == 'cf'): ?>cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js<?php else: ?>cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js<?php endif; ?>"></script>
-<![endif]-->
+<link rel="stylesheet" href="<?php cjUrl('style.min.css') ?>" />
 </head>
 <body <?php if ($this->options->HeadFixed == 'able'): ?>class="head-fixed"<?php endif; ?>>
-<!--[if lt IE 8]>
+<!--[if lt IE 9]>
 <div class="browsehappy">当前网页可能 <strong>不支持</strong> 您正在使用的浏览器. 为了正常的访问, 请 <a href="https://browsehappy.com/">升级您的浏览器</a>.</div>
 <![endif]-->
 <header id="header">

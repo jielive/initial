@@ -1,6 +1,8 @@
 <?php
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
 
+if (Helper::options()->GravatarUrl) define('__TYPECHO_GRAVATAR_PREFIX__', Helper::options()->GravatarUrl);
+
 function themeConfig($form) {
 	$logoUrl = new Typecho_Widget_Helper_Form_Element_Text('logoUrl', NULL, NULL, _t('站点 LOGO 地址'), _t('在这里填入一个图片 URL 地址, 以在网站标题前加上一个 LOGO'));
 	$form->addInput($logoUrl);
@@ -14,10 +16,7 @@ function themeConfig($form) {
 	$favicon = new Typecho_Widget_Helper_Form_Element_Text('favicon', NULL, NULL, _t('Favicon 地址'), _t('在这里填入一个图片 URL 地址, 以添加一个Favicon，留空则不单独设置Favicon'));
 	$form->addInput($favicon);
 
-	$iosicon = new Typecho_Widget_Helper_Form_Element_Text('iosicon', NULL, NULL, _t('Apple Touch Icon 地址'), _t('在这里填入一个图片 URL 地址, 以添加一个Apple Touch Icon，留空则不设置Apple Touch Icon'));
-	$form->addInput($iosicon);
-
-	$cjcdnAddress = new Typecho_Widget_Helper_Form_Element_Text('cjcdnAddress', NULL, NULL, _t('CSS文件的链接地址替换（结尾不用加斜杠“/”）'), _t('请输入你的CDN云存储地址，例如：http://cdn.example.com，支持绝大部分有镜像功能的CDN服务<br><b>被替换的原地址为主题文件位置，即：http://www.example.com/usr/themes/initial</b>'));
+	$cjcdnAddress = new Typecho_Widget_Helper_Form_Element_Text('cjcdnAddress', NULL, NULL, _t('CSS文件的链接地址替换'), _t('请输入你的CDN云存储地址，例如：http://cdn.example.com/，支持绝大部分有镜像功能的CDN服务<br><b>被替换的原地址为主题文件位置，即：http://www.example.com/usr/themes/initial/</b>'));
 	$form->addInput($cjcdnAddress);
 
 	$AttUrlReplace = new Typecho_Widget_Helper_Form_Element_Textarea('AttUrlReplace', NULL, NULL, _t('文章内的链接地址替换（建议用在图片等静态资源的链接上）'), _t('按照格式输入你的CDN链接以替换原链接，格式：<br><b class="notice">原地址=替换地址</b><br>原地址与新地址之间用等号“=”分隔，例如：<br><b>http://www.example.com/usr/uploads/=http://cdn.example.com/usr/uploads/</b><br>支持绝大部分有镜像功能的CDN服务，可设置多个规则，换行即可，一行一个'));
@@ -62,18 +61,19 @@ function themeConfig($form) {
 	'disable', _t('动态显示侧边栏'), _t('默认关闭'));
 	$form->addInput($SidebarFixed);
 
-	$DNSPrefetch = new Typecho_Widget_Helper_Form_Element_Radio('DNSPrefetch', 
-	array('able' => _t('启用'),
-	'disable' => _t('关闭')),
-	'disable', _t('DNS预获取'), _t('默认关闭，启用则会对CDN资源和Gravatar头像进行预获取加速'));
-	$form->addInput($DNSPrefetch);
-
 	$cjCDN = new Typecho_Widget_Helper_Form_Element_Radio('cjCDN', 
 	array('bc' => _t('BootCDN'),
 	'cf' => _t('CDNJS'),
 	'jd' => _t('jsDelivr')),
 	'bc', _t('公共静态资源来源'), _t('默认BootCDN，请根据需求选择合适来源'));
 	$form->addInput($cjCDN);
+
+	$GravatarUrl = new Typecho_Widget_Helper_Form_Element_Radio('GravatarUrl', 
+	array(false => _t('官方源'),
+	'https://cn.gravatar.com/avatar/' => _t('国内源'),
+	'https://cdn.v2ex.com/gravatar/' => _t('V2EX源')),
+	false, _t('Gravatar头像源'), _t('默认官方源'));
+	$form->addInput($GravatarUrl);
 
 	$compressHtml = new Typecho_Widget_Helper_Form_Element_Radio('compressHtml', 
 	array('able' => _t('启用'),
@@ -88,7 +88,8 @@ function themeConfig($form) {
 	$form->addInput($PjaxOption);
 
 	$AjaxLoad = new Typecho_Widget_Helper_Form_Element_Radio('AjaxLoad', 
-	array('able' => _t('启用'),
+	array('auto' => _t('自动'),
+	'click' => _t('点击'),
 	'disable' => _t('关闭')),
 	'disable', _t('Ajax翻页'), _t('默认关闭，启用则会使用Ajax加载文章翻页'));
 	$form->addInput($AjaxLoad);
@@ -152,8 +153,17 @@ function themeConfig($form) {
 	$form->addInput($CustomContent);
 }
 
+function cjUrl($path) {
+	$options = Helper::options();
+	if ($options->cjcdnAddress) {
+		echo rtrim($options->cjcdnAddress, "/").'/'.$path;
+	} else {
+		$options->themeUrl($path);
+	}
+}
+
 function themeInit($archive) {
-	$options = Typecho_Widget::widget('Widget_Options');
+	$options = Helper::options();
 	if ($options->PjaxOption == 'able' || FindContents('page-whisper.php', 'commentsNum', 'd')) {
 		Helper::options()->commentsAntiSpam = false;
 		Helper::options()->commentsOrder = 'DESC';
@@ -165,7 +175,7 @@ function themeInit($archive) {
 }
 
 function AttUrlReplace($obj) {
-	$options = Typecho_Widget::widget('Widget_Options');
+	$options = Helper::options();
 	$list = explode("\r\n", $options->AttUrlReplace);
 	foreach ($list as $tmp) {
 		list($old, $new) = explode('=', $tmp);
@@ -179,7 +189,7 @@ function postThumb($obj) {
 	if(!$val) {
 		return false;
 	} else {
-		$options = Typecho_Widget::widget('Widget_Options');
+		$options = Helper::options();
 		if(is_numeric($val)) {
 			preg_match_all( "/<[img|IMG].*?src=[\'|\"](.*?)[\'|\"].*?[\/]?>/", $obj->content, $matches );
 			if (isset($matches[1][$val-1])) {
@@ -203,7 +213,7 @@ function postThumb($obj) {
 
 function Contents_Post_Initial($limit = 10, $order = NULL) {
 	$db = Typecho_Db::get();
-	$options = Typecho_Widget::widget('Widget_Options');
+	$options = Helper::options();
 	$select = $db->select()->from('table.contents')
 		->where('type = ?', 'post')
 		->where('status = ?','publish')
@@ -225,7 +235,7 @@ function Contents_Post_Initial($limit = 10, $order = NULL) {
 
 function Contents_Comments_Initial($limit = 10, $ignoreAuthor = 0) {
 	$db = Typecho_Db::get();
-	$options = Typecho_Widget::widget('Widget_Options');
+	$options = Helper::options();
 	$select = $db->select()->from('table.comments')
 		->where('status = ?','approved')
 		->where('created < ?', $options->time)
@@ -259,7 +269,7 @@ function ParentContent($cid) {
 
 function FindContents($val = NULL, $order = 'order', $sort = 'a', $publish = NULL) {
 	$db = Typecho_Db::get();
-	$options = Typecho_Widget::widget('Widget_Options');
+	$options = Helper::options();
 	$sort = ($sort == 'a') ? Typecho_Db::SORT_ASC : Typecho_Db::SORT_DESC;
 	$select = $db->select()->from('table.contents')
 		->where('type = ?', 'page')
@@ -282,7 +292,7 @@ function FindContents($val = NULL, $order = 'order', $sort = 'a', $publish = NUL
 
 function Whisper($sidebar = NULL) {
 	$db = Typecho_Db::get();
-	$options = Typecho_Widget::widget('Widget_Options');
+	$options = Helper::options();
 	$pages = FindContents('page-whisper.php', 'commentsNum', 'd');
 	$p = $sidebar ? 'li' : 'p';
 	if (!$pages) {
@@ -315,7 +325,7 @@ function Whisper($sidebar = NULL) {
 }
 
 function Links($sorts = NULL, $icon = 0) {
-	$options = Typecho_Widget::widget('Widget_Options');
+	$options = Helper::options();
 	if ($options->Links) {
 		$list = explode("\r\n", $options->Links);
 		foreach ($list as $tmp) {
@@ -323,23 +333,18 @@ function Links($sorts = NULL, $icon = 0) {
 			if ($sorts) {
 				$arr = explode(",", $sorts);
 				if (in_array($sort, $arr)) {
-					$Links .= '<li><a' .($url ? ' href="'.$url.'"' : '') .($icon==1&&$url ? ' class="l_logo"' : '') .' title="' .$description .'" target="_blank">' .($icon==1&&$url ? '<img src="' .($logo ? $logo : $url .'/favicon.ico') .'" onerror="erroricon(this)">' : '') .'<span>' .($url ? $name : '<del>' .$name .'</del>') .'</span></a></li>'."\n";
+					$Links .= '<li><a' .($url ? ' href="'.$url.'"' : '') .($icon==1&&$url ? ' class="l_logo"' : '') .' title="' .$description .'" target="_blank">' .($icon==1&&$url ? '<img src="' .($logo ? $logo : rtrim($url, "/") .'/favicon.ico') .'" onerror="erroricon(this)">' : '') .'<span>' .($url ? $name : '<del>' .$name .'</del>') .'</span></a></li>'."\n";
 				}
 			} else {
-				$Links .= '<li><a' .($url ? ' href="'.$url.'"' : '') .($icon==1&&$url ? ' class="l_logo"' : '') .' title="' .$description .'" target="_blank">' .($icon==1&&$url ? '<img src="' .($logo ? $logo : $url .'/favicon.ico') .'" onerror="erroricon(this)">' : '') .'<span>' .($url ? $name : '<del>' .$name .'</del>') .'</span></a></li>'."\n";
+				$Links .= '<li><a' .($url ? ' href="'.$url.'"' : '') .($icon==1&&$url ? ' class="l_logo"' : '') .' title="' .$description .'" target="_blank">' .($icon==1&&$url ? '<img src="' .($logo ? $logo : rtrim($url, "/") .'/favicon.ico') .'" onerror="erroricon(this)">' : '') .'<span>' .($url ? $name : '<del>' .$name .'</del>') .'</span></a></li>'."\n";
 			}
 		}
 	}
 	echo $Links ? $Links : '<li>暂无链接</li>'."\n";
 }
 
-function getToken_Initial() {
-	$options = Typecho_Widget::widget('Widget_Options');
-	echo Typecho_Widget::widget('Widget_Security')->getTokenUrl('Token');
-}
-
 function Playlist() {
-	$options = Typecho_Widget::widget('Widget_Options');
+	$options = Helper::options();
 	$arr = explode("\r\n", $options->MusicUrl);
 	echo '[';
 	for($i = 0; $i < count($arr); $i++) {
