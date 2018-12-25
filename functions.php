@@ -1,6 +1,8 @@
 <?php
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
 
+define('INITIAL_VERSION_NUMBER', '2.3.2');
+
 if (Helper::options()->GravatarUrl) define('__TYPECHO_GRAVATAR_PREFIX__', Helper::options()->GravatarUrl);
 
 function themeConfig($form) {
@@ -153,30 +155,30 @@ function themeConfig($form) {
 	$form->addInput($CustomContent);
 }
 
-function cjUrl($path) {
-	$options = Helper::options();
-	if ($options->cjcdnAddress) {
-		echo rtrim($options->cjcdnAddress, "/").'/'.$path;
-	} else {
-		$options->themeUrl($path);
-	}
-}
-
 function themeInit($archive) {
 	$options = Helper::options();
 	if ($options->PjaxOption == 'able' || FindContents('page-whisper.php', 'commentsNum', 'd')) {
-		Helper::options()->commentsAntiSpam = false;
-		Helper::options()->commentsOrder = 'DESC';
-		Helper::options()->commentsPageDisplay = 'first';
+		$options->commentsAntiSpam = false;
+		$options->commentsOrder = 'DESC';
+		$options->commentsPageDisplay = 'first';
 	}
 	if ($archive->is('single') && $options->AttUrlReplace) {
 		$archive->content = AttUrlReplace($archive->content);
 	}
 }
 
-function AttUrlReplace($obj) {
+function cjUrl($path) {
 	$options = Helper::options();
-	$list = explode("\r\n", $options->AttUrlReplace);
+	$ver = '?ver='.constant("INITIAL_VERSION_NUMBER");
+	if ($options->cjcdnAddress) {
+		echo rtrim($options->cjcdnAddress, "/").'/'.$path.$ver;
+	} else {
+		$options->themeUrl($path.$ver);
+	}
+}
+
+function AttUrlReplace($obj) {
+	$list = explode("\r\n", Helper::options()->AttUrlReplace);
 	foreach ($list as $tmp) {
 		list($old, $new) = explode('=', $tmp);
 		$obj = str_replace($old, $new, $obj);
@@ -269,11 +271,10 @@ function ParentContent($cid) {
 
 function FindContents($val = NULL, $order = 'order', $sort = 'a', $publish = NULL) {
 	$db = Typecho_Db::get();
-	$options = Helper::options();
 	$sort = ($sort == 'a') ? Typecho_Db::SORT_ASC : Typecho_Db::SORT_DESC;
 	$select = $db->select()->from('table.contents')
 		->where('type = ?', 'page')
-		->where('created < ?', $options->time)
+		->where('created < ?', Helper::options()->time)
 		->order($order, $sort);
 	if ($val) {
 		$select->where('template = ?', $val);
@@ -344,11 +345,11 @@ function Links($sorts = NULL, $icon = 0) {
 }
 
 function Playlist() {
-	$options = Helper::options();
-	$arr = explode("\r\n", $options->MusicUrl);
+	$arr = explode("\r\n", Helper::options()->MusicUrl);
+	$count = count($arr);
 	echo '[';
-	for($i = 0; $i < count($arr); $i++) {
-		if ($i == count($arr) - 1) {
+	for($i = 0; $i < $count; $i++) {
+		if ($i == $count - 1) {
 			echo '"'.$arr[$i].'"]';
 		} else {
 			echo '"'.$arr[$i].'",';

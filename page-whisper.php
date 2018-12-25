@@ -4,8 +4,8 @@
  *
  * @package custom
  */
-?>
-<?php if (!defined('__TYPECHO_ROOT_DIR__')) exit;
+if (!defined('__TYPECHO_ROOT_DIR__')) exit;
+$this->need('header.php');
 function threadedComments($comments, $options) {
 	$commentClass = '';
 	if ($comments->authorId) {
@@ -49,7 +49,6 @@ echo $commentClass;
 <?php } ?>
 </li>
 <?php } ?>
-<?php $this->need('header.php'); ?>
 <div id="main">
 <?php if (!empty($this->options->Breadcrumbs) && in_array('Pageshow', $this->options->Breadcrumbs)): ?>
 <div class="breadcrumbs">

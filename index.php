@@ -5,12 +5,12 @@
  * 
  * @package Initial
  * @author JIElive
- * @version 2.3.1
+ * @version 2.3.2
  * @link http://www.offodd.com/
  */
+if (!defined('__TYPECHO_ROOT_DIR__')) exit;
+$this->need('header.php');
 ?>
-<?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
-<?php $this->need('header.php'); ?>
 <div id="main">
 <?php if ($this->_currentPage == 1 && !empty($this->options->ShowWhisper) && in_array('index', $this->options->ShowWhisper)): ?>
 <article class="post whisper">
