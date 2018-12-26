@@ -158,7 +158,7 @@ function themeConfig($form) {
 function themeInit($archive) {
 	$options = Helper::options();
 	if ($options->PjaxOption == 'able' || FindContents('page-whisper.php', 'commentsNum', 'd')) {
-		$options->commentsAntiSpam = false;
+		//$options->commentsAntiSpam = false;
 		$options->commentsOrder = 'DESC';
 		$options->commentsPageDisplay = 'first';
 	}
