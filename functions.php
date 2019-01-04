@@ -1,7 +1,7 @@
 <?php
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
 
-define('INITIAL_VERSION_NUMBER', '2.3.2');
+define('INITIAL_VERSION_NUMBER', '2.4');
 
 if (Helper::options()->GravatarUrl) define('__TYPECHO_GRAVATAR_PREFIX__', Helper::options()->GravatarUrl);
 
@@ -63,6 +63,12 @@ function themeConfig($form) {
 	'disable', _t('动态显示侧边栏'), _t('默认关闭'));
 	$form->addInput($SidebarFixed);
 
+	$Catalog = new Typecho_Widget_Helper_Form_Element_Radio('Catalog', 
+	array(true => _t('启用'),
+	false => _t('关闭')),
+	false, _t('文章目录'), _t('默认关闭，启用则会在文章内显示“文章目录”（若文章内无任何标题，则不显示目录）'));
+	$form->addInput($Catalog);
+
 	$cjCDN = new Typecho_Widget_Helper_Form_Element_Radio('cjCDN', 
 	array('bc' => _t('BootCDN'),
 	'cf' => _t('CDNJS'),
@@ -114,8 +120,8 @@ function themeConfig($form) {
 	$MusicVol = new Typecho_Widget_Helper_Form_Element_Text('MusicVol', NULL, NULL, _t('背景音乐播放音量（输入范围：0~1）'), _t('请输入一个0到1之间的小数（0为静音  0.5为50%音量  1为100%最大音量）输入错误内容或留空则使用默认音量100%'));
 	$form->addInput($MusicVol->addRule('isInteger', _t('请填入一个0~1内的数字')));
 
-	$Links = new Typecho_Widget_Helper_Form_Element_Textarea('Links', NULL, NULL, _t('链接列表<b class="notice">（注意：切换主题会被清空，注意备份！）</b>'), _t('按照格式输入链接信息，格式：<br><b class="notice">链接名称*,链接地址*,链接描述,连接图标,链接分类</b><br>不同信息之间用英文逗号“,”分隔，例如：<br><b>OFFODD,http://www.offodd.com/,JIElive的博客 | 有点不同,https://www.offodd.com/logo.png,Myself</b><br>若中间有暂时不想填的信息，请留空，例如暂时不想填写链接描述和链接图标：<br><b>OFFODD,http://www.offodd.com/,,,Myself</b><br>多个链接换行即可，一行一个'));
-	$Links->input->setAttribute('style', 'height:200px');
+	$Links = new Typecho_Widget_Helper_Form_Element_Textarea('Links', NULL, NULL, _t('链接列表（注意：切换主题会被清空，注意备份！）<br><span class="notice"><b style="color:red">！！！注意：</b>新版本 链接列表 已迁移至 <b style="color:red">管理</b> &raquo; <b style="color:red">独立页面</b> &raquo; <b style="color:red">“链接”模板页面</b> &raquo; <b style="color:red">自定义字段"links"</b> 内，请前往该处操作。</span>更多信息请 <a href="https://www.offodd.com/58.html">点击这里</a> 查看帮助。'), _t('按照格式输入链接信息，格式：<br><b class="notice">链接名称,链接地址,链接描述,连接图标,链接分类</b><br>不同信息之间用英文逗号“,”分隔，例如：<br><b>OFFODD,http://www.offodd.com/,JIElive的博客 | 有点不同,https://www.offodd.com/logo.png,Myself</b><br>若中间有暂时不想填的信息，请留空，例如暂时不想填写链接描述和链接图标：<br><b>OFFODD,http://www.offodd.com/,,,Myself</b><br>多个链接换行即可，一行一个'));
+	$Links->input->setAttribute('style', 'background:#eee;color:#999');
 	$form->addInput($Links);
 
 	$InsideLinksIcon = new Typecho_Widget_Helper_Form_Element_Radio('InsideLinksIcon', 
@@ -157,13 +163,18 @@ function themeConfig($form) {
 
 function themeInit($archive) {
 	$options = Helper::options();
+	$options->commentsAntiSpam = false;
 	if ($options->PjaxOption == 'able' || FindContents('page-whisper.php', 'commentsNum', 'd')) {
-		$options->commentsAntiSpam = false;
 		$options->commentsOrder = 'DESC';
 		$options->commentsPageDisplay = 'first';
 	}
-	if ($archive->is('single') && $options->AttUrlReplace) {
-		$archive->content = AttUrlReplace($archive->content);
+	if ($archive->is('single')) {
+		if ($options->AttUrlReplace) {
+			$archive->content = AttUrlReplace($archive->content);
+		}
+		if ($options->Catalog) {
+			$archive->content = createCatalog($archive->content);
+		}
 	}
 }
 
@@ -193,7 +204,7 @@ function postThumb($obj) {
 	} else {
 		$options = Helper::options();
 		if(is_numeric($val)) {
-			preg_match_all( "/<[img|IMG].*?src=[\'|\"](.*?)[\'|\"].*?[\/]?>/", $obj->content, $matches );
+			preg_match_all( "/<img.*?src=[\'|\"](.*?)[\'|\"].*?[\/]?>/i", $obj->content, $matches );
 			if (isset($matches[1][$val-1])) {
 				$thumb = $matches[1][$val-1];
 				if ($options->AttUrlReplace) {
@@ -213,24 +224,96 @@ function postThumb($obj) {
 	}
 }
 
-function Contents_Post_Initial($limit = 10, $order = NULL) {
+function Postviews($archive) {
+	$db = Typecho_Db::get();
+	$cid = $archive->cid;
+	if (!array_key_exists('views', $db->fetchRow($db->select()->from('table.contents')))) {
+		$db->query('ALTER TABLE `'.$db->getPrefix().'contents` ADD `views` INT(10) DEFAULT 0;');
+	}
+	$exist = $db->fetchRow($db->select('views')->from('table.contents')->where('cid = ?', $cid))['views'];
+	if ($archive->is('single')) {
+		$cookie = Typecho_Cookie::get('contents_views');
+		$cookie = $cookie ? explode(',', $cookie) : array();
+		if (!in_array($cid, $cookie)) {
+			$db->query($db->update('table.contents')
+				->rows(array('views' => (int)$exist+1))
+				->where('cid = ?', $cid));
+			$exist = (int)$exist+1;
+			array_push($cookie, $cid);
+			$cookie = implode(',', $cookie);
+			Typecho_Cookie::set('contents_views', $cookie);
+		}
+	}
+	echo $exist == 0 ? '暂无阅读' : $exist.' 次阅读';
+}
+
+function createCatalog($obj) {
+	$HeadFixed = Helper::options()->HeadFixed == 'able';
+	global $catalog;
+	global $catalog_count;
+	$catalog = array();
+	$catalog_count = 0;
+	$obj = preg_replace_callback('/<h([1-6])(.*?)>(.*?)<\/h\1>/i', function($obj) {
+		global $catalog;
+		global $catalog_count;
+		$catalog_count ++;
+		$catalog[] = array('text' => trim(strip_tags($obj[3])), 'depth' => $obj[1], 'count' => $catalog_count);
+		return "<h{$obj[1]} {$obj[2]}><a class=\"cl-offset\" name=\"cl-{$catalog_count}\"></a>{$obj[3]}</h{$obj[1]}>";
+	}, $obj);
+	return $obj;
+}
+
+function getCatalog() {
+	global $catalog;
+	$index = '';
+	if ($catalog) {
+		$index = '<ul>'."\n";
+		$prev_depth = '';
+		$to_depth = 0;
+		foreach($catalog as $catalog_item) {
+			$catalog_depth = $catalog_item['depth'];
+			if ($prev_depth) {
+				if ($catalog_depth == $prev_depth) {
+					$index .= '</li>'."\n";
+				} elseif ($catalog_depth > $prev_depth) {
+					$to_depth++;
+					$index .= '<ul>'."\n";
+				} else {
+					$to_depth2 = ($to_depth > ($prev_depth - $catalog_depth)) ? ($prev_depth - $catalog_depth) : $to_depth;
+					if ($to_depth2) {
+						for ($i=0; $i<$to_depth2; $i++) {
+							$index .= '</li>'."\n".'</ul>'."\n";
+							$to_depth--;
+						}
+					}
+					$index .= '</li>';
+				}
+			}
+			$index .= '<li><a href="#cl-'.$catalog_item['count'].'" onclick="Catalogswith()">'.$catalog_item['text'].'</a>';
+			$prev_depth = $catalog_item['depth'];
+		}
+		for ($i=0; $i<=$to_depth; $i++) {
+			$index .= '</li>'."\n".'</ul>'."\n";
+		}
+	$index = '<li>'."\n".'<script>function Catalogswith(){document.getElementById("catalog-col").classList.toggle("post-catalog")}</script>'."\n".'<span id="catalog" onclick="Catalogswith()">文章目录</span>'."\n".'<div id="catalog-col">'."\n".'<b>文章目录</b><span id="catalog-hide" onclick="Catalogswith()">[隐藏]</span>'."\n".$index.'</div>'."\n".'</li>'."\n";
+	}
+	return $index;
+}
+
+function Contents_Post_Initial($limit = 10, $order = 'created') {
 	$db = Typecho_Db::get();
 	$options = Helper::options();
 	$select = $db->select()->from('table.contents')
-		->where('type = ?', 'post')
-		->where('status = ?','publish')
-		->where('created < ?', $options->time)
-		->order('created', Typecho_Db::SORT_DESC)
+		->where('type = ? AND status = ? AND created < ?', 'post', 'publish', $options->time)
 		->limit($limit);
-	if ($order) {
-		$select->order($order, Typecho_Db::SORT_DESC);
+	if (array_key_exists('views', $db->fetchRow($db->select()->from('table.contents')))) {
+		$select->order('views', Typecho_Db::SORT_DESC);
 	}
-	$posts = $db->fetchAll($select);
+	$select->order($order, Typecho_Db::SORT_DESC);
+	$posts = $db->fetchAll($select, array(Typecho_Widget::widget('Widget_Abstract_Contents'), 'filter'));
 	if($posts) {
 		foreach($posts as $post) {
-			$post = Typecho_Widget::widget('Widget_Abstract_Contents')->push($post);
-			$title = htmlspecialchars($post['title']);
-			echo '<li><a'.($post['hidden'] && $options->PjaxOption == 'able' ? '' : ' href="'.$post['permalink'].'"').'>'.$title.'</a></li>'."\n";
+			echo '<li><a'.($post['hidden'] && $options->PjaxOption == 'able' ? '' : ' href="'.$post['permalink'].'"').'>'.htmlspecialchars($post['title']).'</a></li>'."\n";
 		}
 	}
 }
@@ -239,8 +322,7 @@ function Contents_Comments_Initial($limit = 10, $ignoreAuthor = 0) {
 	$db = Typecho_Db::get();
 	$options = Helper::options();
 	$select = $db->select()->from('table.comments')
-		->where('status = ?','approved')
-		->where('created < ?', $options->time)
+		->where('status = ? AND created < ?','approved', $options->time)
 		->order('coid', Typecho_Db::SORT_DESC)
 		->limit($limit);
 	if ($options->commentsShowCommentOnly) {
@@ -250,8 +332,8 @@ function Contents_Comments_Initial($limit = 10, $ignoreAuthor = 0) {
 		$select->where('ownerId <> authorId');
 	}
 	$page_whisper = FindContents('page-whisper.php', 'commentsNum', 'd')[0]['cid'];
-	if ($page_whisper) {
-		$select->where('cid <> '.$page_whisper);
+	if (isset($page_whisper)) {
+		$select->where('cid <> ? OR (cid = ? AND parent <> ?)', $page_whisper, $page_whisper, '0');
 	}
 	$comments = $db->fetchAll($select);
 	if($comments) {
@@ -273,7 +355,6 @@ function FindContents($val = NULL, $order = 'order', $sort = 'a', $publish = NUL
 	$db = Typecho_Db::get();
 	$sort = ($sort == 'a') ? Typecho_Db::SORT_ASC : Typecho_Db::SORT_DESC;
 	$select = $db->select()->from('table.contents')
-		->where('type = ?', 'page')
 		->where('created < ?', Helper::options()->time)
 		->order($order, $sort);
 	if ($val) {
@@ -282,79 +363,87 @@ function FindContents($val = NULL, $order = 'order', $sort = 'a', $publish = NUL
 	if ($publish) {
 		$select->where('status = ?','publish');
 	}
-	$pages = $db->fetchAll($select);
-	if($pages) {
-		foreach($pages as &$page) {
-			$page = Typecho_Widget::widget('Widget_Abstract_Contents')->push($page);
-		}
-		return $pages;
-	}
+	return $db->fetchAll($select, array(Typecho_Widget::widget('Widget_Abstract_Contents'), 'filter'));
 }
 
 function Whisper($sidebar = NULL) {
 	$db = Typecho_Db::get();
 	$options = Helper::options();
-	$pages = FindContents('page-whisper.php', 'commentsNum', 'd');
+	$pages = FindContents('page-whisper.php', 'commentsNum', 'd')[0];
 	$p = $sidebar ? 'li' : 'p';
-	if (!$pages) {
-		echo ($sidebar ? '' : '<h2 class="post-title"><a>轻语</a></h2>'."\n").'<'.$p.'>暂无内容</'.$p.'>'."\n";
-	}
-	if ($pages[0]) {
-		$title = $sidebar ? '' : '<h2 class="post-title"><a href="'.$pages[0]['permalink'].'">'.$pages[0]['title'].'</a></h2>'."\n";
-		$comments = $db->fetchAll($db->select()->from('table.comments')
-			->where('cid = ?', $pages[0]['cid'])
-			->where('status = ?', 'approved')
-			->where('type = ?', 'comment')
-			->where('created < ?', $options->time)
+	if (isset($pages)) {
+		$title = $sidebar ? '' : '<h2 class="post-title"><a href="'.$pages['permalink'].'">'.$pages['title'].'<span class="more">···</span></a></h2>'."\n";
+		$comment = $db->fetchAll($db->select()->from('table.comments')
+			->where('cid = ? AND status = ? AND parent = ?', $pages['cid'], 'approved', '0')
 			->order('coid', Typecho_Db::SORT_DESC)
-			->limit('2'));
-		if ($comments) {
-			if ($comments[0]) {
-				$content = Markdown::convert($comments[0]['text']);
-				if ($options->AttUrlReplace) {
-					$content = AttUrlReplace($content);
-				}
-				echo $title.strip_tags($content, '<p><br><strong><a><img><pre><code>' . $options->commentsHTMLTagAllowed)."\n";
+			->limit(1));
+		if ($comment) {
+			$content = Markdown::convert($comment[0]['text']);
+			if ($options->AttUrlReplace) {
+				$content = AttUrlReplace($content);
 			}
-			if ($sidebar && $comments[1]) {
-				echo '<li class="more"><a href="'.$pages[0]['permalink'].'">查看更多...</a></li>'."\n";
-			}
+			echo $title.strip_tags($content, '<p><br><strong><a><img><pre><code>'.$options->commentsHTMLTagAllowed)."\n".($sidebar ? '<li class="more"><a href="'.$pages['permalink'].'">查看更多...</a></li>'."\n" : '');
 		} else {
 			echo $title.'<'.$p.'>暂无内容</'.$p.'>'."\n";
 		}
+	} else {
+		echo ($sidebar ? '' : '<h2 class="post-title"><a>轻语</a></h2>'."\n").'<'.$p.'>暂无内容</'.$p.'>'."\n";
 	}
 }
 
+function Links_list() {
+	$db = Typecho_Db::get();
+	$list = Helper::options()->Links ? Helper::options()->Links : '';
+	$page_links = FindContents('page-links.php', 'order', 'a')[0];
+	if (isset($page_links)) {
+		$exist = $db->fetchRow($db->select()->from('table.fields')
+			->where('cid = ? AND name = ?', $page_links['cid'], 'links'));
+		if (empty($exist)) {
+			$db->query($db->insert('table.fields')
+				->rows(array(
+					'cid'           =>  $page_links['cid'],
+					'name'          =>  'links',
+					'type'          =>  'str',
+					'str_value'     =>  $list,
+					'int_value'     =>  0,
+					'float_value'   =>  0
+				)));
+			return $list;
+		}
+		if (empty($exist['str_value'])) {
+			$db->query($db->update('table.fields')
+				->rows(array('str_value' => $list))
+				->where('cid = ? AND name = ?', $page_links['cid'], 'links'));
+			return $list;
+		}
+		$list = $exist['str_value'];
+	}
+	return $list;
+}
+
 function Links($sorts = NULL, $icon = 0) {
-	$options = Helper::options();
-	if ($options->Links) {
-		$list = explode("\r\n", $options->Links);
-		foreach ($list as $tmp) {
-			list($name, $url, $description, $logo, $sort) = explode(",", $tmp);
+	$link = NULL;
+	$list = Links_list();
+	if ($list) {
+		$list = explode("\r\n", $list);
+		foreach ($list as $val) {
+			list($name, $url, $description, $logo, $sort) = explode(",", $val);
 			if ($sorts) {
 				$arr = explode(",", $sorts);
-				if (in_array($sort, $arr)) {
-					$Links .= '<li><a' .($url ? ' href="'.$url.'"' : '') .($icon==1&&$url ? ' class="l_logo"' : '') .' title="' .$description .'" target="_blank">' .($icon==1&&$url ? '<img src="' .($logo ? $logo : rtrim($url, "/") .'/favicon.ico') .'" onerror="erroricon(this)">' : '') .'<span>' .($url ? $name : '<del>' .$name .'</del>') .'</span></a></li>'."\n";
+				if ($sort && in_array($sort, $arr)) {
+					$link .= '<li><a'.($url ? ' href="'.$url.'"' : '').($icon==1&&$url ? ' class="l_logo"' : '').' title="'.$description.'" target="_blank">'.($icon==1&&$url ? '<img src="'.($logo ? $logo : rtrim($url, "/").'/favicon.ico').'" onerror="erroricon(this)">' : '').'<span>'.($url ? $name : '<del>'.$name.'</del>').'</span></a></li>'."\n";
 				}
 			} else {
-				$Links .= '<li><a' .($url ? ' href="'.$url.'"' : '') .($icon==1&&$url ? ' class="l_logo"' : '') .' title="' .$description .'" target="_blank">' .($icon==1&&$url ? '<img src="' .($logo ? $logo : rtrim($url, "/") .'/favicon.ico') .'" onerror="erroricon(this)">' : '') .'<span>' .($url ? $name : '<del>' .$name .'</del>') .'</span></a></li>'."\n";
+				$link .= '<li><a'.($url ? ' href="'.$url.'"' : '').($icon==1&&$url ? ' class="l_logo"' : '').' title="'.$description.'" target="_blank">'.($icon==1&&$url ? '<img src="'.($logo ? $logo : rtrim($url, "/").'/favicon.ico').'" onerror="erroricon(this)">' : '').'<span>'.($url ? $name : '<del>'.$name.'</del>').'</span></a></li>'."\n";
 			}
 		}
 	}
-	echo $Links ? $Links : '<li>暂无链接</li>'."\n";
+	echo $link ? $link : '<li>暂无链接</li>'."\n";
 }
 
 function Playlist() {
 	$arr = explode("\r\n", Helper::options()->MusicUrl);
-	$count = count($arr);
-	echo '[';
-	for($i = 0; $i < $count; $i++) {
-		if ($i == $count - 1) {
-			echo '"'.$arr[$i].'"]';
-		} else {
-			echo '"'.$arr[$i].'",';
-		}
-	}
+	echo '["'.implode('","', $arr).'"]';
 }
 
 function compressHtml($html_source) {

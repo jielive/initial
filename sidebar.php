@@ -5,7 +5,7 @@
 <h3 class="widget-title"><?php echo FindContents('page-whisper.php') ? FindContents('page-whisper.php', 'commentsNum', 'd')[0]['title'] : '轻语' ?></h3>
 <ul class="widget-list whisper">
 <?php Whisper(1); ?>
-<?php if ($this->user->pass('editor', true) && (!FindContents('page-whisper.php') || FindContents('page-whisper.php')[1])): ?>
+<?php if ($this->user->pass('editor', true) && (!FindContents('page-whisper.php') || isset(FindContents('page-whisper.php')[1]))): ?>
 <li class="notice"><b>仅管理员可见: </b><br><?php echo FindContents('page-whisper.php') ? '发现多个"轻语"模板页面，已自动选取内容最多的页面作为展示，请删除多余模板页面。' : '未找到"轻语"模板页面，请检查是否创建模板页面。' ?></li>
 <?php endif; ?>
 </ul>
@@ -15,7 +15,7 @@
 <section class="widget">
 <h3 class="widget-title">热门文章</h3>
 <ul class="widget-list">
-<?php Contents_Post_Initial($this->options->postsListSize, 'commentsNum');?>
+<?php Contents_Post_Initial($this->options->postsListSize, 'commentsNum'); ?>
 </ul>
 </section>
 <?php endif; ?>
@@ -23,7 +23,7 @@
 <section class="widget">
 <h3 class="widget-title">最新文章</h3>
 <ul class="widget-list">
-<?php Contents_Post_Initial($this->options->postsListSize);?>
+<?php Contents_Post_Initial($this->options->postsListSize); ?>
 </ul>
 </section>
 <?php endif; ?>

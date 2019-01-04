@@ -12,7 +12,8 @@
 'category'  =>  _t('分类 %s 下的文章'),
 'search'    =>  _t('包含关键字 %s 的文章'),
 'tag'       =>  _t('标签 %s 下的文章'),
-'author'    =>  _t('%s 发布的文章')
+'date'      =>  _t('在 %s 发布的文章'),
+'author'    =>  _t('作者 %s 发布的文章')
 ), '', ' - '); ?><?php $this->options->title(); if ($this->is('index') && $this->options->subTitle): ?> - <?php $this->options->subTitle(); endif; ?></title>
 <?php $this->header('generator=&template=&pingback=&xmlrpc=&wlw=&commentReply=&rss1=&rss2=&antiSpam=&atom='); ?>
 <link rel="stylesheet" href="<?php cjUrl('style.min.css') ?>" />
@@ -36,7 +37,8 @@
 </h1>
 <?php endif; ?>
 </div>
-<button id="nav-swith"><span></span></button>
+<script>function Navswith(){document.getElementById("header").classList.toggle("on")}</script>
+<button id="nav-swith" onclick="Navswith()"><span></span></button>
 <div id="nav">
 <div id="site-search">
 <form id="search" method="post" action="<?php $this->options->siteUrl(); ?>">

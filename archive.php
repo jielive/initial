@@ -5,7 +5,8 @@
 'category'  =>  _t('分类 %s 下的文章'),
 'search'    =>  _t('包含关键字 %s 的文章'),
 'tag'       =>  _t('标签 %s 下的文章'),
-'author'    =>  _t('%s 发布的文章')
+'date'      =>  _t('在 %s 发布的文章'),
+'author'    =>  _t('作者 %s 发布的文章')
 ), '', ''); ?></div>
 <?php if ($this->have()): ?>
 <?php while($this->next()): ?>
@@ -18,7 +19,7 @@
 </ul>
 <div class="post-content">
 <?php if ($this->options->PjaxOption == 'able' && $this->hidden): ?>
-<form action="<?php echo Typecho_Widget::widget('Widget_Security')->getTokenUrl($this->permalink()); ?>" method="post">
+<form method="post">
 <p class="word">请输入密码访问</p>
 <p>
 <input type="password" class="text" name="protectPassword" />

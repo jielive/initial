@@ -5,7 +5,7 @@
  * 
  * @package Initial
  * @author JIElive
- * @version 2.3.2
+ * @version 2.4
  * @link http://www.offodd.com/
  */
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
@@ -16,7 +16,7 @@ $this->need('header.php');
 <article class="post whisper">
 <div class="post-content">
 <?php Whisper(); ?>
-<?php if ($this->user->pass('editor', true) && (!FindContents('page-whisper.php') || FindContents('page-whisper.php')[1])): ?>
+<?php if ($this->user->pass('editor', true) && (!FindContents('page-whisper.php') || isset(FindContents('page-whisper.php')[1]))): ?>
 <p class="notice"><b>仅管理员可见: </b><br><?php echo FindContents('page-whisper.php') ? '发现多个"轻语"模板页面，已自动选取内容最多的页面作为展示，请删除多余模板页面。' : '未找到"轻语"模板页面，请检查是否创建模板页面。' ?></p>
 <?php endif; ?>
 </div>
@@ -29,10 +29,11 @@ $this->need('header.php');
 <li><?php $this->date(); ?></li>
 <li><?php $this->category(',', false); ?></li>
 <li><?php $this->commentsNum('暂无评论', '%d 条评论'); ?></li>
+<li><?php Postviews($this); ?></li>
 </ul>
 <div class="post-content">
 <?php if ($this->options->PjaxOption == 'able' && $this->hidden): ?>
-<form action="<?php echo Typecho_Widget::widget('Widget_Security')->getTokenUrl($this->permalink()); ?>" method="post">
+<form method="post">
 <p class="word">请输入密码访问</p>
 <p>
 <input type="password" class="text" name="protectPassword" />

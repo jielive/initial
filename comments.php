@@ -36,7 +36,7 @@ echo $commentClass;
 <?php $comments->content(); ?>
 </div>
 <div class="comment-reply">
-<?php $comments->reply(); ?>
+<span><?php $comments->reply(); ?></span>
 </div>
 <?php if ($comments->children) { ?>
 <div class="comment-children">
@@ -60,7 +60,7 @@ echo $commentClass;
 <h3 id="response">添加新评论</h3>
 <form method="post" action="<?php $this->commentUrl() ?>" id="comment-form"<?php if(!$this->user->hasLogin()): ?> class="comment-form clearfix"<?php endif; ?>>
 <?php if($this->user->hasLogin()): ?>
-<p>登录身份: <a href="<?php $this->options->profileUrl(); ?>"><?php $this->user->screenName(); ?></a>. <a href="<?php $this->options->logoutUrl(); ?>" title="Logout"<?php if ($this->options->PjaxOption == 'able'): ?> no-pjax <?php endif; ?>>退出 &raquo;</a></p>
+<p>登录身份: <a href="<?php $this->options->profileUrl(); ?>" target="_blank"><?php $this->user->screenName(); ?></a>. <a href="<?php $this->options->logoutUrl(); ?>" title="Logout"<?php if ($this->options->PjaxOption == 'able'): ?> no-pjax <?php endif; ?>>退出 &raquo;</a></p>
 <?php endif; ?>
 <p <?php if(!$this->user->hasLogin()): ?>class="textarea"<?php endif; ?>>
 <textarea name="text" id="textarea" placeholder="加入讨论..." required ><?php $this->remember('text'); ?></textarea>
