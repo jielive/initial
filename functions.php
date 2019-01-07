@@ -331,9 +331,9 @@ function Contents_Comments_Initial($limit = 10, $ignoreAuthor = 0) {
 	if ($ignoreAuthor == 1) {
 		$select->where('ownerId <> authorId');
 	}
-	$page_whisper = FindContents('page-whisper.php', 'commentsNum', 'd')[0]['cid'];
+	$page_whisper = FindContents('page-whisper.php', 'commentsNum', 'd');
 	if (isset($page_whisper)) {
-		$select->where('cid <> ? OR (cid = ? AND parent <> ?)', $page_whisper, $page_whisper, '0');
+		$select->where('cid <> ? OR (cid = ? AND parent <> ?)', $page_whisper[0]['cid'], $page_whisper[0]['cid'], '0');
 	}
 	$comments = $db->fetchAll($select);
 	if($comments) {
@@ -369,12 +369,13 @@ function FindContents($val = NULL, $order = 'order', $sort = 'a', $publish = NUL
 function Whisper($sidebar = NULL) {
 	$db = Typecho_Db::get();
 	$options = Helper::options();
-	$pages = FindContents('page-whisper.php', 'commentsNum', 'd')[0];
+	$page = FindContents('page-whisper.php', 'commentsNum', 'd');
 	$p = $sidebar ? 'li' : 'p';
-	if (isset($pages)) {
-		$title = $sidebar ? '' : '<h2 class="post-title"><a href="'.$pages['permalink'].'">'.$pages['title'].'<span class="more">···</span></a></h2>'."\n";
+	if (isset($page)) {
+		$page = $page[0];
+		$title = $sidebar ? '' : '<h2 class="post-title"><a href="'.$page['permalink'].'">'.$page['title'].'<span class="more">···</span></a></h2>'."\n";
 		$comment = $db->fetchAll($db->select()->from('table.comments')
-			->where('cid = ? AND status = ? AND parent = ?', $pages['cid'], 'approved', '0')
+			->where('cid = ? AND status = ? AND parent = ?', $page['cid'], 'approved', '0')
 			->order('coid', Typecho_Db::SORT_DESC)
 			->limit(1));
 		if ($comment) {
@@ -382,7 +383,7 @@ function Whisper($sidebar = NULL) {
 			if ($options->AttUrlReplace) {
 				$content = AttUrlReplace($content);
 			}
-			echo $title.strip_tags($content, '<p><br><strong><a><img><pre><code>'.$options->commentsHTMLTagAllowed)."\n".($sidebar ? '<li class="more"><a href="'.$pages['permalink'].'">查看更多...</a></li>'."\n" : '');
+			echo $title.strip_tags($content, '<p><br><strong><a><img><pre><code>'.$options->commentsHTMLTagAllowed)."\n".($sidebar ? '<li class="more"><a href="'.$page['permalink'].'">查看更多...</a></li>'."\n" : '');
 		} else {
 			echo $title.'<'.$p.'>暂无内容</'.$p.'>'."\n";
 		}
