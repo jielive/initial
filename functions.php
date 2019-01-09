@@ -234,7 +234,6 @@ function Postviews($archive) {
 }
 
 function createCatalog($obj) {
-	$HeadFixed = Helper::options()->HeadFixed == 'able';
 	global $catalog;
 	global $catalog_count;
 	$catalog = array();
