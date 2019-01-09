@@ -1,7 +1,7 @@
 <?php
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
 
-define('INITIAL_VERSION_NUMBER', '2.4');
+define('INITIAL_VERSION_NUMBER', '2.4.1');
 
 if (Helper::options()->GravatarUrl) define('__TYPECHO_GRAVATAR_PREFIX__', Helper::options()->GravatarUrl);
 
@@ -62,12 +62,6 @@ function themeConfig($form) {
 	'disable' => _t('关闭')),
 	'disable', _t('动态显示侧边栏'), _t('默认关闭'));
 	$form->addInput($SidebarFixed);
-
-	$Catalog = new Typecho_Widget_Helper_Form_Element_Radio('Catalog', 
-	array(true => _t('启用'),
-	false => _t('关闭')),
-	false, _t('文章目录'), _t('默认关闭，启用则会在文章内显示“文章目录”（若文章内无任何标题，则不显示目录）'));
-	$form->addInput($Catalog);
 
 	$cjCDN = new Typecho_Widget_Helper_Form_Element_Radio('cjCDN', 
 	array('bc' => _t('BootCDN'),
@@ -170,9 +164,9 @@ function themeInit($archive) {
 	}
 	if ($archive->is('single')) {
 		if ($options->AttUrlReplace) {
-			$archive->content = AttUrlReplace($archive->content);
+			$archive->content = UrlReplace($archive->content);
 		}
-		if ($options->Catalog) {
+		if ($archive->fields->catalog) {
 			$archive->content = createCatalog($archive->content);
 		}
 	}
@@ -188,7 +182,7 @@ function cjUrl($path) {
 	}
 }
 
-function AttUrlReplace($obj) {
+function UrlReplace($obj) {
 	$list = explode("\r\n", Helper::options()->AttUrlReplace);
 	foreach ($list as $tmp) {
 		list($old, $new) = explode('=', $tmp);
@@ -198,30 +192,22 @@ function AttUrlReplace($obj) {
 }
 
 function postThumb($obj) {
-	$val = $obj->fields->thumb;
-	if(!$val) {
+	$thumb = $obj->fields->thumb;
+	if (!$thumb) {
 		return false;
-	} else {
-		$options = Helper::options();
-		if(is_numeric($val)) {
-			preg_match_all( "/<img.*?src=[\'|\"](.*?)[\'|\"].*?[\/]?>/i", $obj->content, $matches );
-			if (isset($matches[1][$val-1])) {
-				$thumb = $matches[1][$val-1];
-				if ($options->AttUrlReplace) {
-					$thumb = AttUrlReplace($thumb);
-				}
-				return '<img src="'.$thumb.'" />';
-			} else {
-				return false;
-			}
+	}
+	if (is_numeric($thumb)) {
+		preg_match_all( "/<img.*?src=[\'|\"](.*?)[\'|\"].*?[\/]?>/i", $obj->content, $matches );
+		if (isset($matches[1][$thumb-1])) {
+			$thumb = $matches[1][$thumb-1];
 		} else {
-			$thumb = $val;
-			if ($options->AttUrlReplace) {
-				$thumb = AttUrlReplace($thumb);
-			}
-			return '<img src="'.$thumb.'" />';
+			return false;
 		}
 	}
+	if (Helper::options()->AttUrlReplace) {
+		$thumb = UrlReplace($thumb);
+	}
+	return '<img src="'.$thumb.'" />';
 }
 
 function Postviews($archive) {
@@ -258,7 +244,7 @@ function createCatalog($obj) {
 		global $catalog_count;
 		$catalog_count ++;
 		$catalog[] = array('text' => trim(strip_tags($obj[3])), 'depth' => $obj[1], 'count' => $catalog_count);
-		return "<h{$obj[1]} {$obj[2]}><a class=\"cl-offset\" name=\"cl-{$catalog_count}\"></a>{$obj[3]}</h{$obj[1]}>";
+		return '<h'.$obj[1].$obj[2].'><a class="cl-offset" name="cl-'.$catalog_count.'"></a>'.$obj[3].'</h'.$obj[1].'>';
 	}, $obj);
 	return $obj;
 }
@@ -303,15 +289,11 @@ function getCatalog() {
 function Contents_Post_Initial($limit = 10, $order = 'created') {
 	$db = Typecho_Db::get();
 	$options = Helper::options();
-	$select = $db->select()->from('table.contents')
+	$posts = $db->fetchAll($db->select()->from('table.contents')
 		->where('type = ? AND status = ? AND created < ?', 'post', 'publish', $options->time)
-		->limit($limit);
-	if (array_key_exists('views', $db->fetchRow($db->select()->from('table.contents')))) {
-		$select->order('views', Typecho_Db::SORT_DESC);
-	}
-	$select->order($order, Typecho_Db::SORT_DESC);
-	$posts = $db->fetchAll($select, array(Typecho_Widget::widget('Widget_Abstract_Contents'), 'filter'));
-	if($posts) {
+		->order($order, Typecho_Db::SORT_DESC)
+		->limit($limit), array(Typecho_Widget::widget('Widget_Abstract_Contents'), 'filter'));
+	if ($posts) {
 		foreach($posts as $post) {
 			echo '<li><a'.($post['hidden'] && $options->PjaxOption == 'able' ? '' : ' href="'.$post['permalink'].'"').'>'.htmlspecialchars($post['title']).'</a></li>'."\n";
 		}
@@ -336,18 +318,58 @@ function Contents_Comments_Initial($limit = 10, $ignoreAuthor = 0) {
 		$select->where('cid <> ? OR (cid = ? AND parent <> ?)', $page_whisper[0]['cid'], $page_whisper[0]['cid'], '0');
 	}
 	$comments = $db->fetchAll($select);
-	if($comments) {
+	if ($comments) {
 		foreach($comments as $comment) {
-			$parent = ParentContent($comment['cid']);
-			echo '<li><a'.($parent['hidden'] && $options->PjaxOption == 'able' ? '' : ' href="'.$parent['permalink'].'"').' title="来自: '.$parent['title'].'">'.$comment['author'].'</a>: '.($parent['hidden'] && $options->PjaxOption == 'able' ? '内容被隐藏' : Typecho_Common::subStr(strip_tags($comment['text']), 0, 35, '...')).'</li>'."\n";
+			$parent = FindContent($comment['cid']);
+			echo '<li><a'.($parent['hidden'] && $options->PjaxOption == 'able' ? '' : ' href="'.permaLink($comment).'"').' title="来自: '.$parent['title'].'">'.$comment['author'].'</a>: '.($parent['hidden'] && $options->PjaxOption == 'able' ? '内容被隐藏' : Typecho_Common::subStr(strip_tags($comment['text']), 0, 35, '...')).'</li>'."\n";
 		}
 	}
 }
 
-function ParentContent($cid) {
+function permaLink($obj) {
 	$db = Typecho_Db::get();
-	return $db->fetchRow(Typecho_Widget::widget('Widget_Abstract_Contents')->select()
-	->where('table.contents.cid = ?', $cid)
+	$options = Helper::options();
+	$parentContent = FindContent($obj['cid']);
+	if ($options->commentsPageBreak && 'approved' == $obj['status']) {
+		$coid = $obj['coid'];
+		$parent = $obj['parent'];
+		while ($parent > 0 && $options->commentsThreaded) {
+			$parentRows = $db->fetchRow($db->select('parent')->from('table.comments')
+			->where('coid = ? AND status = ?', $parent, 'approved')->limit(1));
+			if (!empty($parentRows)) {
+				$coid = $parent;
+				$parent = $parentRows['parent'];
+			} else {
+				break;
+			}
+		}
+		$select  = $db->select('coid', 'parent')->from('table.comments')
+			->where('cid = ? AND status = ?', $parentContent['cid'], 'approved')
+			->where('coid '.('DESC' == $options->commentsOrder ? '>=' : '<=').' ?', $coid)
+			->order('coid', Typecho_Db::SORT_ASC);
+		if ($options->commentsShowCommentOnly) {
+			$select->where('type = ?', 'comment');
+		}
+		$comments = $db->fetchAll($select);
+		$commentsMap = array();
+		$total = 0;
+		foreach ($comments as $comment) {
+			$commentsMap[$comment['coid']] = $comment['parent'];
+			if (0 == $comment['parent'] || !isset($commentsMap[$comment['parent']])) {
+				$total ++;
+			}
+		}
+		$currentPage = ceil($total / $options->commentsPageSize);
+		$pageRow = array('permalink' => $parentContent['pathinfo'], 'commentPage' => $currentPage);
+		return Typecho_Router::url('comment_page', $pageRow, $options->index).'#'.$obj['type'].'-'.$obj['coid'];
+	}
+	return $parentContent['permalink'].'#'.$obj['type'].'-'.$obj['coid'];
+}
+
+function FindContent($cid) {
+	$db = Typecho_Db::get();
+	return $db->fetchRow($db->select()->from('table.contents')
+	->where('cid = ?', $cid)
 	->limit(1), array(Typecho_Widget::widget('Widget_Abstract_Contents'), 'filter'));
 }
 
@@ -381,7 +403,7 @@ function Whisper($sidebar = NULL) {
 		if ($comment) {
 			$content = Markdown::convert($comment[0]['text']);
 			if ($options->AttUrlReplace) {
-				$content = AttUrlReplace($content);
+				$content = UrlReplace($content);
 			}
 			echo $title.strip_tags($content, '<p><br><strong><a><img><pre><code>'.$options->commentsHTMLTagAllowed)."\n".($sidebar ? '<li class="more"><a href="'.$page['permalink'].'">查看更多...</a></li>'."\n" : '');
 		} else {
@@ -500,4 +522,10 @@ function themeFields($layout) {
 	$thumb = new Typecho_Widget_Helper_Form_Element_Text('thumb', NULL, NULL, _t('自定义缩略图'), _t('在这里填入一个图片 URL 地址, 以添加本文的缩略图，若填入纯数字，例如 <b>3</b> ，则使用文章第三张图片作为缩略图（对应位置无图则不显示缩略图），留空则默认不显示缩略图'));
 	$thumb->input->setAttribute('class', 'w-100');
 	$layout->addItem($thumb);
+
+	$catalog = new Typecho_Widget_Helper_Form_Element_Radio('catalog', 
+	array(true => _t('启用'),
+	false => _t('关闭')),
+	false, _t('文章目录'), _t('默认关闭，启用则会在文章内显示“文章目录”（若文章内无任何标题，则不显示目录）'));
+	$layout->addItem($catalog);
 }

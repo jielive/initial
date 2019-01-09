@@ -13,18 +13,15 @@
 <li><?php $this->category(','); ?></li>
 <li><a href="<?php $this->permalink() ?>#comments"><?php $this->commentsNum('暂无评论', '%d 条评论'); ?></a></li>
 <li><?php Postviews($this); ?></li>
-<?php if ($this->options->Catalog): echo getCatalog(); endif; ?>
+<?php if ($this->fields->catalog): echo getCatalog(); endif; ?>
 </ul>
 <div class="post-content">
 <?php $this->content(); ?>
 </div>
 <?php if ($this->options->WeChat || $this->options->Alipay): ?>
-<p class="rewards">打赏: 
-<?php if ($this->options->WeChat): ?>
-<a><img src="<?php $this->options->WeChat(); ?>" alt="微信收款二维码" />微信</a>
-<?php endif; if ($this->options->WeChat && $this->options->Alipay): ?>, <?php endif; if ($this->options->Alipay): ?>
-<a><img src="<?php $this->options->Alipay(); ?>" alt="支付宝收款二维码" />支付宝</a>
-<?php endif; ?>
+<p class="rewards">打赏: <?php if ($this->options->WeChat): ?>
+<a><img src="<?php $this->options->WeChat(); ?>" alt="微信收款二维码" />微信</a><?php endif; if ($this->options->WeChat && $this->options->Alipay): ?>, <?php endif; if ($this->options->Alipay): ?>
+<a><img src="<?php $this->options->Alipay(); ?>" alt="支付宝收款二维码" />支付宝</a><?php endif; ?>
 </p>
 <?php endif; ?>
 <p class="tags">标签: <?php $this->tags(', ', true, 'none'); ?></p>
