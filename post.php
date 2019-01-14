@@ -6,14 +6,13 @@
 <a href="<?php $this->options->siteUrl(); ?>">首页</a> &raquo; <?php $this->category(); ?> &raquo; <?php if (!empty($this->options->Breadcrumbs) && in_array('Text', $this->options->Breadcrumbs)): ?>正文<?php else: $this->title(); endif; ?>
 </div>
 <?php endif; ?>
-<article class="post<?php if ($this->options->PjaxOption == 'able' && $this->hidden): ?> protected<?php endif; ?>">
+<article class="post<?php if ($this->options->PjaxOption && $this->hidden): ?> protected<?php endif; ?>">
 <h1 class="post-title"><a href="<?php $this->permalink() ?>"><?php $this->title() ?></a></h1>
 <ul class="post-meta">
 <li><?php $this->date(); ?></li>
 <li><?php $this->category(','); ?></li>
 <li><a href="<?php $this->permalink() ?>#comments"><?php $this->commentsNum('暂无评论', '%d 条评论'); ?></a></li>
 <li><?php Postviews($this); ?></li>
-<?php if ($this->fields->catalog): echo getCatalog(); endif; ?>
 </ul>
 <div class="post-content">
 <?php $this->content(); ?>

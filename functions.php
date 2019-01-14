@@ -1,7 +1,7 @@
 <?php
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
 
-define('INITIAL_VERSION_NUMBER', '2.4.1');
+define('INITIAL_VERSION_NUMBER', '2.4.2');
 
 if (Helper::options()->GravatarUrl) define('__TYPECHO_GRAVATAR_PREFIX__', Helper::options()->GravatarUrl);
 
@@ -52,15 +52,15 @@ function themeConfig($form) {
 	$form->addInput($Alipay);
 
 	$HeadFixed = new Typecho_Widget_Helper_Form_Element_Radio('HeadFixed', 
-	array('able' => _t('启用'),
-	'disable' => _t('关闭')),
-	'disable', _t('浮动显示头部'), _t('默认关闭'));
+	array(1 => _t('启用'),
+	0 => _t('关闭')),
+	0, _t('浮动显示头部'), _t('默认关闭'));
 	$form->addInput($HeadFixed);
 
 	$SidebarFixed = new Typecho_Widget_Helper_Form_Element_Radio('SidebarFixed', 
-	array('able' => _t('启用'),
-	'disable' => _t('关闭')),
-	'disable', _t('动态显示侧边栏'), _t('默认关闭'));
+	array(1 => _t('启用'),
+	0 => _t('关闭')),
+	0, _t('动态显示侧边栏'), _t('默认关闭'));
 	$form->addInput($SidebarFixed);
 
 	$cjCDN = new Typecho_Widget_Helper_Form_Element_Radio('cjCDN', 
@@ -78,34 +78,35 @@ function themeConfig($form) {
 	$form->addInput($GravatarUrl);
 
 	$compressHtml = new Typecho_Widget_Helper_Form_Element_Radio('compressHtml', 
-	array('able' => _t('启用'),
-	'disable' => _t('关闭')),
-	'disable', _t('HTML压缩'), _t('默认关闭，启用则会对HTML代码进行压缩，可能与部分插件存在兼容问题，请酌情选择开启或者关闭'));
+	array(1 => _t('启用'),
+	0 => _t('关闭')),
+	0, _t('HTML压缩'), _t('默认关闭，启用则会对HTML代码进行压缩，可能与部分插件存在兼容问题，请酌情选择开启或者关闭'));
 	$form->addInput($compressHtml);
 
 	$PjaxOption = new Typecho_Widget_Helper_Form_Element_Radio('PjaxOption', 
-	array('able' => _t('启用'),
-	'disable' => _t('关闭')),
-	'disable', _t('全站Pjax'), _t('默认关闭，启用则会强制关闭“反垃圾保护”，强制“将较新的的评论显示在前面”'));
+	array(1 => _t('启用'),
+	0 => _t('关闭')),
+	0, _t('全站Pjax'), _t('默认关闭，启用则会强制关闭“反垃圾保护”，强制“将较新的的评论显示在前面”'));
 	$form->addInput($PjaxOption);
 
 	$AjaxLoad = new Typecho_Widget_Helper_Form_Element_Radio('AjaxLoad', 
 	array('auto' => _t('自动'),
 	'click' => _t('点击'),
-	'disable' => _t('关闭')),
-	'disable', _t('Ajax翻页'), _t('默认关闭，启用则会使用Ajax加载文章翻页'));
+	0 => _t('关闭')),
+	0, _t('Ajax翻页'), _t('默认关闭，启用则会使用Ajax加载文章翻页'));
 	$form->addInput($AjaxLoad);
 
 	$scrollTop = new Typecho_Widget_Helper_Form_Element_Radio('scrollTop', 
-	array('able' => _t('启用'),
-	'disable' => _t('关闭')),
-	'disable', _t('返回顶部'), _t('默认关闭，启用将在右下角显示“返回顶部”按钮'));
+	array(1 => _t('启用'),
+	0 => _t('关闭')),
+	0, _t('返回顶部'), _t('默认关闭，启用将在右下角显示“返回顶部”按钮'));
 	$form->addInput($scrollTop);
 
 	$MusicSet = new Typecho_Widget_Helper_Form_Element_Radio('MusicSet', 
-	array('able' => _t('启用'),
-	'disable' => _t('关闭')),
-	'disable', _t('背景音乐'), _t('默认关闭，启用后请填写音乐地址,否则开启无效'));
+	array('order' => _t('顺序播放'),
+	'shuffle' => _t('随机播放'),
+	0 => _t('关闭')),
+	0, _t('背景音乐'), _t('默认关闭，启用后请填写音乐地址,否则开启无效'));
 	$form->addInput($MusicSet);
 
 	$MusicUrl = new Typecho_Widget_Helper_Form_Element_Textarea('MusicUrl', NULL, NULL, _t('背景音乐地址（建议使用mp3格式）'), _t('请输入完整的音频文件路径，例如：https://music.163.com/song/media/outer/url?id={MusicID}.mp3（好东西^_-）,可设置多个音频，换行即可，一行一个，留空则关闭背景音乐'));
@@ -119,9 +120,9 @@ function themeConfig($form) {
 	$form->addInput($Links);
 
 	$InsideLinksIcon = new Typecho_Widget_Helper_Form_Element_Radio('InsideLinksIcon', 
-	array('able' => _t('启用'),
-	'disable' => _t('关闭')),
-	'disable', _t('显示链接图标（内页）'), _t('默认关闭，启用后内页（链接模板）链接将显示链接图标'));
+	array(1 => _t('启用'),
+	0 => _t('关闭')),
+	0, _t('显示链接图标（内页）'), _t('默认关闭，启用后内页（链接模板）链接将显示链接图标'));
 	$form->addInput($InsideLinksIcon);
 
 	$IndexLinksSort = new Typecho_Widget_Helper_Form_Element_Text('IndexLinksSort', NULL, NULL, _t('首页显示的链接分类（支持多分类，请用英文逗号“,”分隔）'), _t('若只需显示某分类下的链接，请输入链接分类名（建议使用字母形式的分类名），留空则默认显示全部链接'));
@@ -158,11 +159,12 @@ function themeConfig($form) {
 function themeInit($archive) {
 	$options = Helper::options();
 	$options->commentsAntiSpam = false;
-	if ($options->PjaxOption == 'able' || FindContents('page-whisper.php', 'commentsNum', 'd')) {
+	if ($options->PjaxOption || FindContents('page-whisper.php', 'commentsNum', 'd')) {
 		$options->commentsOrder = 'DESC';
 		$options->commentsPageDisplay = 'first';
 	}
 	if ($archive->is('single')) {
+		$archive->content = preg_replace('/<a\b([^>]+?)\bhref="((?!'.addcslashes($options->index, '/-+=#?&').').*?)"([^>]*?)>/i', '<a\1href="\2"\3 target="_blank">', $archive->content);
 		if ($options->AttUrlReplace) {
 			$archive->content = UrlReplace($archive->content);
 		}
@@ -176,7 +178,7 @@ function cjUrl($path) {
 	$options = Helper::options();
 	$ver = '?ver='.constant("INITIAL_VERSION_NUMBER");
 	if ($options->cjcdnAddress) {
-		echo rtrim($options->cjcdnAddress, "/").'/'.$path.$ver;
+		echo rtrim($options->cjcdnAddress, '/').'/'.$path.$ver;
 	} else {
 		$options->themeUrl($path.$ver);
 	}
@@ -197,7 +199,7 @@ function postThumb($obj) {
 		return false;
 	}
 	if (is_numeric($thumb)) {
-		preg_match_all( "/<img.*?src=[\'|\"](.*?)[\'|\"].*?[\/]?>/i", $obj->content, $matches );
+		preg_match_all('/<img.*?src="(.*?)".*?[\/]?>/i', $obj->content, $matches);
 		if (isset($matches[1][$thumb-1])) {
 			$thumb = $matches[1][$thumb-1];
 		} else {
@@ -245,7 +247,7 @@ function createCatalog($obj) {
 		$catalog[] = array('text' => trim(strip_tags($obj[3])), 'depth' => $obj[1], 'count' => $catalog_count);
 		return '<h'.$obj[1].$obj[2].'><a class="cl-offset" name="cl-'.$catalog_count.'"></a>'.$obj[3].'</h'.$obj[1].'>';
 	}, $obj);
-	return $obj;
+	return $obj."\n".getCatalog();
 }
 
 function getCatalog() {
@@ -262,7 +264,7 @@ function getCatalog() {
 					$index .= '</li>'."\n";
 				} elseif ($catalog_depth > $prev_depth) {
 					$to_depth++;
-					$index .= '<ul>'."\n";
+					$index .= "\n".'<ul>'."\n";
 				} else {
 					$to_depth2 = ($to_depth > ($prev_depth - $catalog_depth)) ? ($prev_depth - $catalog_depth) : $to_depth;
 					if ($to_depth2) {
@@ -271,7 +273,7 @@ function getCatalog() {
 							$to_depth--;
 						}
 					}
-					$index .= '</li>';
+					$index .= '</li>'."\n";
 				}
 			}
 			$index .= '<li><a href="#cl-'.$catalog_item['count'].'" onclick="Catalogswith()">'.$catalog_item['text'].'</a>';
@@ -280,7 +282,7 @@ function getCatalog() {
 		for ($i=0; $i<=$to_depth; $i++) {
 			$index .= '</li>'."\n".'</ul>'."\n";
 		}
-	$index = '<li>'."\n".'<script>function Catalogswith(){document.getElementById("catalog-col").classList.toggle("post-catalog")}</script>'."\n".'<span id="catalog" onclick="Catalogswith()">文章目录</span>'."\n".'<div id="catalog-col">'."\n".'<b>文章目录</b><span id="catalog-hide" onclick="Catalogswith()">[隐藏]</span>'."\n".$index.'</div>'."\n".'</li>'."\n";
+	$index = '<div id="catalog-col">'."\n".'<b>文章目录</b>'."\n".$index.'<script>function Catalogswith(){document.getElementById("catalog-col").classList.toggle("catalog");document.getElementById("catalog").classList.toggle("catalog")}</script>'."\n".'</div>'."\n";
 	}
 	return $index;
 }
@@ -294,8 +296,10 @@ function Contents_Post_Initial($limit = 10, $order = 'created') {
 		->limit($limit), array(Typecho_Widget::widget('Widget_Abstract_Contents'), 'filter'));
 	if ($posts) {
 		foreach($posts as $post) {
-			echo '<li><a'.($post['hidden'] && $options->PjaxOption == 'able' ? '' : ' href="'.$post['permalink'].'"').'>'.htmlspecialchars($post['title']).'</a></li>'."\n";
+			echo '<li><a'.($post['hidden'] && $options->PjaxOption ? '' : ' href="'.$post['permalink'].'"').'>'.htmlspecialchars($post['title']).'</a></li>'."\n";
 		}
+	} else {
+		echo '<li>暂无文章</li>'."\n";
 	}
 }
 
@@ -320,8 +324,10 @@ function Contents_Comments_Initial($limit = 10, $ignoreAuthor = 0) {
 	if ($comments) {
 		foreach($comments as $comment) {
 			$parent = FindContent($comment['cid']);
-			echo '<li><a'.($parent['hidden'] && $options->PjaxOption == 'able' ? '' : ' href="'.permaLink($comment).'"').' title="来自: '.$parent['title'].'">'.$comment['author'].'</a>: '.($parent['hidden'] && $options->PjaxOption == 'able' ? '内容被隐藏' : Typecho_Common::subStr(strip_tags($comment['text']), 0, 35, '...')).'</li>'."\n";
+			echo '<li><a'.($parent['hidden'] && $options->PjaxOption ? '' : ' href="'.permaLink($comment).'"').' title="来自: '.$parent['title'].'">'.$comment['author'].'</a>: '.($parent['hidden'] && $options->PjaxOption ? '内容被隐藏' : Typecho_Common::subStr(strip_tags($comment['text']), 0, 35, '...')).'</li>'."\n";
 		}
+	} else {
+		echo '<li>暂无回复</li>'."\n";
 	}
 }
 
@@ -389,7 +395,6 @@ function FindContents($val = NULL, $order = 'order', $sort = 'a', $publish = NUL
 
 function Whisper($sidebar = NULL) {
 	$db = Typecho_Db::get();
-	$options = Helper::options();
 	$page = FindContents('page-whisper.php', 'commentsNum', 'd');
 	$p = $sidebar ? 'li' : 'p';
 	if (isset($page)) {
@@ -449,14 +454,14 @@ function Links($sorts = NULL, $icon = 0) {
 	if ($list) {
 		$list = explode("\r\n", $list);
 		foreach ($list as $val) {
-			list($name, $url, $description, $logo, $sort) = explode(",", $val);
+			list($name, $url, $description, $logo, $sort) = explode(',', $val);
 			if ($sorts) {
-				$arr = explode(",", $sorts);
+				$arr = explode(',', $sorts);
 				if ($sort && in_array($sort, $arr)) {
-					$link .= '<li><a'.($url ? ' href="'.$url.'"' : '').($icon==1&&$url ? ' class="l_logo"' : '').' title="'.$description.'" target="_blank">'.($icon==1&&$url ? '<img src="'.($logo ? $logo : rtrim($url, "/").'/favicon.ico').'" onerror="erroricon(this)">' : '').'<span>'.($url ? $name : '<del>'.$name.'</del>').'</span></a></li>'."\n";
+					$link .= '<li><a'.($url ? ' href="'.$url.'"' : '').($icon==1&&$url ? ' class="l_logo"' : '').' title="'.$description.'" target="_blank">'.($icon==1&&$url ? '<img src="'.($logo ? $logo : rtrim($url, '/').'/favicon.ico').'" onerror="erroricon(this)">' : '').'<span>'.($url ? $name : '<del>'.$name.'</del>').'</span></a></li>'."\n";
 				}
 			} else {
-				$link .= '<li><a'.($url ? ' href="'.$url.'"' : '').($icon==1&&$url ? ' class="l_logo"' : '').' title="'.$description.'" target="_blank">'.($icon==1&&$url ? '<img src="'.($logo ? $logo : rtrim($url, "/").'/favicon.ico').'" onerror="erroricon(this)">' : '').'<span>'.($url ? $name : '<del>'.$name.'</del>').'</span></a></li>'."\n";
+				$link .= '<li><a'.($url ? ' href="'.$url.'"' : '').($icon==1&&$url ? ' class="l_logo"' : '').' title="'.$description.'" target="_blank">'.($icon==1&&$url ? '<img src="'.($logo ? $logo : rtrim($url, '/').'/favicon.ico').'" onerror="erroricon(this)">' : '').'<span>'.($url ? $name : '<del>'.$name.'</del>').'</span></a></li>'."\n";
 			}
 		}
 	}
@@ -464,7 +469,11 @@ function Links($sorts = NULL, $icon = 0) {
 }
 
 function Playlist() {
-	$arr = explode("\r\n", Helper::options()->MusicUrl);
+	$options = Helper::options();
+	$arr = explode("\r\n", $options->MusicUrl);
+	if ($options->MusicSet == 'shuffle') {
+		shuffle($arr);
+	}
 	echo '["'.implode('","', $arr).'"]';
 }
 

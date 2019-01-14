@@ -5,7 +5,7 @@
  * 
  * @package Initial
  * @author JIElive
- * @version 2.4.1
+ * @version 2.4.2
  * @link http://www.offodd.com/
  */
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
@@ -23,7 +23,7 @@ $this->need('header.php');
 </article>
 <?php endif; ?>
 <?php while($this->next()): ?>
-<article class="post<?php if ($this->options->PjaxOption == 'able' && $this->hidden): ?> protected<?php endif; ?>">
+<article class="post<?php if ($this->options->PjaxOption && $this->hidden): ?> protected<?php endif; ?>">
 <h2 class="post-title"><a href="<?php $this->permalink() ?>"><?php $this->title() ?></a></h2>
 <ul class="post-meta">
 <li><?php $this->date(); ?></li>
@@ -32,7 +32,7 @@ $this->need('header.php');
 <li><?php Postviews($this); ?></li>
 </ul>
 <div class="post-content">
-<?php if ($this->options->PjaxOption == 'able' && $this->hidden): ?>
+<?php if ($this->options->PjaxOption && $this->hidden): ?>
 <form method="post">
 <p class="word">请输入密码访问</p>
 <p>
@@ -50,7 +50,7 @@ $this->need('header.php');
 </div>
 </article>
 <?php endwhile; ?>
-<?php $this->pageNav('上一页', $this->options->AjaxLoad != 'disable' ? '查看更多' : '下一页', 0, '..', $this->options->AjaxLoad != 'disable' ? array('wrapClass' => 'page-navigator ajaxload') : ''); ?>
+<?php $this->pageNav('上一页', $this->options->AjaxLoad ? '查看更多' : '下一页', 0, '..', $this->options->AjaxLoad ? array('wrapClass' => 'page-navigator ajaxload') : ''); ?>
 </div>
 <?php $this->need('sidebar.php'); ?>
 <?php $this->need('footer.php'); ?>

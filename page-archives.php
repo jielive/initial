@@ -29,7 +29,7 @@ while($archives->next()){
 		$year = $year_tmp;
 		$output .= '<h3>'.date('Y 年',$archives->created).'</h3><ul>';
 	}
-	if ($this->options->PjaxOption == 'able' && isset($archives->password) && $archives->password !== Typecho_Cookie::get('protectPassword') && $archives->authorId !== $this->user->uid && !$this->user->pass('editor', true)) {
+	if ($this->options->PjaxOption && $archives->hidden) {
 		$output .= '<li>'.date('m/d：',$archives->created).'<a>'. $archives->title .'</a></li>';
 	} else {
 		$output .= '<li>'.date('m/d：',$archives->created).'<a href="'.$archives->permalink .'">'. $archives->title .'</a></li>';
