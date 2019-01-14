@@ -164,7 +164,7 @@ function themeInit($archive) {
 		$options->commentsPageDisplay = 'first';
 	}
 	if ($archive->is('single')) {
-		$archive->content = preg_replace('/<a\b([^>]+?)\bhref="((?!'.addcslashes($options->index, '/-+=#?&').').*?)"([^>]*?)>/i', '<a\1href="\2"\3 target="_blank">', $archive->content);
+		$archive->content = preg_replace('/<a\b([^>]+?)\bhref="((?!'.addcslashes($options->index, '/._-+=#?&').').*?)"([^>]*?)>/i', '<a\1href="\2"\3 target="_blank">', $archive->content);
 		if ($options->AttUrlReplace) {
 			$archive->content = UrlReplace($archive->content);
 		}
