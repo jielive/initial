@@ -395,6 +395,7 @@ function FindContents($val = NULL, $order = 'order', $sort = 'a', $publish = NUL
 
 function Whisper($sidebar = NULL) {
 	$db = Typecho_Db::get();
+	$options = Helper::options();
 	$page = FindContents('page-whisper.php', 'commentsNum', 'd');
 	$p = $sidebar ? 'li' : 'p';
 	if (isset($page)) {
