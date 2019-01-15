@@ -27,13 +27,13 @@ echo $commentClass;
 <?php if ($comments->levels == 0) { ?>
 <div class="comment-author">
 <?php $comments->gravatar('32'); ?>
-<cite><?php $comments->author(); ?></cite>
+<cite><?php CommentAuthor($comments); ?></cite>
 <?php if ($comments->status == 'waiting') { ?>
 <em class="comment-awaiting-moderation">您的评论正等待审核！</em>
 <?php } ?>
 </div>
 <div class="comment-content">
-<?php echo strip_tags(Markdown::convert($comments->text), '<p><br><strong><a><img><pre><code>' . Helper::options()->commentsHTMLTagAllowed); ?>
+<?php echo strip_tags(hrefOpen(Markdown::convert($comments->text)), '<p><br><strong><a><img><pre><code>' . Helper::options()->commentsHTMLTagAllowed); ?>
 </div>
 <div class="comment-meta comment-reply">
 <time><?php $comments->dateWord(); ?></time>
@@ -44,7 +44,7 @@ echo $commentClass;
 <?php } else { ?>
 <div class="comment-author comment-content">
 <?php $comments->gravatar('16'); ?>
-<cite><?php $comments->author(); ?>: </cite>
+<cite><?php CommentAuthor($comments); ?>: </cite>
 <span><?php echo strip_tags($comments->text, '<br>'); ?></span>
 <?php if ($comments->status == 'waiting') { ?>
 <em>您的评论正等待审核！</em>

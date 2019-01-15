@@ -164,7 +164,7 @@ function themeInit($archive) {
 		$options->commentsPageDisplay = 'first';
 	}
 	if ($archive->is('single')) {
-		$archive->content = preg_replace('/<a\b([^>]+?)\bhref="((?!'.addcslashes($options->index, '/._-+=#?&').').*?)"([^>]*?)>/i', '<a\1href="\2"\3 target="_blank">', $archive->content);
+		$archive->content = hrefOpen($archive->content);
 		if ($options->AttUrlReplace) {
 			$archive->content = UrlReplace($archive->content);
 		}
@@ -182,6 +182,10 @@ function cjUrl($path) {
 	} else {
 		$options->themeUrl($path.$ver);
 	}
+}
+
+function hrefOpen($obj) {
+	return preg_replace('/<a\b([^>]+?)\bhref="((?!'.addcslashes(Helper::options()->index, '/._-+=#?&').').*?)"([^>]*?)>/i', '<a\1href="\2"\3 target="_blank">', $obj);
 }
 
 function UrlReplace($obj) {
@@ -285,6 +289,17 @@ function getCatalog() {
 	$index = '<div id="catalog-col">'."\n".'<b>文章目录</b>'."\n".$index.'<script>function Catalogswith(){document.getElementById("catalog-col").classList.toggle("catalog");document.getElementById("catalog").classList.toggle("catalog")}</script>'."\n".'</div>'."\n";
 	}
 	return $index;
+}
+
+function CommentAuthor($obj, $autoLink = NULL, $noFollow = NULL) {
+	$options = Helper::options();
+	$autoLink = $autoLink ? $autoLink : $options->commentsShowUrl;
+	$noFollow = $noFollow ? $noFollow : $options->commentsUrlNofollow;
+	if ($obj->url && $autoLink) {
+		echo '<a href="'.$obj->url.'"'.($noFollow ? ' rel="external nofollow"' : NULL).(strstr($obj->url, $options->index) == $obj->url ? NULL : ' target="_blank"').'>'.$obj->author.'</a>';
+	} else {
+		echo $obj->author;
+	}
 }
 
 function Contents_Post_Initial($limit = 10, $order = 'created') {
@@ -406,7 +421,7 @@ function Whisper($sidebar = NULL) {
 			->order('coid', Typecho_Db::SORT_DESC)
 			->limit(1));
 		if ($comment) {
-			$content = Markdown::convert($comment[0]['text']);
+			$content = hrefOpen(Markdown::convert($comment[0]['text']));
 			if ($options->AttUrlReplace) {
 				$content = UrlReplace($content);
 			}
