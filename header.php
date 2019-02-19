@@ -101,6 +101,8 @@ endif; ?>
 </ul>
 </div>
 </div>
+ <link rel="stylesheet" href="<?php $this->options->themeUrl('prism.css'); ?>">
+    <script src="<?php $this->options->themeUrl('prism.js'); ?>"></script>
 </header>
 <div id="body">
 <div class="container clearfix">
