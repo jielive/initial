@@ -24,9 +24,19 @@
 </p>
 <?php endif; ?>
 <p class="tags">标签: <?php $this->tags(', ', true, 'none'); ?></p>
-<p class="license"><?php echo $this->options->LicenseInfo ? $this->options->LicenseInfo : '本作品采用 <a rel="license nofollow" href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">知识共享署名-相同方式共享 4.0 国际许可协议</a> 进行许可。' ?></p>
 </article>
+
 <?php $this->need('comments.php'); ?>
+
+<p>相关文章：
+<?php $this->related(5)->to($relatedPosts); ?>
+    <ul>
+    <?php while ($relatedPosts->next()): ?>
+    <li><a href="<?php $relatedPosts->permalink(); ?>" title="<?php $relatedPosts->title(); ?>"><?php $relatedPosts->title(); ?></a></li>
+    <?php endwhile; ?>
+</ul>
+</p>
+
 <ul class="post-near">
 <li>上一篇: <?php $this->thePrev('%s','没有了'); ?></li>
 <li>下一篇: <?php $this->theNext('%s','没有了'); ?></li>

@@ -9,7 +9,7 @@ function threadedComments($comments, $options) {
 		}
 	}
 ?>
-<li id="li-<?php $comments->theId(); ?>" class="comment-body<?php
+<li id="<?php $comments->theId(); ?>" class="comment-body<?php
 	if ($comments->levels > 0) {
 		echo ' comment-child';
 		$comments->levelsAlt(' comment-level-odd', ' comment-level-even');
@@ -19,7 +19,6 @@ function threadedComments($comments, $options) {
 	$comments->alt(' comment-odd', ' comment-even');
 echo $commentClass;
 ?>">
-<div id="<?php $comments->theId(); ?>">
 <div class="comment-author">
 <?php $comments->gravatar('32'); ?>
 <cite><?php CommentAuthor($comments); ?></cite>
@@ -37,8 +36,7 @@ echo $commentClass;
 <?php $comments->content(); ?>
 </div>
 <div class="comment-reply">
-<?php $comments->reply(); ?>
-</div>
+<span><?php $comments->reply(); ?></span>
 </div>
 <?php if ($comments->children) { ?>
 <div class="comment-children">

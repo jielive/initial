@@ -16,21 +16,14 @@ function threadedComments($comments, $options) {
 		}
 	}
 ?>
-<li id="li-<?php $comments->theId(); ?>" class="<?php
-	if ($comments->levels == 0) {
-		echo ' whisper-body';
-	} elseif ($comments->levels == 1) {
-		echo 'comment-body comment-parent';
+<li id="<?php $comments->theId(); ?>" class="comment-body<?php
+	if ($comments->levels > 0) {
+		echo ' comment-child';
 	} else {
-		echo 'comment-body comment-child';
+		echo ' comment-parent';
 	}
 echo $commentClass;
 ?>">
-<div id="<?php $comments->theId(); ?>"<?php
-	if ($comments->levels > 0) {
-		echo ' class="comment-whisper"';
-	}
-?>>
 <?php if ($comments->levels == 0) { ?>
 <div class="comment-author">
 <?php $comments->gravatar('32'); ?>
@@ -42,27 +35,22 @@ echo $commentClass;
 <div class="comment-content">
 <?php echo strip_tags(hrefOpen(Markdown::convert($comments->text)), '<p><br><strong><a><img><pre><code>' . Helper::options()->commentsHTMLTagAllowed); ?>
 </div>
-<div class="comment-meta">
+<div class="comment-meta comment-reply">
 <time><?php $comments->dateWord(); ?></time>
-<?php if (Helper::options()->commentsThreaded && !$comments->isTopLevel && $comments->parameter->allowComment) {
-		echo '<a class="whisper-reply" onclick="return TypechoComment.reply(\'' . $comments->theId . '\', ' . $comments->coid . ');">评论</a>';
-} ?>
+<?php if (Typecho_Widget::widget('Widget_Archive')->allow('comment') && Helper::options()->commentsThreaded) { ?>
+<span><?php $comments->reply('评论'); ?></span>
+<?php } ?>
 </div>
 <?php } else { ?>
 <div class="comment-author comment-content">
 <?php $comments->gravatar('16'); ?>
 <cite><?php CommentAuthor($comments); ?>: </cite>
-<span <?php
-	if (Helper::options()->commentsThreaded && !$comments->isTopLevel && $comments->parameter->allowComment) {
-		echo ' class="whisper-reply" onclick="return TypechoComment.reply(\'' . $comments->theId . '\', ' . $comments->coid . ');"';
-	}
-?>><?php if ($comments->levels > 1) {CommentAt($comments->coid);}echo strip_tags(str_replace("\r\n", "<br>", $comments->text), "<br>"); ?></span>
+<span><?php echo strip_tags($comments->text, '<br>'); ?></span>
 <?php if ($comments->status == 'waiting') { ?>
 <em>您的评论正等待审核！</em>
 <?php } ?>
 </div>
 <?php } ?>
-</div>
 <?php if ($comments->children) { ?>
 <div class="comment-children">
 <?php $comments->threadedComments($options); ?>
