@@ -1,7 +1,7 @@
 <?php
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
 
-define('INITIAL_VERSION_NUMBER', '2.4.2');
+define('INITIAL_VERSION_NUMBER', '2.4.3');
 
 if (Helper::options()->GravatarUrl) define('__TYPECHO_GRAVATAR_PREFIX__', Helper::options()->GravatarUrl);
 
@@ -50,6 +50,10 @@ function themeConfig($form) {
 
 	$Alipay = new Typecho_Widget_Helper_Form_Element_Text('Alipay', NULL, NULL, _t('支付宝打赏二维码（建议图片尺寸不低于240*240）'), _t('在这里填入一个图片 URL 地址, 以添加一个支付宝打赏二维码，留空则不设置支付宝打赏'));
 	$form->addInput($Alipay);
+
+	$LicenseInfo = new Typecho_Widget_Helper_Form_Element_Text('LicenseInfo', NULL, NULL, _t('文章许可信息'), _t('填入后将在文章底部显示你填入的许可信息（支持HTML标签），留空则默认为 (CC BY-SA 4.0)国际许可协议。'));
+	$form->addInput($LicenseInfo);
+
 
 	$HeadFixed = new Typecho_Widget_Helper_Form_Element_Radio('HeadFixed',
 	array(1 => _t('启用'),
@@ -115,12 +119,6 @@ function themeConfig($form) {
 	$MusicVol = new Typecho_Widget_Helper_Form_Element_Text('MusicVol', NULL, NULL, _t('背景音乐播放音量（输入范围：0~1）'), _t('请输入一个0到1之间的小数（0为静音  0.5为50%音量  1为100%最大音量）输入错误内容或留空则使用默认音量100%'));
 	$form->addInput($MusicVol->addRule('isInteger', _t('请填入一个0~1内的数字')));
 
-
-	$Links = new Typecho_Widget_Helper_Form_Element_Textarea('Links', NULL, NULL, _t('链接列表（切换主题会被清空，注意备份！）<br><span class="notice"><b style="color:red">！注意：</b>链接列表 已迁移至 <b style="color:red">管理</b> &raquo; <b style="color:red">独立页面</b> &raquo; <b style="color:red">“链接”模板页面</b> &raquo; <b style="color:red">自定义字段"links"</b> 内，请前往该处操作。</span>更多信息请 <a href="https://www.offodd.com/58.html">点击这里</a> 查看帮助。'), _t('按照格式输入链接信息，格式：<br><b class="notice">链接名称,链接地址,链接描述,连接图标,链接分类</b><br>不同信息之间用英文逗号“,”分隔，例如：<br><b>OFFODD,http://www.offodd.com/,JIElive的博客 | 有点不同,https://www.offodd.com/logo.png,Myself</b><br>若中间有暂时不想填的信息，请留空，例如暂时不想填写链接描述和链接图标：<br><b>OFFODD,http://www.offodd.com/,,,Myself</b><br>多个链接换行即可，一行一个'));
-	$Links->input->setAttribute('style', 'background:#eee;color:#666');
-	$form->addInput($Links);
-
-
 	$InsideLinksIcon = new Typecho_Widget_Helper_Form_Element_Radio('InsideLinksIcon',
 	array(1 => _t('启用'),
 	0 => _t('关闭')),
@@ -176,7 +174,6 @@ function themeInit($archive) {
 		}
 	}
 }
-
 function cjUrl($path) {
 	$options = Helper::options();
 	$ver = '?ver='.constant("INITIAL_VERSION_NUMBER");
@@ -186,11 +183,9 @@ function cjUrl($path) {
 		$options->themeUrl($path.$ver);
 	}
 }
-
 function hrefOpen($obj) {
-	return preg_replace('/<a\b([^>]+?)\bhref="((?!'.addcslashes(Helper::options()->index, '/._-+=#?&').').*?)"([^>]*?)>/i', '<a\1href="\2"\3 target="_blank">', $obj);
+	return preg_replace('/<a\b([^>]+?)\bhref="((?!'.addcslashes(Helper::options()->index, '/._-+=#?&').'|\#).*?)"([^>]*?)>/i', '<a\1href="\2"\3 target="_blank">', $obj);
 }
-
 function UrlReplace($obj) {
 	$list = explode("\r\n", Helper::options()->AttUrlReplace);
 	foreach ($list as $tmp) {
@@ -199,7 +194,6 @@ function UrlReplace($obj) {
 	}
 	return $obj;
 }
-
 function postThumb($obj) {
 	$thumb = $obj->fields->thumb;
 	if (!$thumb) {
@@ -218,7 +212,6 @@ function postThumb($obj) {
 	}
 	return '<img src="'.$thumb.'" />';
 }
-
 function Postviews($archive) {
 	$db = Typecho_Db::get();
 	$cid = $archive->cid;
@@ -241,7 +234,6 @@ function Postviews($archive) {
 	}
 	echo $exist == 0 ? '暂无阅读' : $exist.' 次阅读';
 }
-
 function createCatalog($obj) {
 	global $catalog;
 	global $catalog_count;
@@ -256,7 +248,6 @@ function createCatalog($obj) {
 	}, $obj);
 	return $obj."\n".getCatalog();
 }
-
 function getCatalog() {
 	global $catalog;
 	$index = '';
@@ -293,7 +284,6 @@ function getCatalog() {
 	}
 	return $index;
 }
-
 function CommentAuthor($obj, $autoLink = NULL, $noFollow = NULL) {
 	$options = Helper::options();
 	$autoLink = $autoLink ? $autoLink : $options->commentsShowUrl;
@@ -304,7 +294,17 @@ function CommentAuthor($obj, $autoLink = NULL, $noFollow = NULL) {
 		echo $obj->author;
 	}
 }
-
+function CommentAt($coid){
+	$db = Typecho_Db::get();
+	$prow = $db->fetchRow($db->select('parent')->from('table.comments')
+		->where('coid = ? AND status = ?', $coid, 'approved'));
+	$parent = $prow['parent'];
+	if ($prow && $parent != '0') {
+		$arow = $db->fetchRow($db->select('author')->from('table.comments')
+			->where('coid = ? AND status = ?', $parent, 'approved'));
+		echo '<b class="comment-at">@'.$arow['author'].'</b>';
+	}
+}
 function Contents_Post_Initial($limit = 10, $order = 'created') {
 	$db = Typecho_Db::get();
 	$options = Helper::options();
@@ -320,7 +320,6 @@ function Contents_Post_Initial($limit = 10, $order = 'created') {
 		echo '<li>暂无文章</li>'."\n";
 	}
 }
-
 function Contents_Comments_Initial($limit = 10, $ignoreAuthor = 0) {
 	$db = Typecho_Db::get();
 	$options = Helper::options();
@@ -335,7 +334,7 @@ function Contents_Comments_Initial($limit = 10, $ignoreAuthor = 0) {
 		$select->where('ownerId <> authorId');
 	}
 	$page_whisper = FindContents('page-whisper.php', 'commentsNum', 'd');
-	if (isset($page_whisper)) {
+	if ($page_whisper) {
 		$select->where('cid <> ? OR (cid = ? AND parent <> ?)', $page_whisper[0]['cid'], $page_whisper[0]['cid'], '0');
 	}
 	$comments = $db->fetchAll($select);
@@ -348,7 +347,6 @@ function Contents_Comments_Initial($limit = 10, $ignoreAuthor = 0) {
 		echo '<li>暂无回复</li>'."\n";
 	}
 }
-
 function permaLink($obj) {
 	$db = Typecho_Db::get();
 	$options = Helper::options();
@@ -388,14 +386,12 @@ function permaLink($obj) {
 	}
 	return $parentContent['permalink'].'#'.$obj['type'].'-'.$obj['coid'];
 }
-
 function FindContent($cid) {
 	$db = Typecho_Db::get();
 	return $db->fetchRow($db->select()->from('table.contents')
 	->where('cid = ?', $cid)
 	->limit(1), array(Typecho_Widget::widget('Widget_Abstract_Contents'), 'filter'));
 }
-
 function FindContents($val = NULL, $order = 'order', $sort = 'a', $publish = NULL) {
 	$db = Typecho_Db::get();
 	$sort = ($sort == 'a') ? Typecho_Db::SORT_ASC : Typecho_Db::SORT_DESC;
@@ -408,15 +404,15 @@ function FindContents($val = NULL, $order = 'order', $sort = 'a', $publish = NUL
 	if ($publish) {
 		$select->where('status = ?','publish');
 	}
-	return $db->fetchAll($select, array(Typecho_Widget::widget('Widget_Abstract_Contents'), 'filter'));
+	$content = $db->fetchAll($select, array(Typecho_Widget::widget('Widget_Abstract_Contents'), 'filter'));
+	return empty($content) ? false : $content;
 }
-
 function Whisper($sidebar = NULL) {
 	$db = Typecho_Db::get();
 	$options = Helper::options();
 	$page = FindContents('page-whisper.php', 'commentsNum', 'd');
 	$p = $sidebar ? 'li' : 'p';
-	if (isset($page)) {
+	if ($page) {
 		$page = $page[0];
 		$title = $sidebar ? '' : '<h2 class="post-title"><a href="'.$page['permalink'].'">'.$page['title'].'<span class="more">···</span></a></h2>'."\n";
 		$comment = $db->fetchAll($db->select()->from('table.comments')
@@ -436,40 +432,28 @@ function Whisper($sidebar = NULL) {
 		echo ($sidebar ? '' : '<h2 class="post-title"><a>轻语</a></h2>'."\n").'<'.$p.'>暂无内容</'.$p.'>'."\n";
 	}
 }
-
-function Links_list() {
+function Links($sorts = NULL, $icon = 0) {
 	$db = Typecho_Db::get();
-	$list = Helper::options()->Links ? Helper::options()->Links : '';
-	$page_links = FindContents('page-links.php', 'order', 'a')[0];
-	if (isset($page_links)) {
+	$link = NULL;
+	$list = NULL;
+	$page_links = FindContents('page-links.php', 'order', 'a');
+	if ($page_links) {
 		$exist = $db->fetchRow($db->select()->from('table.fields')
-			->where('cid = ? AND name = ?', $page_links['cid'], 'links'));
+			->where('cid = ? AND name = ?', $page_links[0]['cid'], 'links'));
 		if (empty($exist)) {
 			$db->query($db->insert('table.fields')
 				->rows(array(
-					'cid'           =>  $page_links['cid'],
+					'cid'           =>  $page_links[0]['cid'],
 					'name'          =>  'links',
 					'type'          =>  'str',
-					'str_value'     =>  $list,
+					'str_value'     =>  NULL,
 					'int_value'     =>  0,
 					'float_value'   =>  0
 				)));
-			return $list;
-		}
-		if (empty($exist['str_value'])) {
-			$db->query($db->update('table.fields')
-				->rows(array('str_value' => $list))
-				->where('cid = ? AND name = ?', $page_links['cid'], 'links'));
-			return $list;
+			return NULL;
 		}
 		$list = $exist['str_value'];
 	}
-	return $list;
-}
-
-function Links($sorts = NULL, $icon = 0) {
-	$link = NULL;
-	$list = Links_list();
 	if ($list) {
 		$list = explode("\r\n", $list);
 		foreach ($list as $val) {
@@ -486,7 +470,6 @@ function Links($sorts = NULL, $icon = 0) {
 	}
 	echo $link ? $link : '<li>暂无链接</li>'."\n";
 }
-
 function Playlist() {
 	$options = Helper::options();
 	$arr = explode("\r\n", $options->MusicUrl);
@@ -495,7 +478,6 @@ function Playlist() {
 	}
 	echo '["'.implode('","', $arr).'"]';
 }
-
 function compressHtml($html_source) {
 	$chunks = preg_split('/(<!--<nocompress>-->.*?<!--<\/nocompress>-->|<nocompress>.*?<\/nocompress>|<pre.*?\/pre>|<textarea.*?\/textarea>|<script.*?\/script>)/msi', $html_source, -1, PREG_SPLIT_DELIM_CAPTURE);
 	$compress = '';
@@ -544,12 +526,10 @@ function compressHtml($html_source) {
 	}
 	return $compress;
 }
-
 function themeFields($layout) {
 	$thumb = new Typecho_Widget_Helper_Form_Element_Text('thumb', NULL, NULL, _t('自定义缩略图'), _t('在这里填入一个图片 URL 地址, 以添加本文的缩略图，若填入纯数字，例如 <b>3</b> ，则使用文章第三张图片作为缩略图（对应位置无图则不显示缩略图），留空则默认不显示缩略图'));
 	$thumb->input->setAttribute('class', 'w-100');
 	$layout->addItem($thumb);
-
 	$catalog = new Typecho_Widget_Helper_Form_Element_Radio('catalog',
 	array(true => _t('启用'),
 	false => _t('关闭')),
