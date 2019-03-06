@@ -16,9 +16,8 @@
 <article class="post">
 <h1 class="post-title"><a href="<?php $this->permalink() ?>"><?php $this->title() ?></a></h1>
 <?php
-$stat = Typecho_Widget::widget('Widget_Stat');
-$this->widget('Widget_Contents_Post_Recent', 'pageSize='.$stat->publishedPostsNum)->to($archives);
-$year=0; $mon=0; $i=0; $j=0;
+$this->widget('Widget_Contents_Post_Recent', 'pageSize='.Typecho_Widget::widget('Widget_Stat')->publishedPostsNum)->to($archives);
+$year=0;
 $output = '<div id="archives">';
 while($archives->next()){
 	$year_tmp = date('Y',$archives->created);
