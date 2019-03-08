@@ -2,7 +2,7 @@ body {
  font:95%/1.5 -apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif;
  margin:0;
  color:#444;
- background-color:#fff
+ background-color:#eee
 }
 a,.nav-menu ul a,.post-content .more a {
  color:#666;
@@ -384,7 +384,12 @@ button,input[type=submit],.menu-parent a,.rewards a,.whisper .whisper-reply,#cor
  color:#666
 }
 .post {
- padding:15px 0
+ border: 10px;
+ border-color: #fcfcfc;
+ border-style: solid;
+ padding:15px 0;
+ margin-top:20px;
+ background-color:#fcfcfc
 }
 .post-title {
  margin:.83em 0;
