@@ -23,6 +23,7 @@
 <p class="word">请输入密码访问</p>
 <p>
 <input type="password" class="text" name="protectPassword" />
+<input type="hidden" name="protectCID" value="<?php $this->cid(); ?>" />
 <input type="submit" class="submit" value="提交" />
 </p>
 </form>
