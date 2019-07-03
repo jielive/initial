@@ -1,8 +1,8 @@
 body {
- font:95%/1.5 -apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif;
+ font:95%/1.5-apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif;
  margin:0;
  color:#444;
- background-color:#fff
+ background-color:#eee
 }
 a,.nav-menu ul a,.post-content .more a {
  color:#666;
@@ -380,15 +380,21 @@ button,input[type=submit],.menu-parent a,.rewards a,.whisper .whisper-reply,#cor
  }
 }
 .breadcrumbs {
- margin:15px 0 -15px;
- color:#666
+ margin:15px 0px;
+ color:#666;
+ padding: 5px 0px 5px 15px; 
+ border: 1px solid #fff;
+ background-color: #fff;
 }
 .post {
- padding:15px 0
+ padding: 10px 15px 20px 15px;
+ border: 1px solid #fff;
+ background-color: #fff;
+ margin-top: 15px;
 }
 .post-title {
  margin:.83em 0;
- font-size:1.27em
+ font-size:1.6em
 }
 .post-meta {
  margin-top:-0.5em;
@@ -636,9 +642,10 @@ button,input[type=submit],.menu-parent a,.rewards a,.whisper .whisper-reply,#cor
  margin-left:5px
 }
 .comment-list li {
- margin-top:10px;
- padding:10px;
- border:1px solid #eee
+ margin-top: 10px;
+ padding: 10px;
+ border: 1px solid #fff;
+ background: #eed;
 }
 .comment-level-odd,.comment-whisper {
  background:#f6f6f6
@@ -716,16 +723,21 @@ button,input[type=submit],.menu-parent a,.rewards a,.whisper .whisper-reply,#cor
  border-radius:2px
 }
 #secondary {
- margin-left:75%;
+ margin-left:71%;
  padding-top:15px;
- word-wrap:break-word
+ word-wrap:break-word;
+
 }
 #secondary .more {
  display:block;
  font-size:.875em
 }
 .widget {
- margin-bottom:30px
+ margin-bottom:15px;
+ padding: 10px 15px 20px 15px;
+ border: 1px solid #fff;
+ background-color: #fff;
+
 }
 .widget-list,.widget-tile,.links,#cornertool ul {
  list-style:none;
@@ -740,7 +752,8 @@ button,input[type=submit],.menu-parent a,.rewards a,.whisper .whisper-reply,#cor
 }
 .widget-tile {
  margin-left:-5px;
- margin-right:-5px
+ margin-right:-5px;
+ font-size: 1.25em;
 }
 .widget-tile li {
  display:inline-block;
@@ -749,11 +762,12 @@ button,input[type=submit],.menu-parent a,.rewards a,.whisper .whisper-reply,#cor
  color:#666
 }
 #footer {
- font-size:.875em;
+ font-size:.75em;
  padding:2em 0;
- line-height:1.5;
+ line-height:1.8;
  text-align:center;
- border-top:1px solid #eee
+ border-top:5px double #fff;
+ background-color:#fff;
 }
 #footer,#footer .links a,.icpnum {
  color:#999
