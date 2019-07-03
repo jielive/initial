@@ -1,12 +1,11 @@
 # Typecho主题 - Initial 2
-
 ![主题预览](https://heng07.com/img/screenshot.png)
-
-基于 [OFFODD 开发的 Initial] (https://www.offodd.com/17.html)修改。主题预览地址：[https://heng07.com](https://heng07.com)
+基于 [OFFODD 开发的 Initial] (https://www.offodd.com/17.html)修改。
+主题预览地址：[https://heng07.com](https://heng07.com)
 
 ## 功能与特点
 
-#### 原主题
+#### --原主题--
 * 重新优化的响应式布局，移动端舒适体验
 * 轻量级设计，关闭附加功能后无框架、无JQ、无库
 * 傻瓜式后台设置，告别使用疑惑
@@ -25,7 +24,7 @@
 * 添加右下角小工具，包括返回顶部、背景音乐
 * 更多细节，等你发现🤩
 
-#### 新增
+#### ++新增++
 * 文章和侧边栏卡片显示
 * 字体增大
 
