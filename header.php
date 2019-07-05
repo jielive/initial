@@ -14,7 +14,7 @@
 'tag'       =>  _t('标签 %s 下的文章'),
 'date'      =>  _t('在 %s 发布的文章'),
 'author'    =>  _t('作者 %s 发布的文章')
-), '', ' - '); ?><?php $this->options->title(); if ($this->is('index') && $this->options->subTitle): ?> - <?php $this->options->subTitle(); endif; ?></title>
+), '', ' | '); ?><?php $this->options->title(); if ($this->is('index') && $this->options->subTitle): ?> - <?php $this->options->subTitle(); endif; ?></title>
 <?php $this->header('generator=&template=&pingback=&xmlrpc=&wlw=&commentReply=&rss1=&rss2=&antiSpam=&atom='); ?>
 <link rel="stylesheet" href="<?php cjUrl('style.min.css') ?>" />
 </head>

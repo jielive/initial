@@ -7,7 +7,7 @@
 ?>
 <?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
 <?php $this->need('header.php'); ?>
-<div id="main">
+<div id="page-main">
 <?php if (!empty($this->options->Breadcrumbs) && in_array('Pageshow', $this->options->Breadcrumbs)): ?>
 <div class="breadcrumbs">
 <a href="<?php $this->options->siteUrl(); ?>">首页</a> &raquo; <?php $this->title() ?>
@@ -29,9 +29,9 @@ while($archives->next()){
 		$output .= '<h3>'.date('Y 年',$archives->created).'</h3><ul>';
 	}
 	if ($this->options->PjaxOption && $archives->hidden) {
-		$output .= '<li>'.date('m/d：',$archives->created).'<a>'. $archives->title .'</a></li>';
+		$output .= '<li>'.date('m-d：',$archives->created).'<a>'. $archives->title .'</a></li>';
 	} else {
-		$output .= '<li>'.date('m/d：',$archives->created).'<a href="'.$archives->permalink .'">'. $archives->title .'</a></li>';
+		$output .= '<li>'.date('m-d：',$archives->created).'<a href="'.$archives->permalink .'">'. $archives->title .'</a></li>';
 	}
 }
 $output .= '</ul></div>';
@@ -39,5 +39,5 @@ echo $output;
 ?>
 </article>
 </div>
-<?php $this->need('sidebar.php'); ?>
+
 <?php $this->need('footer.php'); ?>

@@ -11,7 +11,7 @@
 <?php endif; ?>
 </ul>
 <?php endif; ?>
-<p>&copy; 2007 - <?php echo date('Y'); ?> <?php $this->options->title(); ?> </p>
+<p>&copy; 2007 - <?php echo date('Y'); ?> <?php $this->options->title(); ?> - Powered by <a href="http://www.typecho.org" target="_blank">Typecho</a> &amp; <a href="https://www.offodd.com/17.html" target="_blank">Initial</a> - <a href="https://heng07.com/sitemap.xml" target="_blank">SiteMap</a></p>
 <?php if ($this->options->ICPbeian): ?>
 <p><a href="http://www.miitbeian.gov.cn" class="icpnum" target="_blank" rel="nofollow"><?php $this->options->ICPbeian(); ?></a></p>
 <?php endif; ?>

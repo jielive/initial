@@ -9,26 +9,26 @@
 <article class="post<?php if ($this->options->PjaxOption && $this->hidden): ?> protected<?php endif; ?>">
 <h1 class="post-title"><a href="<?php $this->permalink() ?>"><?php $this->title() ?></a></h1>
 <ul class="post-meta">
-<li><?php $this->date(); ?></li>
-<li><?php $this->category(','); ?></li>
+<li>发布时间：<?php $this->date(); ?></li>
+<li>文章分类：<?php $this->category(','); ?></li>
 <li><a href="<?php $this->permalink() ?>#comments"><?php $this->commentsNum('暂无评论', '%d 条评论'); ?></a></li>
 <li><?php Postviews($this); ?></li>
+<li><p class="tags">标签: <?php $this->tags(', ', true, 'none'); ?></p></li>
 </ul>
 <div class="post-content">
 <?php $this->content(); ?>
 </div>
+</br>
 <?php if ($this->options->WeChat || $this->options->Alipay): ?>
 <p class="rewards">打赏: <?php if ($this->options->WeChat): ?>
 <a><img src="<?php $this->options->WeChat(); ?>" alt="微信收款二维码" />微信</a><?php endif; if ($this->options->WeChat && $this->options->Alipay): ?>, <?php endif; if ($this->options->Alipay): ?>
 <a><img src="<?php $this->options->Alipay(); ?>" alt="支付宝收款二维码" />支付宝</a><?php endif; ?>
 </p>
 <?php endif; ?>
-<p class="tags">标签: <?php $this->tags(', ', true, 'none'); ?></p>
 <p class="license"><?php echo $this->options->LicenseInfo ? $this->options->LicenseInfo : '本作品采用 <a rel="license nofollow" href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">知识共享署名-相同方式共享 4.0 国际许可协议</a> 进行许可。' ?></p>
 </article>
 
-<?php $this->need('comments.php'); ?>
-
+<div class="post">
 <p>相关文章：
 <?php $this->related(5)->to($relatedPosts); ?>
     <ul>
@@ -37,6 +37,10 @@
     <?php endwhile; ?>
 </ul>
 </p>
+</div>
+
+<?php $this->need('comments.php'); ?>
+
 
 <ul class="post-near">
 <li>上一篇: <?php $this->thePrev('%s','没有了'); ?></li>

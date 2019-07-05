@@ -1,5 +1,5 @@
 body {
- font:95%/1.5-apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif;
+ font:14px/1.6 "Droid Serif",-apple-system,BlinkMacSystemFont,"Segoe UI","Droid Sans","Helvetica Neue","PingFang SC","Hiragino Sans GB","Droid Sans Fallback","Microsoft YaHei",sans-serif;
  margin:0;
  color:#444;
  background-color:#eee
@@ -382,7 +382,7 @@ button,input[type=submit],.menu-parent a,.rewards a,.whisper .whisper-reply,#cor
 .breadcrumbs {
  margin:15px 0px;
  color:#666;
- padding: 5px 0px 5px 15px; 
+ padding: 10px 0px 10px 15px; 
  border: 1px solid #fff;
  background-color: #fff;
 }
@@ -514,8 +514,13 @@ button,input[type=submit],.menu-parent a,.rewards a,.whisper .whisper-reply,#cor
  border:1px solid #ddd;
  border-width:2px 0 0 0
 }
-.post-content .thumb,.post-content .more {
+.post-content .thumb {
  text-align:center
+}
+.more {
+ text-align:center;
+ display:block;
+ color: #666;
 }
 .protected input {
  width:auto

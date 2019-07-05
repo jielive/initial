@@ -51,7 +51,7 @@
 <?php $this->widget('Widget_Metas_Tag_Cloud', 'ignoreZeroCount=1&limit=40')->to($tags); ?>
 <?php if($tags->have()): ?>
 <?php while($tags->next()): ?>
-<li><a style="color: rgb(<?php echo(rand(0, 255)); ?>, <?php echo(rand(0,255)); ?>, <?php echo(rand(0, 255)); ?>)" href="<?php $tags->permalink(); ?>" title='<?php $tags->name(); ?>'><?php $tags->name(); ?> [<?php $tags->count(); ?>] </a></li>
+<li><a href="<?php $tags->permalink(); ?>" title='<?php $tags->name(); ?>'><?php $tags->name(); ?> [<?php $tags->count(); ?>] </a></li>
 <?php endwhile; ?>
 <?php else: ?>
 <li>暂无标签</li>
@@ -97,7 +97,7 @@
 <section class="widget">
 <h3 class="widget-title">友情链接</h3>
 <ul class="widget-list">
-<?php Links_Plugin::output(""); ?>
+<?php Links_Plugin::output("SHOW_TEXT"); ?>
 </ul>
 </section>
 <?php endif; ?>

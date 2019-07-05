@@ -7,7 +7,7 @@
 ?>
 <?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
 <?php $this->need('header.php'); ?>
-<div id="main">
+<div id="page-main">
 <?php if (!empty($this->options->Breadcrumbs) && in_array('Pageshow', $this->options->Breadcrumbs)): ?>
 <div class="breadcrumbs">
 <a href="<?php $this->options->siteUrl(); ?>">首页</a> &raquo; <?php $this->title() ?>
@@ -27,5 +27,5 @@
 </article>
 <?php $this->need('comments.php'); ?>
 </div>
-<?php $this->need('sidebar.php'); ?>
+
 <?php $this->need('footer.php'); ?>
