@@ -52,5 +52,15 @@ $this->need('header.php');
 <?php endwhile; ?>
 <?php $this->pageNav('上一页', $this->options->AjaxLoad ? '查看更多' : '下一页', 0, '..', $this->options->AjaxLoad ? array('wrapClass' => 'page-navigator ajaxload') : ''); ?>
 </div>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-format="fluid"
+     data-ad-layout-key="-4g+dv+4q-81+2z"
+     data-ad-client="ca-pub-9060781598368507"
+     data-ad-slot="1500366541"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
 <?php $this->need('sidebar.php'); ?>
 <?php $this->need('footer.php'); ?>
