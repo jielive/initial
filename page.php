@@ -12,6 +12,10 @@
 <?php $this->content(); ?>
 </div>
 </article>
+<?php if ($this->options->ADpage): ?>
+<p><?php $this->options->ADpage(); ?></p>
+<?php endif; ?>
+
 <?php $this->need('comments.php'); ?>
 </div>
 

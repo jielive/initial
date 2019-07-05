@@ -11,6 +11,11 @@
 </ul>
 </section>
 <?php endif; ?>
+
+<?php if ($this->options->ADsidebar): ?>
+<p><?php $this->options->ADsidebar(); ?></p>
+<?php endif; ?>
+
 <?php if (!empty($this->options->sidebarBlock) && in_array('ShowHotPosts', $this->options->sidebarBlock)): ?>
 <section class="widget">
 <h3 class="widget-title">热门文章</h3>
