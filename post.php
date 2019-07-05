@@ -39,10 +39,6 @@
 </p>
 </div>
 
-<?php if ($this->options->ADpost): ?>
-<p><?php $this->options->ADpost(); ?></p>
-<?php endif; ?>
-
 <?php $this->need('comments.php'); ?>
 
 
