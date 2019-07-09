@@ -922,10 +922,9 @@ button,input[type=submit],.menu-parent a,.rewards a,.whisper .whisper-reply,#cor
 
 #footer {
 	font-size: .75em;
-	padding: 2em 0;
+	padding: 5px 0;
 	line-height: 1.8;
 	text-align: center;
-	border-top: 5px double #fff;
 	background-color: #fff;
 }
 
