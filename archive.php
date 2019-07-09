@@ -43,5 +43,4 @@
 <?php endif; ?>
 <?php $this->pageNav('上一页', $this->options->AjaxLoad ? '查看更多' : '下一页', 0, '..', $this->options->AjaxLoad ? array('wrapClass' => 'page-navigator ajaxload') : ''); ?>
 </div>
-<?php $this->need('sidebar.php'); ?>
 <?php $this->need('footer.php'); ?>
