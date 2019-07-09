@@ -1,18 +1,6 @@
 <?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
 </div>
 </div>
-<!---Google自动广告--->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-format="fluid"
-     data-ad-layout-key="-4g+dv+4q-81+2z"
-     data-ad-client="ca-pub-9060781598368507"
-     data-ad-slot="1500366541"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-<!---Google自动广告--->
 <footer id="footer">
 <div class="container">
 <?php if (!empty($this->options->ShowLinks) && in_array('footer', $this->options->ShowLinks)): ?>
