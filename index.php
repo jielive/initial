@@ -1,10 +1,8 @@
 <?php
 /**
- * Initial - 简约而不简单
- * 还原本质 勿忘初心
- * 
- * @package Initial
- * @author JIElive
+ * Initial 2- 简约而不简单
+ * @package Initial 2
+ * @author JIElive & 一恒
  * @version 2.4.3
  * @link http://www.offodd.com/
  */
@@ -27,7 +25,7 @@ $this->need('header.php');
 <h2 class="post-title"><a href="<?php $this->permalink() ?>"><?php $this->title() ?></a></h2>
 <ul class="post-meta">
 <li><?php $this->date(); ?></li>
-<li><?php $this->category(',', false); ?></li>
+<!--<li><?php $this->category(',', false); ?></li>-->
 <li><?php $this->commentsNum('暂无评论', '%d 条评论'); ?></li>
 <li><?php Postviews($this); ?></li>
 </ul>
@@ -46,21 +44,12 @@ $this->need('header.php');
 <?php endif; ?>
 <p><?php $this->excerpt(200, ''); ?></p>
 <?php endif; ?>
-<p class="more"><a href="<?php $this->permalink() ?>" title="<?php $this->title() ?>">- 阅读全文 -</a></p>
+<p class="more"><a href="<?php $this->permalink() ?>" title="<?php $this->title() ?>">-- 阅读全文 --</a></p>
 </div>
 </article>
 <?php endwhile; ?>
 <?php $this->pageNav('上一页', $this->options->AjaxLoad ? '查看更多' : '下一页', 0, '..', $this->options->AjaxLoad ? array('wrapClass' => 'page-navigator ajaxload') : ''); ?>
 </div>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-format="fluid"
-     data-ad-layout-key="-4g+dv+4q-81+2z"
-     data-ad-client="ca-pub-9060781598368507"
-     data-ad-slot="1500366541"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+
 <?php $this->need('sidebar.php'); ?>
 <?php $this->need('footer.php'); ?>
