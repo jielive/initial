@@ -1,7 +1,19 @@
 <?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
 </div>
 </div>
-<footer id="footer">
+<!---Google自动广告--->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-format="fluid"
+     data-ad-layout-key="-4g+dv+4q-81+2z"
+     data-ad-client="ca-pub-9060781598368507"
+     data-ad-slot="1500366541"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<!---Google自动广告--->
+<footer id="footer">
 <div class="container">
 <?php if (!empty($this->options->ShowLinks) && in_array('footer', $this->options->ShowLinks)): ?>
 <ul class="links">
@@ -11,10 +23,52 @@
 <?php endif; ?>
 </ul>
 <?php endif; ?>
-<p>&copy; 2007 - <?php echo date('Y'); ?> <?php $this->options->title(); ?> - Powered by <a href="http://www.typecho.org" target="_blank">Typecho</a> &amp; <a href="https://www.offodd.com/17.html" target="_blank">Initial</a> - <a href="https://heng07.com/sitemap.xml" target="_blank">SiteMap</a></p>
+<p>&copy; 2007 - <?php echo date('Y'); ?> <?php $this->options->title(); ?>【<span id="sitetime"></span>】</p>
+<p>
+Powered by <a href="http://www.typecho.org" target="_blank">Typecho</a> &amp; <a href="https://www.offodd.com/17.html" target="_blank">Initial</a> -
+<a href="/sitemap.xml" target="_blank">SiteMap</a> -
+<a href="/ampindex" target="_blank">AMP</a> -
 <?php if ($this->options->ICPbeian): ?>
-<p><a href="http://www.miitbeian.gov.cn" class="icpnum" target="_blank" rel="nofollow"><?php $this->options->ICPbeian(); ?></a></p>
+<a href="http://www.miitbeian.gov.cn" class="icpnum" target="_blank" rel="nofollow"><?php $this->options->ICPbeian(); ?></a>
 <?php endif; ?>
+</p>
+
+<script language=javascript>
+	function siteTime(){
+		window.setTimeout("siteTime()", 1000);
+		var seconds = 1000;
+		var minutes = seconds * 60;
+		var hours = minutes * 60;
+		var days = hours * 24;
+		var years = days * 365;
+		var today = new Date();
+		var todayYear = today.getFullYear();
+		var todayMonth = today.getMonth()+1;
+		var todayDate = today.getDate();
+		var todayHour = today.getHours();
+		var todayMinute = today.getMinutes();
+		var todaySecond = today.getSeconds();
+		/* Date.UTC() -- 返回date对象距世界标准时间(UTC)1970年1月1日午夜之间的毫秒数(时间戳)
+		year - 作为date对象的年份，为4位年份值
+		month - 0-11之间的整数，做为date对象的月份
+		day - 1-31之间的整数，做为date对象的天数
+		hours - 0(午夜24点)-23之间的整数，做为date对象的小时数
+		minutes - 0-59之间的整数，做为date对象的分钟数
+		seconds - 0-59之间的整数，做为date对象的秒数
+		microseconds - 0-999之间的整数，做为date对象的毫秒数 */
+		var t1 = Date.UTC(2007,03,14,00,00,00); //北京时间2018-2-13 00:00:00
+		var t2 = Date.UTC(todayYear,todayMonth,todayDate,todayHour,todayMinute,todaySecond);
+		var diff = t2-t1;
+		var diffYears = Math.floor(diff/years);
+		var diffDays = Math.floor((diff/days)-diffYears*365);
+		var diffHours = Math.floor((diff-(diffYears*365+diffDays)*days)/hours);
+		var diffMinutes = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours)/minutes);
+		var diffSeconds = Math.floor((diff-(diffYears*365+diffDays)*days-diffHours*hours-diffMinutes*minutes)/seconds);
+		document.getElementById("sitetime").innerHTML=" 本站已在线运行: "+diffYears+" 年 "+diffDays+" 天 "+diffHours+" 小时 "+diffMinutes+" 分钟 "+diffSeconds+" 秒";
+	}/*因为建站时间还没有一年，就将之注释掉了。需要的可以取消*/
+	siteTime();
+</script>
+
 </div>
 </footer>
 <?php if ($this->options->scrollTop || ($this->options->MusicSet && $this->options->MusicUrl)): ?>
@@ -31,6 +85,7 @@
 <?php endif; ?>
 </ul>
 </div>
+
 <?php endif; if ($this->options->PjaxOption || $this->options->AjaxLoad): ?>
 <script src="//<?php if ($this->options->cjCDN == 'bc'): ?>cdn.bootcss.com/jquery/2.1.4/jquery.min.js<?php elseif ($this->options->cjCDN == 'cf'): ?>cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js<?php else: ?>cdn.jsdelivr.net/npm/jquery@2.1.4/dist/jquery.min.js<?php endif; ?>"></script>
 <?php endif; if ($this->options->PjaxOption): ?>
@@ -45,8 +100,8 @@
 <?php endif; if ($this->options->MusicSet && $this->options->MusicUrl): ?>
 <script>(function(){var a=document.getElementById("audio");var b=document.getElementById("music");var c=<?php Playlist() ?>;<?php if ($this->options->MusicVol): ?>var d=<?php $this->options->MusicVol(); ?>;if(d>=0&&d<=1){a.volume=d}<?php endif; ?>a.src=c.shift();a.addEventListener('play',g);a.addEventListener('pause',h);a.addEventListener('ended',f);a.addEventListener('error',f);a.addEventListener('canplay',j);function f(){if(!c.length){a.removeEventListener('play',g);a.removeEventListener('pause',h);a.removeEventListener('ended',f);a.removeEventListener('error',f);a.removeEventListener('canplay',j);b.style.display="none";alert("本站的背景音乐好像有问题了，希望您可以通过留言等方式通知管理员，谢谢您的帮助。")}else{a.src=c.shift();a.play()}}function g(){b.setAttribute("class","play");a.addEventListener('timeupdate',k)}function h(){b.removeAttribute("class");a.removeEventListener('timeupdate',k)}function j(){c.push(a.src)}function k(){b.getElementsByTagName("i")[0].style.width=(a.currentTime/a.duration*100).toFixed(1)+"%"}b.onclick=function(){if(a.canPlayType('audio/mpeg')!=""||a.canPlayType('audio/ogg;codes="vorbis"')!=""||a.canPlayType('audio/mp4;codes="mp4a.40.5"')!=""){if(a.paused){if(a.error){f()}else{a.play()}}else{a.pause()}}else{alert("对不起，您的浏览器不支持HTML5音频播放，请升级您的浏览器。")}};b.removeAttribute("class")})();</script>
 <?php endif; if ($this->options->CustomContent): $this->options->CustomContent(); ?>
-
 <?php endif; ?>
 <script>var cornertool=true;function cl(){var a=document.getElementById("catalog-col"),b=document.getElementById("catalog"),c=document.getElementById("cornertool"),d;if(a&&!b){if(c){c=c.getElementsByTagName("ul")[0];d=document.createElement("li");d.setAttribute("id","catalog");d.setAttribute("onclick","Catalogswith()");d.appendChild(document.createElement("span"));c.appendChild(d)}else{cornertool=false;c=document.createElement("div");c.setAttribute("id","cornertool");c.innerHTML='<ul><li id="catalog" onclick="Catalogswith()"><span></span></li></ul>';document.body.appendChild(c)}document.getElementById("catalog").className=a.className}if(!a&&b){cornertool?c.getElementsByTagName("ul")[0].removeChild(b):document.body.removeChild(c)}if(a&&b){b.className=a.className}}cl();console.log("\n%c Initial By JIElive %c http://www.offodd.com ","color:#fff;background:#000;padding:5px 0","color:#fff;background:#666;padding:5px 0")</script>
 </body>
-</html><?php if ($this->options->compressHtml): $html_source = ob_get_contents(); ob_clean(); print compressHtml($html_source); ob_end_flush(); endif; ?>
+</html>
+<?php if ($this->options->compressHtml): $html_source = ob_get_contents(); ob_clean(); print compressHtml($html_source); ob_end_flush(); endif; ?>
