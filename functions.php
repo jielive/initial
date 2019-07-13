@@ -156,14 +156,17 @@ function themeConfig($form) {
 	$CustomContent = new Typecho_Widget_Helper_Form_Element_Textarea('CustomContent', NULL, NULL, _t('底部自定义内容(网站统计代码等)'), _t('位于底部，footer之后body之前，适合放置一些JS内容，如网站统计代码等（若开启全站Pjax，目前支持Google和百度统计的回调，其余统计代码可能会不准确）'));
 	$form->addInput($CustomContent);
 
-	$ADpost = new Typecho_Widget_Helper_Form_Element_Textarea('ADpost', NULL, NULL, _t('文章底部AD'), _t('位于文章页面底部，评论列表之前'));
+	$ADpost = new Typecho_Widget_Helper_Form_Element_Textarea('ADpost', NULL, NULL, _t('文章底部广告代码'), _t('位于文章页面底部，评论列表之前'));
 	$form->addInput($ADpost);
 
-	$ADpage = new Typecho_Widget_Helper_Form_Element_Textarea('ADpage', NULL, NULL, _t('独立页面底部AD'), _t('位于独立页面底部，评论列表之前'));
+	$ADpage = new Typecho_Widget_Helper_Form_Element_Textarea('ADpage', NULL, NULL, _t('独立页面底部广告代码'), _t('位于独立页面底部，评论列表之前'));
 	$form->addInput($ADpage);
 
-	$ADsidebar = new Typecho_Widget_Helper_Form_Element_Textarea('ADsidebar', NULL, NULL, _t('侧边栏顶部AD'), _t('位于独立页面底部，评论列表之前'));
+	$ADsidebar = new Typecho_Widget_Helper_Form_Element_Textarea('ADsidebar', NULL, NULL, _t('侧边栏顶部广告代码'), _t('位于侧边栏顶部'));
 	$form->addInput($ADsidebar);
+
+  $ADpostlist = new Typecho_Widget_Helper_Form_Element_Textarea('ADpostlist', NULL, NULL, _t('首页文章列表广告代码'), _t('文章列表间的信息流广告，只适用于ADsense广告代码'));
+  $form->addInput($ADpostlist);
 }
 
 function themeInit($archive) {
