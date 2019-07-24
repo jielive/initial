@@ -38,6 +38,9 @@ $output .= '</ul></div>';
 echo $output;
 ?>
 </article>
+<?php if ($this->options->ADpage): ?>
+<p><?php $this->options->ADpage(); ?></p>
+<?php endif; ?>
 </div>
 
 <?php $this->need('footer.php'); ?>

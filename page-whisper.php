@@ -82,6 +82,9 @@ echo $commentClass;
 <?php $this->content(); ?>
 </div>
 </article>
+<?php if ($this->options->ADpage): ?>
+<p><?php $this->options->ADpage(); ?></p>
+<?php endif; ?>
 <div id="comments" class="whisper<?php if($this->user->pass('editor', true)): ?> permission<?php endif; ?>">
 <?php $this->comments()->to($comments); ?>
 <?php if ($comments->have()): ?>
