@@ -1,9 +1,7 @@
 # Typecho主题 - Initial 2
 ![主题预览](https://heng07.com/img/screenshot.png)
 
-基于[OFFODD的 Initial](https://www.offodd.com/17.html)二次开发
-
-主题预览地址：[https://heng07.com](https://heng07.com)
+基于[OFFODD的 Initial](https://www.offodd.com/17.html)二次开发。| 主题预览地址：[https://heng07.com](https://heng07.com)
 
 ## 功能与特点
 
