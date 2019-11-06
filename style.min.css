@@ -2,15 +2,20 @@ body {
  font:15px/1.6 "Droid Serif",-apple-system,BlinkMacSystemFont,"Segoe UI","Droid Sans","Helvetica Neue","PingFang SC","Hiragino Sans GB","Droid Sans Fallback","Microsoft YaHei",sans-serif;
  margin:0;
  color:#444;
- background-color:#eee
+ background-color: #f1f3f4;
 }
-a,.nav-menu ul a,.post-content .more a {
+a,.nav-menu ul a {
  color:#666;
  border:0;
  text-decoration:none
 }
+.post-content .more a {
+ color:red;
+ border:1px;
+ text-decoration:none
+}
 a:hover,.rewards a:hover,.tags a:hover,.comment-author a:hover,#footer .links a:hover,.icpnum:hover {
- color:#333
+ color:red
 }
 ul {
  padding-left:30px
@@ -138,9 +143,10 @@ button,input[type=submit],.menu-parent a,.rewards a,.whisper .whisper-reply,#cor
  padding-top:71px
 }
 #header {
- line-height:50px;
+ line-height:55px;
  padding:10px 0;
  border-bottom:1px solid #eee
+ box-shadow: 0 5px 5px rgba(0,0,0,.05);
 }
 .site-name,.comment-form p {
  float:left
@@ -389,6 +395,8 @@ button,input[type=submit],.menu-parent a,.rewards a,.whisper .whisper-reply,#cor
 .post {
  padding: 10px 15px 20px 15px;
  border: 1px solid #fff;
+ border-radius: 5px;
+ box-shadow: 0 5px 5px rgba(0,0,0,.05);
  background-color: #fff;
  margin-top: 15px;
 }
@@ -494,7 +502,7 @@ button,input[type=submit],.menu-parent a,.rewards a,.whisper .whisper-reply,#cor
  border-radius:2px
 }
 .post-content,.comment-content {
- line-height:1.5;
+ line-height:1.6;
  word-wrap:break-word
 }
 .post-content a,.comment-content a {
@@ -741,6 +749,8 @@ button,input[type=submit],.menu-parent a,.rewards a,.whisper .whisper-reply,#cor
  margin-bottom:15px;
  padding: 10px 15px 20px 15px;
  border: 1px solid #fff;
+ border-radius: 5px;
+ box-shadow: 0 5px 5px rgba(0,0,0,.05);
  background-color: #fff;
 
 }

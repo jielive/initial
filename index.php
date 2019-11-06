@@ -1,8 +1,8 @@
 <?php
 /**
  * Initial 2- 简约而不简单
- * @package Initial 2
- * @author JIElive & 一恒
+ * @package Initial 2
+ * @author JIElive & 一恒
  * @version 2.4.3
  * @link http://www.offodd.com/
  */
@@ -44,7 +44,7 @@ $this->need('header.php');
 <?php endif; ?>
 <p><?php $this->excerpt(200, ''); ?></p>
 <?php endif; ?>
-<p class="more"><a href="<?php $this->permalink() ?>" title="<?php $this->title() ?>">-- 阅读全文 --</a></p>
+<p class="more"><a href="<?php $this->permalink() ?>" title="<?php $this->title() ?>">>>> 阅读全文 <<<</a></p>
 </div>
 </article>
 <?php endwhile; ?>

@@ -7,7 +7,7 @@
 </div>
 <?php endif; ?>
 <article class="post<?php if ($this->options->PjaxOption && $this->hidden): ?> protected<?php endif; ?>">
-<h1 class="post-title"><a href="<?php $this->permalink() ?>"><?php $this->title() ?></a></h1>
+<h1 class="post-title"><?php $this->title() ?></h1>
 <ul class="post-meta">
 <li><?php $this->date(); ?></li>
 <!--<li><?php $this->category(','); ?></li>-->
