@@ -101,6 +101,7 @@ endif; ?>
 </ul>
 </div>
 </div>
+<script data-ad-client="ca-pub-9060781598368507" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 </header>
 <div id="body">
 <div class="container clearfix">
