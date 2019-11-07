@@ -13,8 +13,8 @@
 <article class="post<?php if ($this->options->PjaxOption && $this->hidden): ?> protected<?php endif; ?>">
 <h2 class="post-title"><a href="<?php $this->permalink() ?>"><?php $this->title() ?></a></h2>
 <ul class="post-meta">
-<li><?php $this->date(); ?></li>
-<li><?php $this->category(',', false); ?></li>
+<li>发布时间：<?php $this->date(); ?></li>
+<li>文章分类：<?php $this->category(',', false); ?></li>
 <li><?php $this->commentsNum('暂无评论', '%d 条评论'); ?></li>
 </ul>
 <div class="post-content">
@@ -26,13 +26,7 @@
 <input type="submit" class="submit" value="提交" />
 </p>
 </form>
-<?php else: ?>
-<?php if (postThumb($this)): ?>
-<p class="thumb"><?php echo postThumb($this); ?></p>
 <?php endif; ?>
-<p><?php $this->excerpt(200, ''); ?></p>
-<?php endif; ?>
-<p class="more"><a href="<?php $this->permalink() ?>" title="<?php $this->title() ?>">- 阅读全文 -</a></p>
 </div>
 </article>
 <?php endwhile; ?>

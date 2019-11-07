@@ -298,6 +298,7 @@ button,input[type=submit],.menu-parent a,.rewards a,.whisper .whisper-reply,#cor
  list-style:none;
  transform:translateX(-50%);
  -webkit-transform:translateX(-50%)
+ line-height: 45px;
 }
 .menu-parent ul:before {
  content:"";
