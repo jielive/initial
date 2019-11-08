@@ -115,6 +115,9 @@ echo $commentClass;
 <?php if ($this->options->ADpage): ?>
 <p><?php $this->options->ADpage(); ?></p>
 <?php endif; ?>
+<?php if ($this->options->ADpage): ?>
+<p><?php $this->options->ADpage(); ?></p>
+<?php endif; ?>
 </div>
 </div>
 

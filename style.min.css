@@ -392,8 +392,10 @@ button,input[type=submit],.menu-parent a,.rewards a,.whisper .whisper-reply,#cor
  background-color: #fff;
 }
 .post {
- padding: 10px 15px 20px 15px;
- margin-top: 15px;
+ padding: 0px 15px 10px 15px;
+}
+.post-list {
+ padding: 0px 10px 5px 10px;
 }
 .post-title {
  margin:.83em 0;
@@ -524,6 +526,8 @@ button,input[type=submit],.menu-parent a,.rewards a,.whisper .whisper-reply,#cor
  text-align:center;
  display:block;
  color: #666;
+ border: 1px #999 solid;
+ margin: 0 33%;
 }
 .protected input {
  width:auto
@@ -652,8 +656,7 @@ button,input[type=submit],.menu-parent a,.rewards a,.whisper .whisper-reply,#cor
 .comment-list li {
  margin-top: 10px;
  padding: 10px;
- border: 1px solid #fff;
- background: #eed;
+ border: 1px solid #ddd;
 }
 .comment-level-odd,.comment-whisper {
  background:#f6f6f6

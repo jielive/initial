@@ -11,7 +11,7 @@
 <?php endif; ?>
 </ul>
 <?php endif; ?>
-<p>&copy; 2007 - <?php echo date('Y'); ?> <?php $this->options->title(); ?> [<span id="sitetime"></span>]</p>
+<p>&copy; 2007 - <?php echo date('Y'); ?> <?php $this->options->title(); ?>【<span id="sitetime"></span>】</p>
 <p>
 Powered by <a href="http://www.typecho.org" target="_blank">Typecho</a> &amp; <a href="https://www.offodd.com/17.html" target="_blank">Initial</a> -
 <a href="/sitemap.xml" target="_blank">SiteMap</a> -
