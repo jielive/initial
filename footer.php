@@ -4,11 +4,13 @@
 <footer id="footer">
 <div class="container">
 <?php if (!empty($this->options->ShowLinks) && in_array('footer', $this->options->ShowLinks)): ?>
+  <h3 class="widget-title">友情链接</h3>
 <ul class="links">
-<?php Links($this->options->IndexLinksSort); ?>
-<?php if (FindContents('page-links.php', 'order', 'a', 1)): ?>
-<li><a href="<?php echo FindContents('page-links.php', 'order', 'a', 1)[0]['permalink']; ?>">更多...</a></li>
-<?php endif; ?>
+
+
+  <?php Links_Plugin::output("SHOW_TEXT"); ?>
+
+
 </ul>
 <?php endif; ?>
 <p>&copy; 2007 - <?php echo date('Y'); ?> <?php $this->options->title(); ?>【<span id="sitetime"></span>】</p>

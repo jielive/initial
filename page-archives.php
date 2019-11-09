@@ -15,6 +15,27 @@
 <?php endif; ?>
 <article class="post">
 <h1 class="post-title"><a href="<?php $this->permalink() ?>"><?php $this->title() ?></a></h1>
+<h3 class="widget-title">文章分类</h3>
+<ul class="widget-tile">
+<?php $this->widget('Widget_Metas_Category_List')
+->parse('<li><a href="{permalink}">{name}</a></li>'); ?>
+</ul>
+</section>
+
+<section class="widget">
+<h3 class="widget-title">标签云</h3>
+<ul class="widget-tile">
+<?php $this->widget('Widget_Metas_Tag_Cloud', 'ignoreZeroCount=1&limit=40')->to($tags); ?>
+<?php if($tags->have()): ?>
+<?php while($tags->next()): ?>
+<li><a href="<?php $tags->permalink(); ?>" title='<?php $tags->name(); ?>'><?php $tags->name(); ?> [<?php $tags->count(); ?>] </a></li>
+<?php endwhile; ?>
+<?php else: ?>
+<li>暂无标签</li>
+<?php endif; ?>
+</ul>
+</section>
+
 <?php
 $this->widget('Widget_Contents_Post_Recent', 'pageSize='.Typecho_Widget::widget('Widget_Stat')->publishedPostsNum)->to($archives);
 $year=0;
