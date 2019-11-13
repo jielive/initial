@@ -1,3 +1,5 @@
+## 这个主题暂停更新。修改重心已转移至另一个主题[Cactus](https://github.com/heng032000/cactus)。
+
 # Typecho主题 - Initial 2
 ![主题预览](https://heng07.com/img/screenshot.png)
 
