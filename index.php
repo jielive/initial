@@ -2,7 +2,7 @@
 /**
  * Initial - 简约而不简单
  * 还原本质 勿忘初心
- * 
+ *
  * @package Initial
  * @author JIElive
  * @version 2.4.4
@@ -27,7 +27,7 @@ $this->need('header.php');
 <h2 class="post-title"><a href="<?php $this->permalink() ?>"><?php $this->title() ?></a></h2>
 <ul class="post-meta">
 <li><?php $this->date(); ?></li>
-<li><?php $this->category(',', false); ?></li>
+<!--<li><?php $this->category(',', false); ?></li>-->
 <li><?php $this->commentsNum('暂无评论', '%d 条评论'); ?></li>
 <li><?php Postviews($this); ?></li>
 </ul>
@@ -46,11 +46,15 @@ $this->need('header.php');
 <?php endif; ?>
 <p><?php $this->excerpt(200, ''); ?></p>
 <?php endif; ?>
-<p class="more"><a href="<?php $this->permalink() ?>" title="<?php $this->title() ?>">- 阅读全文 -</a></p>
+<p class="more"><a href="<?php $this->permalink() ?>" title="<?php $this->title() ?>">>>> 阅读全文 <<<</a></p>
 </div>
 </article>
 <?php endwhile; ?>
+<?php if ($this->options->ADpostlist): ?>
+<p><?php $this->options->ADpostlist(); ?></p>
+<?php endif; ?>
 <?php $this->pageNav('上一页', $this->options->AjaxLoad ? '查看更多' : '下一页', 0, '..', $this->options->AjaxLoad ? array('wrapClass' => 'page-navigator ajaxload') : ''); ?>
 </div>
+
 <?php $this->need('sidebar.php'); ?>
 <?php $this->need('footer.php'); ?>

@@ -11,6 +11,11 @@
 </ul>
 </section>
 <?php endif; ?>
+
+<?php if ($this->options->ADsidebar): ?>
+<p><?php $this->options->ADsidebar(); ?></p>
+<?php endif; ?>
+
 <?php if (!empty($this->options->sidebarBlock) && in_array('ShowHotPosts', $this->options->sidebarBlock)): ?>
 <section class="widget">
 <h3 class="widget-title">热门文章</h3>
@@ -37,7 +42,7 @@
 <?php endif; ?>
 <?php if (!empty($this->options->sidebarBlock) && in_array('ShowCategory', $this->options->sidebarBlock)): ?>
 <section class="widget">
-<h3 class="widget-title">分类</h3>
+<h3 class="widget-title">文章分类</h3>
 <ul class="widget-tile">
 <?php $this->widget('Widget_Metas_Category_List')
 ->parse('<li><a href="{permalink}">{name}</a></li>'); ?>
@@ -46,12 +51,12 @@
 <?php endif; ?>
 <?php if (!empty($this->options->sidebarBlock) && in_array('ShowTag', $this->options->sidebarBlock)): ?>
 <section class="widget">
-<h3 class="widget-title">标签</h3>
+<h3 class="widget-title">标签云</h3>
 <ul class="widget-tile">
-<?php $this->widget('Widget_Metas_Tag_Cloud', 'ignoreZeroCount=1&limit=30')->to($tags); ?>
+<?php $this->widget('Widget_Metas_Tag_Cloud', 'ignoreZeroCount=1&limit=40')->to($tags); ?>
 <?php if($tags->have()): ?>
 <?php while($tags->next()): ?>
-<li><a href="<?php $tags->permalink(); ?>"><?php $tags->name(); ?></a></li>
+<li><a href="<?php $tags->permalink(); ?>" title='<?php $tags->name(); ?>'><?php $tags->name(); ?> [<?php $tags->count(); ?>] </a></li>
 <?php endwhile; ?>
 <?php else: ?>
 <li>暂无标签</li>
@@ -70,7 +75,7 @@
 <?php endif; ?>
 <?php if (!empty($this->options->ShowLinks) && in_array('sidebar', $this->options->ShowLinks)): ?>
 <section class="widget">
-<h3 class="widget-title">链接</h3>
+<h3 class="widget-title">友情链接</h3>
 <ul class="widget-tile">
 <?php Links($this->options->IndexLinksSort); ?>
 <?php if (FindContents('page-links.php', 'order', 'a', 1)): ?>
@@ -81,7 +86,7 @@
 <?php endif; ?>
 <?php if (!empty($this->options->sidebarBlock) && in_array('ShowOther', $this->options->sidebarBlock)): ?>
 <section class="widget">
-<h3 class="widget-title">其它</h3>
+<h3 class="widget-title">杂项</h3>
 <ul class="widget-list">
 <li><a href="<?php $this->options->feedUrl(); ?>" target="_blank">文章 RSS</a></li>
 <li><a href="<?php $this->options->commentsFeedUrl(); ?>" target="_blank">评论 RSS</a></li>
@@ -92,4 +97,14 @@
 </ul>
 </section>
 <?php endif; ?>
+<!--Hanny 友情链接-->
+<?php if (!empty($this->options->sidebarBlock) && in_array('ShowLink', $this->options->sidebarBlock)): ?>
+<section class="widget">
+<h3 class="widget-title">友情链接</h3>
+<ul class="widget-list">
+<?php Links_Plugin::output("SHOW_TEXT"); ?>
+</ul>
+</section>
+<?php endif; ?>
+<!--Hanny 友情链接-->
 </div>

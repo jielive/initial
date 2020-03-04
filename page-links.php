@@ -7,7 +7,7 @@
 ?>
 <?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
 <?php $this->need('header.php'); ?>
-<div id="main">
+<div id="page-main">
 <?php if (!empty($this->options->Breadcrumbs) && in_array('Pageshow', $this->options->Breadcrumbs)): ?>
 <div class="breadcrumbs">
 <a href="<?php $this->options->siteUrl(); ?>">首页</a> &raquo; <?php $this->title() ?>
@@ -16,16 +16,18 @@
 <article class="post">
 <h1 class="post-title"><a href="<?php $this->permalink() ?>"><?php $this->title() ?></a></h1>
 <div class="post-content">
-<?php $this->content(); ?>
-<ul class="links">
-<?php if ($this->options->InsideLinksIcon): ?>
-<script>function erroricon(obj){var a=obj.parentNode,i=document.createElement("i");i.appendChild(document.createTextNode("★"));a.removeChild(obj);a.insertBefore(i,a.childNodes[0])}</script>
-<?php endif; ?>
-<?php Links($this->options->InsideLinksSort, $this->options->InsideLinksIcon ? 1 : 0); ?>
-</ul>
+  <h3 class="widget-title">友情链接</h3>
+  <ul class="widget-list">
+  <?php Links_Plugin::output("SHOW_TEXT"); ?>
+  </ul>
+  </section>
+  <?php endif; ?>
 </div>
 </article>
+<?php if ($this->options->ADpage): ?>
+<p><?php $this->options->ADpage(); ?></p>
+<?php endif; ?>
 <?php $this->need('comments.php'); ?>
 </div>
-<?php $this->need('sidebar.php'); ?>
+
 <?php $this->need('footer.php'); ?>
