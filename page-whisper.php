@@ -36,7 +36,7 @@ echo $commentClass;
 <?php $comments->gravatar('32'); ?>
 <cite><?php CommentAuthor($comments); ?></cite>
 <?php if ($comments->status == 'waiting') { ?>
-<em class="comment-awaiting-moderation">您的评论正等待审核！</em>
+<em class="comment-awaiting-moderation">内容被拦截，请前往后台-管理评论-通过审核。</em>
 <?php } ?>
 </div>
 <div class="comment-content">

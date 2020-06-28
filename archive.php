@@ -16,6 +16,7 @@
 <li><?php $this->date(); ?></li>
 <li><?php $this->category(',', false); ?></li>
 <li><?php $this->commentsNum('暂无评论', '%d 条评论'); ?></li>
+<li><?php Postviews($this); ?></li>
 </ul>
 <div class="post-content">
 <?php if ($this->options->PjaxOption && $this->hidden): ?>

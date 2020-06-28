@@ -1,9 +1,8 @@
 <?php
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
-
-define('INITIAL_VERSION_NUMBER', '2.4.3');
-
+define('INITIAL_VERSION_NUMBER', '2.4.4');
 if (Helper::options()->GravatarUrl) define('__TYPECHO_GRAVATAR_PREFIX__', Helper::options()->GravatarUrl);
+error_reporting(0);
 
 function themeConfig($form) {
 	$logoUrl = new Typecho_Widget_Helper_Form_Element_Text('logoUrl', NULL, NULL, _t('站点 LOGO 地址'), _t('在这里填入一个图片 URL 地址, 以在网站标题前加上一个 LOGO'));
