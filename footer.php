@@ -23,6 +23,7 @@
 <?php if ($this->options->scrollTop): ?>
 <li id="top" class="hidden"></li>
 <?php endif; ?>
+<li id="darkmode" onclick="switchDarkMode()"><?php if($_COOKIE['dark']=='1'){echo"亮";}else{echo"暗";} ?></li>
 <?php if ($this->options->MusicSet && $this->options->MusicUrl): ?>
 <li id="music" class="hidden">
 <span><i></i></span>
@@ -48,5 +49,43 @@
 
 <?php endif; ?>
 <script>var cornertool=true;function cl(){var a=document.getElementById("catalog-col"),b=document.getElementById("catalog"),c=document.getElementById("cornertool"),d;if(a&&!b){if(c){c=c.getElementsByTagName("ul")[0];d=document.createElement("li");d.setAttribute("id","catalog");d.setAttribute("onclick","Catalogswith()");d.appendChild(document.createElement("span"));c.appendChild(d)}else{cornertool=false;c=document.createElement("div");c.setAttribute("id","cornertool");c.innerHTML='<ul><li id="catalog" onclick="Catalogswith()"><span></span></li></ul>';document.body.appendChild(c)}document.getElementById("catalog").className=a.className}if(!a&&b){cornertool?c.getElementsByTagName("ul")[0].removeChild(b):document.body.removeChild(c)}if(a&&b){b.className=a.className}}cl();console.log("\n%c Initial By JIElive %c http://www.offodd.com ","color:#fff;background:#000;padding:5px 0","color:#fff;background:#666;padding:5px 0")</script>
+<script>
+function switchDarkMode(){
+    var night = document.cookie.replace(/(?:(?:^|.*;\s*)dark\s*\=\s*([^;]*).*$)|^.*$/, "$1") || '0';
+    if (night == '0'){
+        document.body.classList.add('dark');
+        document.cookie = "dark=1;path=/";
+        console.log('Dark mode on');
+        document.getElementById("darkmode").innerHTML="亮";
+    }else{
+        document.body.classList.remove('dark');
+        document.cookie = "dark=0;path=/";
+        console.log('Dark mode off');
+        document.getElementById("darkmode").innerHTML="暗";
+    }
+}
+(function(){
+    if(document.cookie.replace(/(?:(?:^|.*;\s*)dark\s*\=\s*([^;]*).*$)|^.*$/, "$1") === ''){
+        if(new Date().getHours() > 22 || new Date().getHours() < 6){
+            document.body.classList.add('dark');
+            document.cookie = "dark=1;path=/";
+            console.log('Dark mode on');
+            document.getElementById("darkmode").innerHTML="亮";
+        }else{
+            document.body.classList.remove('dark');
+            document.cookie = "dark=0;path=/";
+            console.log('Dark mode off');
+            document.getElementById("darkmode").innerHTML="暗";
+        }
+    }else{
+        var dark = document.cookie.replace(/(?:(?:^|.*;\s*)dark\s*\=\s*([^;]*).*$)|^.*$/, "$1") || '0';
+        if(dark == '0'){
+            document.body.classList.remove('dark');
+        }else if(dark == '1'){
+            document.body.classList.add('dark');
+        }
+    }
+})();
+</script>
 </body>
 </html><?php if ($this->options->compressHtml): $html_source = ob_get_contents(); ob_clean(); print compressHtml($html_source); ob_end_flush(); endif; ?>
