@@ -25,17 +25,10 @@
 <header id="header">
 <div class="container clearfix">
 <div class="site-name">
-<?php if ($this->options->logoUrl): ?>
 <h1>
-<a id="logo" href="<?php $this->options->siteUrl(); ?>">
-<img src="<?php $this->options->logoUrl() ?>" alt="<?php $this->options->title() ?>" title="<?php $this->options->title() ?>" />
+<a id="logo" href="<?php $this->options->siteUrl(); ?>"><?php if ($this->options->logoUrl && ($this->options->titleForm == 'logo' || $this->options->titleForm == 'all')): ?><img src="<?php $this->options->logoUrl() ?>" alt="<?php $this->options->title() ?>" title="<?php $this->options->title() ?>" /><?php endif; ($this->options->titleForm == 'logo' && $this->options->logoUrl) ? '' : ($this->options->customTitle ? $this->options->customTitle() : $this->options->title()) ?>
 </a>
 </h1>
-<?php else: ?>
-<h1>
-<a id="logo" href="<?php $this->options->siteUrl(); ?>"><?php if ($this->options->customTitle): $this->options->customTitle(); else: $this->options->title(); endif; ?></a>
-</h1>
-<?php endif; ?>
 </div>
 <script>function Navswith(){document.getElementById("header").classList.toggle("on")}</script>
 <button id="nav-swith" onclick="Navswith()"><span></span></button>

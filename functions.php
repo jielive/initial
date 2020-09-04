@@ -1,18 +1,25 @@
 <?php
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
-define('INITIAL_VERSION_NUMBER', '2.4.4');
+define('INITIAL_VERSION_NUMBER', '2.4.5');
 if (Helper::options()->GravatarUrl) define('__TYPECHO_GRAVATAR_PREFIX__', Helper::options()->GravatarUrl);
 error_reporting(0);
 
 function themeConfig($form) {
-	$logoUrl = new Typecho_Widget_Helper_Form_Element_Text('logoUrl', NULL, NULL, _t('站点 LOGO 地址'), _t('在这里填入一个图片 URL 地址, 以在网站标题前加上一个 LOGO'));
+	$logoUrl = new Typecho_Widget_Helper_Form_Element_Text('logoUrl', NULL, NULL, _t('站点标题 LOGO 地址'), _t('在这里填入一个图片 URL 地址, 以显示网站标题 LOGO'));
 	$form->addInput($logoUrl);
+
+	$customTitle = new Typecho_Widget_Helper_Form_Element_Text('customTitle', NULL, NULL, _t('自定义站点标题'), _t('仅用于替换页面头部位置的“标题”显示，和Typecho后台设置的站点名称不冲突，留空则显示默认站点名称'));
+	$form->addInput($customTitle);
+
+	$titleForm = new Typecho_Widget_Helper_Form_Element_Radio('titleForm', 
+	array('title' => _t('仅文字'),
+	'logo' => _t('仅LOGO'),
+	'all' => _t('LOGO+文字')),
+	'title', _t('站点标题显示内容'), _t('默认仅显示文字标题，若要显示LOGO，请在上方添加 LOGO 地址'));
+	$form->addInput($titleForm);
 
 	$subTitle = new Typecho_Widget_Helper_Form_Element_Text('subTitle', NULL, NULL, _t('自定义站点副标题'), _t('浏览器副标题，仅在当前页面为首页时显示，显示格式为：<b>标题 - 副标题</b>，留空则不显示副标题'));
 	$form->addInput($subTitle);
-
-	$customTitle = new Typecho_Widget_Helper_Form_Element_Text('customTitle', NULL, NULL, _t('自定义头部站点标题'), _t('仅在页面头部标题位置显示，和Typecho后台设置的站点名称不冲突，留空则显示默认站点名称'));
-	$form->addInput($customTitle);
 
 	$favicon = new Typecho_Widget_Helper_Form_Element_Text('favicon', NULL, NULL, _t('Favicon 地址'), _t('在这里填入一个图片 URL 地址, 以添加一个Favicon，留空则不单独设置Favicon'));
 	$form->addInput($favicon);
@@ -66,10 +73,11 @@ function themeConfig($form) {
 	$form->addInput($SidebarFixed);
 
 	$cjCDN = new Typecho_Widget_Helper_Form_Element_Radio('cjCDN', 
-	array('bc' => _t('BootCDN'),
-	'cf' => _t('CDNJS'),
-	'jd' => _t('jsDelivr')),
-	'bc', _t('公共静态资源来源'), _t('默认BootCDN，请根据需求选择合适来源'));
+	array('sc' => _t('Staticfile'),
+	'bc' => _t('BootCDN'),
+	'jd' => _t('jsDelivr'),
+	'cf' => _t('CDNJS')),
+	'sc', _t('公共静态资源来源'), _t('默认Staticfile，请根据需求选择合适来源'));
 	$form->addInput($cjCDN);
 
 	$GravatarUrl = new Typecho_Widget_Helper_Form_Element_Radio('GravatarUrl', 
@@ -97,6 +105,13 @@ function themeConfig($form) {
 	0 => _t('关闭')),
 	0, _t('Ajax翻页'), _t('默认关闭，启用则会使用Ajax加载文章翻页'));
 	$form->addInput($AjaxLoad);
+
+	$catalog = new Typecho_Widget_Helper_Form_Element_Radio('catalog', 
+	array('post' => _t('使用文章内设定'),
+	'open' => _t('全部启用'),
+	0 => _t('全部关闭')),
+	'post', _t('文章目录'), _t('一键开关全部文章目录，默认使用文章内的设定，（若文章内无任何标题，则不显示目录）'));
+	$form->addInput($catalog);
 
 	$scrollTop = new Typecho_Widget_Helper_Form_Element_Radio('scrollTop', 
 	array(1 => _t('启用'),
@@ -166,7 +181,7 @@ function themeInit($archive) {
 		if ($options->AttUrlReplace) {
 			$archive->content = UrlReplace($archive->content);
 		}
-		if ($archive->fields->catalog) {
+		if ($archive->is('post') && (($options->catalog == 'post' && $archive->fields->catalog) || $options->catalog == 'open')) {
 			$archive->content = createCatalog($archive->content);
 		}
 	}
@@ -548,8 +563,8 @@ function themeFields($layout) {
 	$layout->addItem($thumb);
 
 	$catalog = new Typecho_Widget_Helper_Form_Element_Radio('catalog', 
-	array(true => _t('启用'),
-	false => _t('关闭')),
-	false, _t('文章目录'), _t('默认关闭，启用则会在文章内显示“文章目录”（若文章内无任何标题，则不显示目录）'));
+	array(1 => _t('启用'),
+	0 => _t('关闭')),
+	0, _t('文章目录'), _t('默认关闭，启用则会在文章内显示“文章目录”（若文章内无任何标题，则不显示目录），需要在“控制台-设置外观-文章目录”启用“使用文章内设定”后，方可生效'));
 	$layout->addItem($catalog);
 }
