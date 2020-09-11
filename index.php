@@ -5,7 +5,7 @@
  * 
  * @package Initial
  * @author JIElive
- * @version 2.4.5
+ * @version 2.5
  * @link http://www.offodd.com/
  */
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
@@ -33,7 +33,7 @@ $this->need('header.php');
 </ul>
 <div class="post-content">
 <?php if ($this->options->PjaxOption && $this->hidden): ?>
-<form method="post">
+<form <?php if (!$this->options->AjaxLoad): ?>action="<?php echo Typecho_Widget::widget('Widget_Security')->getTokenUrl($this->permalink); ?>" <?php endif; ?>method="post">
 <p class="word">请输入密码访问</p>
 <p>
 <input type="password" class="text" name="protectPassword" />
@@ -50,7 +50,7 @@ $this->need('header.php');
 </div>
 </article>
 <?php endwhile; ?>
-<?php $this->pageNav('上一页', $this->options->AjaxLoad ? '查看更多' : '下一页', 0, '..', $this->options->AjaxLoad ? array('wrapClass' => 'page-navigator ajaxload') : ''); ?>
+<?php $this->pageNav('上一页', $this->options->AjaxLoad ? '查看更多' : '下一页', 0, '..', $this->options->AjaxLoad ? array('wrapClass' => $this->options->AjaxLoad == 'auto' ? 'page-navigator ajaxload auto' : 'page-navigator ajaxload') : ''); ?>
 </div>
 <?php $this->need('sidebar.php'); ?>
 <?php $this->need('footer.php'); ?>

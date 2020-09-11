@@ -20,7 +20,7 @@
 </ul>
 <div class="post-content">
 <?php if ($this->options->PjaxOption && $this->hidden): ?>
-<form method="post">
+<form <?php if (!$this->options->AjaxLoad): ?>action="<?php echo Typecho_Widget::widget('Widget_Security')->getTokenUrl($this->permalink); ?>" <?php endif; ?>method="post">
 <p class="word">请输入密码访问</p>
 <p>
 <input type="password" class="text" name="protectPassword" />

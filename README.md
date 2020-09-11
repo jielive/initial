@@ -11,7 +11,7 @@
 * 重新优化的响应式布局，移动端舒适体验
 * 轻量级设计，关闭附加功能后无框架、无JQ、无库
 * 傻瓜式后台设置，告别使用疑惑
-* 公共资源支持切换源：BootCDN、CDNJS、jsDelivr
+* 公共资源支持切换源：Staticfile、BootCDN、jsDelivr、CDNJS
 * Gravatar头像支持切换源：官方源、国内源、V2EX源。
 * 支持CSS文件、文章附件自定义链接，实现CDN加速
 * 全站Pjax、Ajax评论、Ajax翻页、HTML压缩、CSS文件压缩

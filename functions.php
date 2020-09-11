@@ -1,6 +1,6 @@
 <?php
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
-define('INITIAL_VERSION_NUMBER', '2.4.5');
+define('INITIAL_VERSION_NUMBER', '2.5');
 if (Helper::options()->GravatarUrl) define('__TYPECHO_GRAVATAR_PREFIX__', Helper::options()->GravatarUrl);
 error_reporting(0);
 
@@ -24,7 +24,7 @@ function themeConfig($form) {
 	$favicon = new Typecho_Widget_Helper_Form_Element_Text('favicon', NULL, NULL, _t('Favicon 地址'), _t('在这里填入一个图片 URL 地址, 以添加一个Favicon，留空则不单独设置Favicon'));
 	$form->addInput($favicon);
 
-	$cjcdnAddress = new Typecho_Widget_Helper_Form_Element_Text('cjcdnAddress', NULL, NULL, _t('CSS文件的链接地址替换'), _t('请输入你的CDN云存储地址，例如：http://cdn.example.com/，支持绝大部分有镜像功能的CDN服务<br><b>被替换的原地址为主题文件位置，即：http://www.example.com/usr/themes/initial/</b>'));
+	$cjcdnAddress = new Typecho_Widget_Helper_Form_Element_Text('cjcdnAddress', NULL, NULL, _t('主题静态文件（css和js）的链接地址替换'), _t('请输入你的CDN云存储地址，例如：//cdn.jsdelivr.net/gh/jielive/initial@<b class="notice">{version}</b>/，支持绝大部分有镜像功能的CDN服务<br><b>被替换的原地址为主题文件位置，即：http://www.example.com/usr/themes/initial/</b>'));
 	$form->addInput($cjcdnAddress);
 
 	$AttUrlReplace = new Typecho_Widget_Helper_Form_Element_Textarea('AttUrlReplace', NULL, NULL, _t('文章内的链接地址替换（建议用在图片等静态资源的链接上）'), _t('按照格式输入你的CDN链接以替换原链接，格式：<br><b class="notice">原地址=替换地址</b><br>原地址与新地址之间用等号“=”分隔，例如：<br><b>http://www.example.com/usr/uploads/=http://cdn.example.com/usr/uploads/</b><br>支持绝大部分有镜像功能的CDN服务，可设置多个规则，换行即可，一行一个'));
@@ -73,11 +73,10 @@ function themeConfig($form) {
 	$form->addInput($SidebarFixed);
 
 	$cjCDN = new Typecho_Widget_Helper_Form_Element_Radio('cjCDN', 
-	array('sc' => _t('Staticfile'),
-	'bc' => _t('BootCDN'),
-	'jd' => _t('jsDelivr'),
+	array('jd' => _t('jsDelivr'),
+	'sc' => _t('Staticfile'),
 	'cf' => _t('CDNJS')),
-	'sc', _t('公共静态资源来源'), _t('默认Staticfile，请根据需求选择合适来源'));
+	'jd', _t('公共静态资源来源'), _t('默认jsDelivr，请根据需求选择合适来源'));
 	$form->addInput($cjCDN);
 
 	$GravatarUrl = new Typecho_Widget_Helper_Form_Element_Radio('GravatarUrl', 
@@ -126,7 +125,7 @@ function themeConfig($form) {
 	0, _t('背景音乐'), _t('默认关闭，启用后请填写音乐地址,否则开启无效'));
 	$form->addInput($MusicSet);
 
-	$MusicUrl = new Typecho_Widget_Helper_Form_Element_Textarea('MusicUrl', NULL, NULL, _t('背景音乐地址（建议使用mp3格式）'), _t('请输入完整的音频文件路径，例如：https://music.163.com/song/media/outer/url?id={MusicID}.mp3（好东西^_-）,可设置多个音频，换行即可，一行一个，留空则关闭背景音乐'));
+	$MusicUrl = new Typecho_Widget_Helper_Form_Element_Textarea('MusicUrl', NULL, NULL, _t('背景音乐地址（建议使用mp3格式）'), _t('请输入完整的音频文件路径，例如：https://music.163.com/song/media/outer/url?id=<b class="notice">{MusicID}</b>.mp3（好东西^_-）,可设置多个音频，换行即可，一行一个，留空则关闭背景音乐'));
 	$form->addInput($MusicUrl);
 
 	$MusicVol = new Typecho_Widget_Helper_Form_Element_Text('MusicVol', NULL, NULL, _t('背景音乐播放音量（输入范围：0~1）'), _t('请输入一个0到1之间的小数（0为静音  0.5为50%音量  1为100%最大音量）输入错误内容或留空则使用默认音量100%'));
@@ -250,6 +249,13 @@ function Postviews($archive) {
 		}
 	}
 	echo $exist == 0 ? '暂无阅读' : $exist.' 次阅读';
+}
+
+function Breadcrumbs($archive) {
+	$options = Helper::options();
+	if (!empty($options->Breadcrumbs) && in_array('Pageshow', $options->Breadcrumbs)) {
+		echo '<div class="breadcrumbs">'."\n".'<a href="'.$options->siteUrl.'">首页</a> &raquo; '.$archive->title."\n".'</div>'."\n";
+	}
 }
 
 function createCatalog($obj) {
@@ -505,7 +511,7 @@ function Playlist() {
 	if ($options->MusicSet == 'shuffle') {
 		shuffle($arr);
 	}
-	echo '["'.implode('","', $arr).'"]';
+	echo implode(',', $arr);
 }
 
 function compressHtml($html_source) {

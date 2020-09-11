@@ -4,7 +4,7 @@
 <head>
 <meta charset="<?php $this->options->charset(); ?>" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <?php if ($this->options->favicon): ?>
 <link rel="shortcut icon" href="<?php $this->options->favicon(); ?>" />
 <?php endif; ?>
@@ -95,5 +95,5 @@ endif; ?>
 </div>
 </div>
 </header>
-<div id="body">
+<div id="body"<?php if ($this->options->PjaxOption): ?> in-pjax<?php endif; ?>>
 <div class="container clearfix">
