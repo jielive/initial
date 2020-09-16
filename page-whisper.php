@@ -6,6 +6,7 @@
  */
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
 $this->need('header.php');
+$this->options->commentsMaxNestingLevels = '3';
 function threadedComments($comments, $options) {
 	$commentClass = '';
 	if ($comments->authorId) {
@@ -44,7 +45,7 @@ echo $commentClass;
 </div>
 <div class="comment-meta">
 <time><?php $comments->dateWord(); ?></time>
-<?php if (Helper::options()->commentsThreaded && !$comments->isTopLevel && $comments->parameter->allowComment) {
+<?php if (Helper::options()->commentsThreaded && $comments->parameter->allowComment) {
 		echo '<a class="whisper-reply" onclick="return TypechoComment.reply(\'' . $comments->theId . '\', ' . $comments->coid . ');">评论</a>';
 } ?>
 </div>
@@ -53,10 +54,10 @@ echo $commentClass;
 <?php $comments->gravatar('16'); ?>
 <cite><?php CommentAuthor($comments); ?>: </cite>
 <span <?php
-	if (Helper::options()->commentsThreaded && !$comments->isTopLevel && $comments->parameter->allowComment) {
+	if (Helper::options()->commentsThreaded && $comments->parameter->allowComment) {
 		echo ' class="whisper-reply" onclick="return TypechoComment.reply(\'' . $comments->theId . '\', ' . $comments->coid . ');"';
 	}
-?>><?php if ($comments->levels > 1) {CommentAt($comments->coid);}echo strip_tags(str_replace("\r\n", "<br>", $comments->text), "<br>"); ?></span>
+?>><?php if ($comments->levels > 1) {CommentAt($comments->coid);}echo strip_tags(str_replace(PHP_EOL, "<br>", $comments->text), "<br>"); ?></span>
 <?php if ($comments->status == 'waiting') { ?>
 <em>您的评论正等待审核！</em>
 <?php } ?>

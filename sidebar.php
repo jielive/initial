@@ -2,13 +2,7 @@
 <div id="secondary"<?php if ($this->options->SidebarFixed): ?> sidebar-fixed<?php endif; ?>>
 <?php if (!empty($this->options->ShowWhisper) && in_array('sidebar', $this->options->ShowWhisper)): ?>
 <section class="widget">
-<h3 class="widget-title"><?php echo FindContents('page-whisper.php') ? FindContents('page-whisper.php', 'commentsNum', 'd')[0]['title'] : '轻语' ?></h3>
-<ul class="widget-list whisper">
 <?php Whisper(1); ?>
-<?php if ($this->user->pass('editor', true) && (!FindContents('page-whisper.php') || isset(FindContents('page-whisper.php')[1]))): ?>
-<li class="notice"><b>仅管理员可见: </b><br><?php echo FindContents('page-whisper.php') ? '发现多个"轻语"模板页面，已自动选取内容最多的页面作为展示，请删除多余模板页面。' : '未找到"轻语"模板页面，请检查是否创建模板页面。' ?></li>
-<?php endif; ?>
-</ul>
 </section>
 <?php endif; ?>
 <?php if (!empty($this->options->sidebarBlock) && in_array('ShowHotPosts', $this->options->sidebarBlock)): ?>
@@ -31,7 +25,14 @@
 <section class="widget">
 <h3 class="widget-title">最近回复</h3>
 <ul class="widget-list">
-<?php Contents_Comments_Initial($this->options->commentsListSize, in_array('IgnoreAuthor', $this->options->sidebarBlock) ? 1 : ''); ?>
+<?php $this->widget('Initial_Widget_Comments_Recent', in_array('IgnoreAuthor', $this->options->sidebarBlock) ? 'ignoreAuthor=1' : '')->to($comments); ?>
+<?php if($comments->have()): ?>
+<?php while($comments->next()): ?>
+<li><a <?php echo FindContent($comments->cid)['hidden'] && $this->options->PjaxOption ? '' : 'href="'.$comments->permalink.'" ' ?>title="来自: <?php $comments->title(); ?>"><?php $comments->author(false); ?></a>: <?php $comments->excerpt(35, '...'); ?></li>
+<?php endwhile; ?>
+<?php else: ?>
+<li>暂无回复</li>
+<?php endif; ?>
 </ul>
 </section>
 <?php endif; ?>

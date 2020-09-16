@@ -34,9 +34,11 @@
 </ul>
 </div>
 <?php endif; if ($this->options->PjaxOption || $this->options->AjaxLoad): ?>
-<script src="//<?php if ($this->options->cjCDN == 'jd'): ?>cdn.jsdelivr.net/npm/jquery@2.1.4/dist/jquery.min.js<?php elseif ($this->options->cjCDN == 'sc'): ?>cdn.staticfile.org/jquery/2.1.4/jquery.min.js<?php else: ?>cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js<?php endif; ?>"></script>
+<script src="//<?php if ($this->options->cjCDN == 'cf'): ?>cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js<?php elseif ($this->options->cjCDN == 'sc'): ?>cdn.staticfile.org/jquery/2.1.4/jquery.min.js<?php else: ?>cdn.jsdelivr.net/npm/jquery@2.1.4/dist/jquery.min.js<?php endif; ?>"></script>
 <?php endif; if ($this->options->PjaxOption): ?>
-<script src="//<?php if ($this->options->cjCDN == 'jd'): ?>cdn.jsdelivr.net/npm/jquery-pjax@2.0.1/jquery.pjax.min.js<?php elseif ($this->options->cjCDN == 'sc'): ?>cdn.staticfile.org/jquery.pjax/2.0.1/jquery.pjax.min.js<?php else: ?>cdnjs.cloudflare.com/ajax/libs/jquery.pjax/2.0.1/jquery.pjax.min.js<?php endif; ?>"></script>
+<script src="//<?php if ($this->options->cjCDN == 'cf'): ?>cdnjs.cloudflare.com/ajax/libs/jquery.pjax/2.0.1/jquery.pjax.min.js<?php elseif ($this->options->cjCDN == 'sc'): ?>cdn.staticfile.org/jquery.pjax/2.0.1/jquery.pjax.min.js<?php else: ?>cdn.jsdelivr.net/npm/jquery-pjax@2.0.1/jquery.pjax.min.js<?php endif; ?>"></script>
+<?php endif; if ($this->options->Highlight):?>
+<script src="//<?php if ($this->options->cjCDN == 'cf'): ?>cdnjs.cloudflare.com/ajax/libs/highlight.js/10.2.0/highlight.min.js<?php elseif ($this->options->cjCDN == 'sc'): ?>cdn.staticfile.org/highlight.js/10.2.0/highlight.min.js<?php else: ?>cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.2.0/build/highlight.min.js<?php endif; ?>"></script>
 <?php endif; ?>
 <script src="<?php cjUrl('main.min.js') ?>"></script>
 <?php $this->footer(); ?>

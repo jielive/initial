@@ -1,8 +1,8 @@
 <?php
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
-define('INITIAL_VERSION_NUMBER', '2.5');
-if (Helper::options()->GravatarUrl) define('__TYPECHO_GRAVATAR_PREFIX__', Helper::options()->GravatarUrl);
 error_reporting(0);
+define('INITIAL_VERSION_NUMBER', '2.5.1');
+if (Helper::options()->GravatarUrl) define('__TYPECHO_GRAVATAR_PREFIX__', Helper::options()->GravatarUrl);
 
 function themeConfig($form) {
 	$logoUrl = new Typecho_Widget_Helper_Form_Element_Text('logoUrl', NULL, NULL, _t('站点标题 LOGO 地址'), _t('在这里填入一个图片 URL 地址, 以显示网站标题 LOGO'));
@@ -105,6 +105,12 @@ function themeConfig($form) {
 	0, _t('Ajax翻页'), _t('默认关闭，启用则会使用Ajax加载文章翻页'));
 	$form->addInput($AjaxLoad);
 
+	$Highlight = new Typecho_Widget_Helper_Form_Element_Radio('Highlight', 
+	array(1 => _t('启用'),
+	0 => _t('关闭')),
+	0, _t('代码高亮'), _t('默认关闭，启用则会渲染页面内代码块”'));
+	$form->addInput($Highlight);
+
 	$catalog = new Typecho_Widget_Helper_Form_Element_Radio('catalog', 
 	array('post' => _t('使用文章内设定'),
 	'open' => _t('全部启用'),
@@ -201,7 +207,7 @@ function hrefOpen($obj) {
 }
 
 function UrlReplace($obj) {
-	$list = explode("\r\n", Helper::options()->AttUrlReplace);
+	$list = explode(PHP_EOL, Helper::options()->AttUrlReplace);
 	foreach ($list as $tmp) {
 		list($old, $new) = explode('=', $tmp);
 		$obj = str_replace($old, $new, $obj);
@@ -254,7 +260,7 @@ function Postviews($archive) {
 function Breadcrumbs($archive) {
 	$options = Helper::options();
 	if (!empty($options->Breadcrumbs) && in_array('Pageshow', $options->Breadcrumbs)) {
-		echo '<div class="breadcrumbs">'."\n".'<a href="'.$options->siteUrl.'">首页</a> &raquo; '.$archive->title."\n".'</div>'."\n";
+		echo '<div class="breadcrumbs">'.PHP_EOL .'<a href="'.$options->siteUrl.'">首页</a> &raquo; '.$archive->title.PHP_EOL .'</div>'.PHP_EOL;
 	}
 }
 
@@ -270,42 +276,42 @@ function createCatalog($obj) {
 		$catalog[] = array('text' => trim(strip_tags($obj[3])), 'depth' => $obj[1], 'count' => $catalog_count);
 		return '<h'.$obj[1].$obj[2].'><a class="cl-offset" name="cl-'.$catalog_count.'"></a>'.$obj[3].'</h'.$obj[1].'>';
 	}, $obj);
-	return $obj."\n".getCatalog();
+	return $obj.PHP_EOL .getCatalog();
 }
 
 function getCatalog() {
 	global $catalog;
 	$index = '';
 	if ($catalog) {
-		$index = '<ul>'."\n";
+		$index = '<ul>'.PHP_EOL;
 		$prev_depth = '';
 		$to_depth = 0;
 		foreach($catalog as $catalog_item) {
 			$catalog_depth = $catalog_item['depth'];
 			if ($prev_depth) {
 				if ($catalog_depth == $prev_depth) {
-					$index .= '</li>'."\n";
+					$index .= '</li>'.PHP_EOL;
 				} elseif ($catalog_depth > $prev_depth) {
 					$to_depth++;
-					$index .= "\n".'<ul>'."\n";
+					$index .= PHP_EOL .'<ul>'.PHP_EOL;
 				} else {
 					$to_depth2 = ($to_depth > ($prev_depth - $catalog_depth)) ? ($prev_depth - $catalog_depth) : $to_depth;
 					if ($to_depth2) {
 						for ($i=0; $i<$to_depth2; $i++) {
-							$index .= '</li>'."\n".'</ul>'."\n";
+							$index .= '</li>'.PHP_EOL .'</ul>'.PHP_EOL;
 							$to_depth--;
 						}
 					}
-					$index .= '</li>'."\n";
+					$index .= '</li>'.PHP_EOL;
 				}
 			}
 			$index .= '<li><a href="#cl-'.$catalog_item['count'].'" onclick="Catalogswith()">'.$catalog_item['text'].'</a>';
 			$prev_depth = $catalog_item['depth'];
 		}
 		for ($i=0; $i<=$to_depth; $i++) {
-			$index .= '</li>'."\n".'</ul>'."\n";
+			$index .= '</li>'.PHP_EOL .'</ul>'.PHP_EOL;
 		}
-	$index = '<div id="catalog-col">'."\n".'<b>文章目录</b>'."\n".$index.'<script>function Catalogswith(){document.getElementById("catalog-col").classList.toggle("catalog");document.getElementById("catalog").classList.toggle("catalog")}</script>'."\n".'</div>'."\n";
+	$index = '<div id="catalog-col">'.PHP_EOL .'<b>文章目录</b>'.PHP_EOL .$index.'<script>function Catalogswith(){document.getElementById("catalog-col").classList.toggle("catalog");document.getElementById("catalog").classList.toggle("catalog")}</script>'.PHP_EOL .'</div>'.PHP_EOL;
 	}
 	return $index;
 }
@@ -342,79 +348,38 @@ function Contents_Post_Initial($limit = 10, $order = 'created') {
 		->limit($limit), array(Typecho_Widget::widget('Widget_Abstract_Contents'), 'filter'));
 	if ($posts) {
 		foreach($posts as $post) {
-			echo '<li><a'.($post['hidden'] && $options->PjaxOption ? '' : ' href="'.$post['permalink'].'"').'>'.htmlspecialchars($post['title']).'</a></li>'."\n";
+			echo '<li><a'.($post['hidden'] && $options->PjaxOption ? '' : ' href="'.$post['permalink'].'"').'>'.htmlspecialchars($post['title']).'</a></li>'.PHP_EOL;
 		}
 	} else {
-		echo '<li>暂无文章</li>'."\n";
+		echo '<li>暂无文章</li>'.PHP_EOL;
 	}
 }
 
-function Contents_Comments_Initial($limit = 10, $ignoreAuthor = 0) {
-	$db = Typecho_Db::get();
-	$options = Helper::options();
-	$select = $db->select()->from('table.comments')
-		->where('status = ? AND created < ?','approved', $options->time)
-		->order('coid', Typecho_Db::SORT_DESC)
-		->limit($limit);
-	if ($options->commentsShowCommentOnly) {
-		$select->where('type = ?', 'comment');
+class Initial_Widget_Comments_Recent extends Widget_Abstract_Comments
+{
+	public function __construct($request, $response, $params = NULL) {
+		parent::__construct($request, $response, $params);
+		$this->parameter->setDefault(array('pageSize' => $this->options->commentsListSize, 'parentId' => 0, 'ignoreAuthor' => false));
 	}
-	if ($ignoreAuthor == 1) {
-		$select->where('ownerId <> authorId');
-	}
-	$page_whisper = FindContents('page-whisper.php', 'commentsNum', 'd');
-	if ($page_whisper) {
-		$select->where('cid <> ? OR (cid = ? AND parent <> ?)', $page_whisper[0]['cid'], $page_whisper[0]['cid'], '0');
-	}
-	$comments = $db->fetchAll($select);
-	if ($comments) {
-		foreach($comments as $comment) {
-			$parent = FindContent($comment['cid']);
-			echo '<li><a'.($parent['hidden'] && $options->PjaxOption ? '' : ' href="'.permaLink($comment).'"').' title="来自: '.$parent['title'].'">'.$comment['author'].'</a>: '.($parent['hidden'] && $options->PjaxOption ? '内容被隐藏' : Typecho_Common::subStr(strip_tags($comment['text']), 0, 35, '...')).'</li>'."\n";
+	public function execute() {
+		$select  = $this->select()->limit($this->parameter->pageSize)
+		->where('table.comments.status = ?', 'approved')
+		->order('table.comments.coid', Typecho_Db::SORT_DESC);
+		if ($this->parameter->parentId) {
+			$select->where('cid = ?', $this->parameter->parentId);
 		}
-	} else {
-		echo '<li>暂无回复</li>'."\n";
-	}
-}
-
-function permaLink($obj) {
-	$db = Typecho_Db::get();
-	$options = Helper::options();
-	$parentContent = FindContent($obj['cid']);
-	if ($options->commentsPageBreak && 'approved' == $obj['status']) {
-		$coid = $obj['coid'];
-		$parent = $obj['parent'];
-		while ($parent > 0 && $options->commentsThreaded) {
-			$parentRows = $db->fetchRow($db->select('parent')->from('table.comments')
-			->where('coid = ? AND status = ?', $parent, 'approved')->limit(1));
-			if (!empty($parentRows)) {
-				$coid = $parent;
-				$parent = $parentRows['parent'];
-			} else {
-				break;
-			}
-		}
-		$select  = $db->select('coid', 'parent')->from('table.comments')
-			->where('cid = ? AND status = ?', $parentContent['cid'], 'approved')
-			->where('coid '.('DESC' == $options->commentsOrder ? '>=' : '<=').' ?', $coid)
-			->order('coid', Typecho_Db::SORT_ASC);
-		if ($options->commentsShowCommentOnly) {
+		if ($this->options->commentsShowCommentOnly) {
 			$select->where('type = ?', 'comment');
 		}
-		$comments = $db->fetchAll($select);
-		$commentsMap = array();
-		$total = 0;
-		foreach ($comments as $comment) {
-			$commentsMap[$comment['coid']] = $comment['parent'];
-			if (0 == $comment['parent'] || !isset($commentsMap[$comment['parent']])) {
-				$total ++;
-			}
+		if ($this->parameter->ignoreAuthor) {
+			$select->where('ownerId <> authorId');
 		}
-		$currentPage = ceil($total / $options->commentsPageSize);
-		$pageRow = array('permalink' => $parentContent['pathinfo'], 'commentPage' => $currentPage);
-		return Typecho_Router::url('comment_page', $pageRow, $options->index).'#'.$obj['type'].'-'.$obj['coid'];
+		$page_whisper = FindContents('page-whisper.php', 'commentsNum', 'd');
+		if ($page_whisper) {
+			$select->where('cid <> ? OR (cid = ? AND parent <> ?)', $page_whisper[0]['cid'], $page_whisper[0]['cid'], '0');
+		}
+		$this->db->fetchAll($select, array($this, 'push'));
 	}
-	return $parentContent['permalink'].'#'.$obj['type'].'-'.$obj['coid'];
 }
 
 function FindContent($cid) {
@@ -437,7 +402,7 @@ function FindContents($val = NULL, $order = 'order', $sort = 'a', $publish = NUL
 		$select->where('status = ?','publish');
 	}
 	$content = $db->fetchAll($select, array(Typecho_Widget::widget('Widget_Abstract_Contents'), 'filter'));
-	return empty($content) ? false : $content;
+	return empty($content) ? NULL : $content;
 }
 
 function Whisper($sidebar = NULL) {
@@ -445,9 +410,13 @@ function Whisper($sidebar = NULL) {
 	$options = Helper::options();
 	$page = FindContents('page-whisper.php', 'commentsNum', 'd');
 	$p = $sidebar ? 'li' : 'p';
+	$remind = '';
+	if (Typecho_Widget::widget('Widget_User')->pass('editor', true) && (!$page || isset($page[1]))) {
+		$remind = '<'.$p.' class="notice"><b>仅管理员可见: </b>'.($page ? '发现多个"轻语"模板页面，已自动选取内容较多的页面来展示，请删除多余模板页面。' : '未找到"轻语"模板页面，请创建"轻语"模板页面。').'</'.$p.'>'.PHP_EOL;
+	}
 	if ($page) {
 		$page = $page[0];
-		$title = $sidebar ? '' : '<h2 class="post-title"><a href="'.$page['permalink'].'">'.$page['title'].'<span class="more">···</span></a></h2>'."\n";
+		$title = $sidebar ? '<h3 class="widget-title">'.$page['title'].'</h3>' : '<h2 class="post-title"><a href="'.$page['permalink'].'">'.$page['title'].'<span class="more">···</span></a></h2>';
 		$comment = $db->fetchAll($db->select()->from('table.comments')
 			->where('cid = ? AND status = ? AND parent = ?', $page['cid'], 'approved', '0')
 			->order('coid', Typecho_Db::SORT_DESC)
@@ -457,13 +426,15 @@ function Whisper($sidebar = NULL) {
 			if ($options->AttUrlReplace) {
 				$content = UrlReplace($content);
 			}
-			echo $title.strip_tags($content, '<p><br><strong><a><img><pre><code>'.$options->commentsHTMLTagAllowed)."\n".($sidebar ? '<li class="more"><a href="'.$page['permalink'].'">查看更多...</a></li>'."\n" : '');
+			$content = strip_tags($content, '<p><br><strong><a><img><pre><code>'.$options->commentsHTMLTagAllowed).($sidebar ? PHP_EOL .'<li class="more"><a href="'.$page['permalink'].'">查看更多...</a></li>' : '');
 		} else {
-			echo $title.'<'.$p.'>暂无内容</'.$p.'>'."\n";
+			$content = '<'.$p.'>暂无内容</'.$p.'>';
 		}
 	} else {
-		echo ($sidebar ? '' : '<h2 class="post-title"><a>轻语</a></h2>'."\n").'<'.$p.'>暂无内容</'.$p.'>'."\n";
+		$title = $sidebar ? '<h3 class="widget-title">轻语</h3>' : '<h2 class="post-title"><a>轻语</a></h2>';
+		$content = '<'.$p.'>暂无内容</'.$p.'>';
 	}
+	echo $title.PHP_EOL .($sidebar ? '<ul class="widget-list whisper">' : '<div class="post-content">').PHP_EOL .$content.PHP_EOL .$remind.($sidebar ? '</ul>' : '</div>').PHP_EOL;
 }
 
 function Links($sorts = NULL, $icon = 0) {
@@ -489,25 +460,25 @@ function Links($sorts = NULL, $icon = 0) {
 		$list = $exist['str_value'];
 	}
 	if ($list) {
-		$list = explode("\r\n", $list);
+		$list = explode(PHP_EOL, $list);
 		foreach ($list as $val) {
 			list($name, $url, $description, $logo, $sort) = explode(',', $val);
 			if ($sorts) {
 				$arr = explode(',', $sorts);
 				if ($sort && in_array($sort, $arr)) {
-					$link .= '<li><a'.($url ? ' href="'.$url.'"' : '').($icon==1&&$url ? ' class="l_logo"' : '').' title="'.$description.'" target="_blank">'.($icon==1&&$url ? '<img src="'.($logo ? $logo : rtrim($url, '/').'/favicon.ico').'" onerror="erroricon(this)">' : '').'<span>'.($url ? $name : '<del>'.$name.'</del>').'</span></a></li>'."\n";
+					$link .= '<li><a'.($url ? ' href="'.$url.'"' : '').($icon==1&&$url ? ' class="l_logo"' : '').' title="'.$description.'" target="_blank">'.($icon==1&&$url ? '<img src="'.($logo ? $logo : rtrim($url, '/').'/favicon.ico').'" onerror="erroricon(this)">' : '').'<span>'.($url ? $name : '<del>'.$name.'</del>').'</span></a></li>'.PHP_EOL;
 				}
 			} else {
-				$link .= '<li><a'.($url ? ' href="'.$url.'"' : '').($icon==1&&$url ? ' class="l_logo"' : '').' title="'.$description.'" target="_blank">'.($icon==1&&$url ? '<img src="'.($logo ? $logo : rtrim($url, '/').'/favicon.ico').'" onerror="erroricon(this)">' : '').'<span>'.($url ? $name : '<del>'.$name.'</del>').'</span></a></li>'."\n";
+				$link .= '<li><a'.($url ? ' href="'.$url.'"' : '').($icon==1&&$url ? ' class="l_logo"' : '').' title="'.$description.'" target="_blank">'.($icon==1&&$url ? '<img src="'.($logo ? $logo : rtrim($url, '/').'/favicon.ico').'" onerror="erroricon(this)">' : '').'<span>'.($url ? $name : '<del>'.$name.'</del>').'</span></a></li>'.PHP_EOL;
 			}
 		}
 	}
-	echo $link ? $link : '<li>暂无链接</li>'."\n";
+	echo $link ? $link : '<li>暂无链接</li>'.PHP_EOL;
 }
 
 function Playlist() {
 	$options = Helper::options();
-	$arr = explode("\r\n", $options->MusicUrl);
+	$arr = explode(PHP_EOL, $options->MusicUrl);
 	if ($options->MusicSet == 'shuffle') {
 		shuffle($arr);
 	}
@@ -529,7 +500,7 @@ function compressHtml($html_source) {
 		} else if (strtolower(substr($c, 0, 4)) == '<pre' || strtolower(substr($c, 0, 9)) == '<textarea') {
 			$compress .= $c;
 			continue;
-		} else if (strtolower(substr($c, 0, 7)) == '<script' && strpos($c, '//') != false && (strpos($c, "\r") !== false || strpos($c, "\n") !== false)) {
+		} else if (strtolower(substr($c, 0, 7)) == '<script' && strpos($c, '//') != false && (strpos($c, PHP_EOL) !== false || strpos($c, PHP_EOL) !== false)) {
 			$tmps = preg_split('/(\r|\n)/ms', $c, -1, PREG_SPLIT_NO_EMPTY);
 			$c = '';
 			foreach ($tmps as $tmp) {
