@@ -17,6 +17,9 @@
 ), '', ' - '); ?><?php $this->options->title(); if ($this->is('index') && $this->options->subTitle): ?> - <?php $this->options->subTitle(); endif; ?></title>
 <?php $this->header('generator=&template=&pingback=&xmlrpc=&wlw=&commentReply=&rss1=&rss2=&antiSpam=&atom='); ?>
 <link rel="stylesheet" href="<?php cjUrl('style.min.css') ?>" />
+<?php if ($this->options->CustomCSS): ?>
+<style type="text/css"><?php $this->options->CustomCSS(); ?></style>
+<?php endif; ?>
 </head>
 <body <?php if ($this->options->HeadFixed): ?>class="head-fixed"<?php endif; ?>>
 <!--[if lt IE 9]>
