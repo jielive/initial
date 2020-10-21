@@ -1,7 +1,7 @@
 <?php
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
 error_reporting(0);
-define('INITIAL_VERSION_NUMBER', '2.5.1');
+define('INITIAL_VERSION_NUMBER', '2.5.2');
 if (Helper::options()->GravatarUrl) define('__TYPECHO_GRAVATAR_PREFIX__', Helper::options()->GravatarUrl);
 
 function themeConfig($form) {
