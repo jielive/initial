@@ -6,6 +6,7 @@
  */
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
 $this->need('header.php');
+$this->options->commentsThreaded = true;
 $this->options->commentsMaxNestingLevels = '3';
 function threadedComments($comments, $options) {
 	$commentClass = '';
@@ -35,9 +36,9 @@ echo $commentClass;
 <?php if ($comments->levels == 0) { ?>
 <div class="comment-author">
 <?php $comments->gravatar('32'); ?>
-<cite><?php CommentAuthor($comments); ?></cite>
+<b><?php CommentAuthor($comments); ?></b>
 <?php if ($comments->status == 'waiting') { ?>
-<em class="comment-awaiting-moderation">内容被拦截，请前往后台-管理评论-通过审核。</em>
+<em>内容被拦截，请前往后台-管理评论-通过审核。</em>
 <?php } ?>
 </div>
 <div class="comment-content">
@@ -45,16 +46,20 @@ echo $commentClass;
 </div>
 <div class="comment-meta">
 <time><?php $comments->dateWord(); ?></time>
-<?php if (Helper::options()->commentsThreaded && $comments->parameter->allowComment) {
+<?php if ($comments->parameter->allowComment || Typecho_Widget::widget('Widget_User')->pass('editor', true)) {
 		echo '<a class="whisper-reply" onclick="return TypechoComment.reply(\'' . $comments->theId . '\', ' . $comments->coid . ');">评论</a>';
 } ?>
 </div>
 <?php } else { ?>
 <div class="comment-author comment-content">
-<?php $comments->gravatar('16'); ?>
-<cite><?php CommentAuthor($comments); ?>: </cite>
+<a <?php
+	if ($comments->parameter->allowComment || Typecho_Widget::widget('Widget_User')->pass('editor', true)) {
+		echo ' class="whisper-reply" title="@' . $comments->author . '" onclick="return TypechoComment.reply(\'' . $comments->theId . '\', ' . $comments->coid . ');"';
+	}
+?>><?php $comments->gravatar('16'); ?></a>
+<b><?php CommentAuthor($comments); ?>: </b>
 <span <?php
-	if (Helper::options()->commentsThreaded && $comments->parameter->allowComment) {
+	if ($comments->parameter->allowComment || Typecho_Widget::widget('Widget_User')->pass('editor', true)) {
 		echo ' class="whisper-reply" onclick="return TypechoComment.reply(\'' . $comments->theId . '\', ' . $comments->coid . ');"';
 	}
 ?>><?php if ($comments->levels > 1) {CommentAt($comments->coid);}echo strip_tags(str_replace(PHP_EOL, "<br>", $comments->text), "<br>"); ?></span>
@@ -85,7 +90,7 @@ echo $commentClass;
 <?php $comments->listComments(); ?>
 <?php $comments->pageNav('上一页', '下一页', 0, '..'); ?>
 <?php endif; ?>
-<?php if($this->allow('comment')): ?>
+<?php if($this->allow('comment') || $this->user->pass('editor', true)): ?>
 <div id="<?php $this->respondId(); ?>" class="respond">
 <div class="cancel-comment-reply">
 <?php $comments->cancelReply('取消评论'); ?>
@@ -105,9 +110,7 @@ echo $commentClass;
 </p>
 </form>
 </div>
-<?php if ($this->options->commentsThreaded): ?>
 <script>(function(){window.TypechoComment={dom:function(id){return document.getElementById(id)},create:function(tag,attr){var el=document.createElement(tag);for(var key in attr){el.setAttribute(key,attr[key])}return el},reply:function(cid,coid){var comment=this.dom(cid),parent=comment.parentNode,response=this.dom('<?php $this->respondId(); ?>'),input=this.dom('comment-parent'),form='form'==response.tagName?response:response.getElementsByTagName('form')[0],textarea=response.getElementsByTagName('textarea')[0];if(null==input){input=this.create('input',{'type':'hidden','name':'parent','id':'comment-parent'});form.appendChild(input)}input.setAttribute('value',coid);if(null==this.dom('comment-form-place-holder')){var holder=this.create('div',{'id':'comment-form-place-holder'});response.parentNode.insertBefore(holder,response)}form.setAttribute('action', '<?php $this->commentUrl() ?>');<?php if($this->user->pass('editor', true)): ?>this.dom('response').innerHTML='发表评论';<?php endif; ?>comment.appendChild(response);this.dom('cancel-comment-reply-link').style.display='';if(null!=textarea&&'text'==textarea.name){textarea.focus()}return false},cancelReply:function(){var response=this.dom('<?php $this->respondId(); ?>'),holder=this.dom('comment-form-place-holder'),input=this.dom('comment-parent'),form='form'==response.tagName?response:response.getElementsByTagName('form')[0];if(null!=input){input.parentNode.removeChild(input)}if(null==holder){return true}this.dom('cancel-comment-reply-link').style.display='none';form.removeAttribute('action');<?php if($this->user->pass('editor', true)): ?>this.dom('response').innerHTML='发表轻语';<?php endif; ?>holder.parentNode.insertBefore(response,holder);return false}}})();</script>
-<?php endif; ?>
 <?php endif; ?>
 </div>
 </div>

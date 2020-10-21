@@ -22,12 +22,12 @@ echo $commentClass;
 <div id="<?php $comments->theId(); ?>">
 <div class="comment-author">
 <?php $comments->gravatar('32'); ?>
-<cite><?php CommentAuthor($comments); ?></cite>
+<b><?php CommentAuthor($comments); ?></b>
 <?php if ($comments->authorId == $comments->ownerId) { ?>
 <span class="author-icon">Author</span>
 <?php } ?>
 <?php if ($comments->status == 'waiting') { ?>
-<em class="comment-awaiting-moderation">您的评论正等待审核！</em>
+<em>您的评论正等待审核！</em>
 <?php } ?>
 </div>
 <div class="comment-meta">
