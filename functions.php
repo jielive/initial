@@ -1,7 +1,7 @@
 <?php
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
 error_reporting(0);
-define('INITIAL_VERSION_NUMBER', '2.5.2');
+define('INITIAL_VERSION_NUMBER', '2.5.3');
 if (Helper::options()->GravatarUrl) define('__TYPECHO_GRAVATAR_PREFIX__', Helper::options()->GravatarUrl);
 
 function themeConfig($form) {
@@ -79,14 +79,16 @@ function themeConfig($form) {
 	array('jd' => _t('jsDelivr'),
 	'sc' => _t('Staticfile'),
 	'cf' => _t('CDNJS')),
-	'jd', _t('公共静态资源来源'), _t('默认jsDelivr，请根据需求选择合适来源'));
+	'jd', _t('公共静态资源来源'), _t('默认jsDelivr，若JS文件异常，可尝试切换来源'));
 	$form->addInput($cjCDN);
 
 	$GravatarUrl = new Typecho_Widget_Helper_Form_Element_Radio('GravatarUrl', 
 	array(false => _t('官方源'),
 	'https://cn.gravatar.com/avatar/' => _t('国内源'),
-	'https://cdn.v2ex.com/gravatar/' => _t('V2EX源')),
-	false, _t('Gravatar头像源'), _t('默认官方源'));
+	'https://gravatar.loli.net/avatar/' => _t('loli源'),
+	'https://sdn.geekzu.org/avatar/' => _t('极客族源'),
+	'https://dn-qiniu-avatar.qbox.me/avatar/' => _t('七牛源')),
+	false, _t('Gravatar头像源'), _t('默认官方源，若头像显示异常，可尝试切换来源'));
 	$form->addInput($GravatarUrl);
 
 	$compressHtml = new Typecho_Widget_Helper_Form_Element_Radio('compressHtml', 
@@ -105,7 +107,7 @@ function themeConfig($form) {
 	array('auto' => _t('自动'),
 	'click' => _t('点击'),
 	0 => _t('关闭')),
-	0, _t('Ajax翻页'), _t('默认关闭，启用则会使用Ajax加载文章翻页'));
+	0, _t('Ajax翻页'), _t('默认关闭，启用则会使用Ajax加载下一页的文章'));
 	$form->addInput($AjaxLoad);
 
 	$Highlight = new Typecho_Widget_Helper_Form_Element_Radio('Highlight', 
