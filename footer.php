@@ -25,6 +25,7 @@
 <?php if ($this->options->scrollTop): ?>
 <li id="top" class="hidden"></li>
 <?php endif; ?>
+<li id="darkmode" onclick="switchDarkMode()"><?php if($_COOKIE['dark']=='1'){echo"☀️";}else{echo"🌙";} ?></li>
 <?php if ($this->options->MusicSet && $this->options->MusicUrl): ?>
 <li id="music" class="hidden">
 <span><i></i></span>
@@ -45,5 +46,44 @@
 <?php if ($this->options->CustomContent): $this->options->CustomContent(); ?>
 
 <?php endif; ?>
+<script>
+function switchDarkMode(){
+    var night = document.cookie.replace(/(?:(?:^|.*;\s*)dark\s*\=\s*([^;]*).*$)|^.*$/, "$1") || '0';
+    if (night == '0'){
+        document.body.classList.add('dark');
+        document.cookie = "dark=1;path=/";
+        console.log('Dark mode on');
+        document.getElementById("darkmode").innerHTML="☀️";
+    }else{
+        document.body.classList.remove('dark');
+        document.cookie = "dark=0;path=/";
+        console.log('Dark mode off');
+        document.getElementById("darkmode").innerHTML="🌙";
+    }
+}
+(function(){
+    if(document.cookie.replace(/(?:(?:^|.*;\s*)dark\s*\=\s*([^;]*).*$)|^.*$/, "$1") === ''){
+        if(new Date().getHours() > 22 || new Date().getHours() < 6 || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+)){
+            document.body.classList.add('dark');
+            document.cookie = "dark=1;path=/";
+            console.log('Dark mode on');
+            document.getElementById("darkmode").innerHTML="☀️";
+        }else{
+            document.body.classList.remove('dark');
+            document.cookie = "dark=0;path=/";
+            console.log('Dark mode off');
+            document.getElementById("darkmode").innerHTML="🌙";
+        }
+    }else{
+        var dark = document.cookie.replace(/(?:(?:^|.*;\s*)dark\s*\=\s*([^;]*).*$)|^.*$/, "$1") || '0';
+        if(dark == '0'){
+            document.body.classList.remove('dark');
+        }else if(dark == '1'){
+            document.body.classList.add('dark');
+        }
+    }
+})();
+</script>
 </body>
 </html><?php if ($this->options->compressHtml): $html_source = ob_get_contents(); ob_clean(); print compressHtml($html_source); ob_end_flush(); endif; ?>
