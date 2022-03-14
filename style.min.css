@@ -132,6 +132,7 @@ button,input[type=submit]{
 button,input[type=submit],.menu-parent a,.rewards a,.whisper .whisper-reply,#cornertool li{
     cursor:pointer
 }
+
 .browsehappy{
     padding:8px 0;
     background:#fbe3e4;

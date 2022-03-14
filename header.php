@@ -41,6 +41,7 @@
     }
     body.dark pre, body.dark code, body.dark input, body.dark textarea , body.dark button , body.dark blockquote , body.dark .post-content .links li a , body.dark .menu-parent ul , body.dark .comment-list li.comment-level-odd , body.dark .comment-list li.comment-by-author , body.dark .whisper .comment-child , body.dark table tr , body.dark table th {
         background: #161b22;
+        color: #aaa;
     }
     body.dark .author-icon {
         background: linear-gradient(135deg,transparent 30%,rgba(111, 111, 111, 0.8) 0) left,linear-gradient(-135deg,transparent 30%,rgba(111, 111, 111, 0.8) 0) right;
@@ -62,6 +63,7 @@
     }
     body.dark textarea , body.dark .comment-list li  {
         border: 1px solid #161b22;
+        color: #aaa;
     }
     body.dark button , body.dark pre code , body.dark blockquote {
         color: #aaa;
