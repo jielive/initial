@@ -5,14 +5,12 @@
  * 
  * @package Initial
  * @author JIElive
- * @version 2.5.3
+ * @version 2.5.4
  * @link http://www.offodd.com/
  */
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
 $this->need('header.php');
-?>
-<div id="main">
-<?php if ($this->_currentPage == 1 && !empty($this->options->ShowWhisper) && in_array('index', $this->options->ShowWhisper)): ?>
+if ($this->_currentPage == 1 && !empty($this->options->ShowWhisper) && in_array('index', $this->options->ShowWhisper)): ?>
 <article class="post whisper">
 <?php Whisper(); ?>
 </article>
@@ -40,12 +38,13 @@ $this->need('header.php');
 <p class="thumb"><?php echo postThumb($this); ?></p>
 <?php endif; ?>
 <p><?php $this->excerpt(200, ''); ?></p>
-<?php endif; ?>
+<?php endif; if (!$this->options->OneCOL): ?>
 <p class="more"><a href="<?php $this->permalink() ?>" title="<?php $this->title() ?>">- 阅读全文 -</a></p>
+<?php endif; ?>
 </div>
 </article>
 <?php endwhile; ?>
 <?php $this->pageNav('上一页', $this->options->AjaxLoad ? '查看更多' : '下一页', 0, '..', $this->options->AjaxLoad ? array('wrapClass' => $this->options->AjaxLoad == 'auto' ? 'page-navigator ajaxload auto' : 'page-navigator ajaxload') : ''); ?>
 </div>
-<?php $this->need('sidebar.php'); ?>
+<?php if (!$this->options->OneCOL): $this->need('sidebar.php'); endif; ?>
 <?php $this->need('footer.php'); ?>

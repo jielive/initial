@@ -1,6 +1,5 @@
-<?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
-<?php $this->need('header.php'); ?>
-<div id="main">
+<?php if (!defined('__TYPECHO_ROOT_DIR__')) exit;
+$this->need('header.php'); ?>
 <div class="breadcrumbs"><a href="<?php $this->options->siteUrl(); ?>">首页</a> &raquo; <?php $this->archiveTitle(array(
 'category'  =>  _t('分类 %s 下的文章'),
 'search'    =>  _t('包含关键字 %s 的文章'),
@@ -32,8 +31,9 @@
 <p class="thumb"><?php echo postThumb($this); ?></p>
 <?php endif; ?>
 <p><?php $this->excerpt(200, ''); ?></p>
-<?php endif; ?>
+<?php endif; if (!$this->options->OneCOL): ?>
 <p class="more"><a href="<?php $this->permalink() ?>" title="<?php $this->title() ?>">- 阅读全文 -</a></p>
+<?php endif; ?>
 </div>
 </article>
 <?php endwhile; ?>
@@ -44,5 +44,5 @@
 <?php endif; ?>
 <?php $this->pageNav('上一页', $this->options->AjaxLoad ? '查看更多' : '下一页', 0, '..', $this->options->AjaxLoad ? array('wrapClass' => 'page-navigator ajaxload') : ''); ?>
 </div>
-<?php $this->need('sidebar.php'); ?>
+<?php if (!$this->options->OneCOL): $this->need('sidebar.php'); endif; ?>
 <?php $this->need('footer.php'); ?>

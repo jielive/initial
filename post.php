@@ -1,7 +1,6 @@
-<?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
-<?php $this->need('header.php'); ?>
-<div id="main">
-<?php if (!empty($this->options->Breadcrumbs) && in_array('Postshow', $this->options->Breadcrumbs)): ?>
+<?php if (!defined('__TYPECHO_ROOT_DIR__')) exit;
+$this->need('header.php');
+if (!empty($this->options->Breadcrumbs) && in_array('Postshow', $this->options->Breadcrumbs)): ?>
 <div class="breadcrumbs">
 <a href="<?php $this->options->siteUrl(); ?>">首页</a> &raquo; <?php $this->category(); ?> &raquo; <?php echo !empty($this->options->Breadcrumbs) && in_array('Text', $this->options->Breadcrumbs) ? '正文' : $this->title; ?>
 </div>
@@ -34,5 +33,5 @@
 <li>下一篇: <?php $this->theNext('%s','没有了'); ?></li>
 </ul>
 </div>
-<?php $this->need('sidebar.php'); ?>
+<?php if (!$this->options->OneCOL): $this->need('sidebar.php'); endif; ?>
 <?php $this->need('footer.php'); ?>

@@ -8,7 +8,14 @@ if (!defined('__TYPECHO_ROOT_DIR__')) exit;
 $this->need('header.php');
 $this->options->commentsThreaded = true;
 $this->options->commentsMaxNestingLevels = '3';
-function threadedComments($comments, $options) {
+Breadcrumbs($this); ?>
+<article class="post">
+<h1 class="post-title"><a href="<?php $this->permalink() ?>"><?php $this->title() ?></a></h1>
+<div class="post-content">
+<?php $this->content(); ?>
+</div>
+</article>
+<?php function threadedComments($comments, $options) {
 	$commentClass = '';
 	if ($comments->authorId) {
 		if ($comments->authorId == $comments->ownerId) {
@@ -76,14 +83,6 @@ echo $commentClass;
 <?php } ?>
 </li>
 <?php } ?>
-<div id="main">
-<?php Breadcrumbs($this); ?>
-<article class="post">
-<h1 class="post-title"><a href="<?php $this->permalink() ?>"><?php $this->title() ?></a></h1>
-<div class="post-content">
-<?php $this->content(); ?>
-</div>
-</article>
 <div id="comments" class="whisper<?php if($this->user->pass('editor', true)): ?> permission<?php endif; ?>">
 <?php $this->comments()->to($comments); ?>
 <?php if ($comments->have()): ?>
@@ -114,5 +113,5 @@ echo $commentClass;
 <?php endif; ?>
 </div>
 </div>
-<?php $this->need('sidebar.php'); ?>
+<?php if (!$this->options->OneCOL): $this->need('sidebar.php'); endif; ?>
 <?php $this->need('footer.php'); ?>

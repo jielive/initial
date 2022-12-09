@@ -21,7 +21,7 @@
 <style type="text/css"><?php $this->options->CustomCSS(); ?></style>
 <?php endif; ?>
 </head>
-<body <?php if ($this->options->HeadFixed): ?>class="head-fixed"<?php endif; ?>>
+<body class="<?php if ($this->options->OneCOL): ?>one-col<?php else: ?>bd<?php endif; if ($this->options->HeadFixed): ?> head-fixed<?php endif; ?>">
 <!--[if lt IE 9]>
 <div class="browsehappy">当前网页可能 <strong>不支持</strong> 您正在使用的浏览器. 为了正常的访问, 请 <a href="https://browsehappy.com/">升级您的浏览器</a>.</div>
 <![endif]-->
@@ -100,3 +100,4 @@ endif; ?>
 </header>
 <div id="body"<?php if ($this->options->PjaxOption): ?> in-pjax<?php endif; ?>>
 <div class="container clearfix">
+<div id="main">

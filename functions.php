@@ -1,7 +1,7 @@
 <?php
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
 error_reporting(0);
-define('INITIAL_VERSION_NUMBER', '2.5.3');
+define('INITIAL_VERSION_NUMBER', '2.5.4');
 if (Helper::options()->GravatarUrl) define('__TYPECHO_GRAVATAR_PREFIX__', Helper::options()->GravatarUrl);
 
 function themeConfig($form) {
@@ -171,6 +171,12 @@ function themeConfig($form) {
 	'ShowOther' => _t('显示其它杂项')),
 	array('ShowRecentPosts', 'ShowRecentComments', 'ShowCategory', 'ShowTag', 'ShowArchive', 'ShowOther'), _t('侧边栏显示'));
 	$form->addInput($sidebarBlock->multiMode());
+
+	$OneCOL = new Typecho_Widget_Helper_Form_Element_Radio('OneCOL', 
+	array(1 => _t('启用'),
+	0 => _t('关闭')),
+	0, _t('单栏模式'), _t('关闭侧边栏，仅显示主栏内容。'));
+	$form->addInput($OneCOL);
 
 	$ICPbeian = new Typecho_Widget_Helper_Form_Element_Text('ICPbeian', NULL, NULL, _t('ICP备案号'), _t('在这里输入ICP备案号,留空则不显示'));
 	$form->addInput($ICPbeian);

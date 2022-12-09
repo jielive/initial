@@ -1,7 +1,6 @@
-<?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
-<?php $this->need('header.php'); ?>
-<div id="main">
-<?php Breadcrumbs($this); ?>
+<?php if (!defined('__TYPECHO_ROOT_DIR__')) exit;
+$this->need('header.php');
+Breadcrumbs($this); ?>
 <article class="post">
 <h1 class="post-title"><a href="<?php $this->permalink() ?>"><?php $this->title() ?></a></h1>
 <div class="post-content">
@@ -10,5 +9,5 @@
 </article>
 <?php $this->need('comments.php'); ?>
 </div>
-<?php $this->need('sidebar.php'); ?>
+<?php if (!$this->options->OneCOL): $this->need('sidebar.php'); endif; ?>
 <?php $this->need('footer.php'); ?>
