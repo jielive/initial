@@ -28,7 +28,7 @@
 <?php $this->widget('Initial_Widget_Comments_Recent', in_array('IgnoreAuthor', $this->options->sidebarBlock) ? 'ignoreAuthor=1' : '')->to($comments); ?>
 <?php if($comments->have()): ?>
 <?php while($comments->next()): ?>
-<li><a <?php echo (FindContent($comments->cid)['hidden'] && $this->options->PjaxOption) || (FindContent($comments->cid)['status'] != 'publish' && $this->authorId !== $this->user->uid && !$this->user->pass('editor', true)) ? '' : 'href="'.$comments->permalink.'" ' ?>title="来自: <?php echo (FindContent($comments->cid)['status'] != 'publish' && $this->authorId !== $this->user->uid && !$this->user->pass('editor', true)) ? '此内容被作者隐藏' : $comments->title ?>"><?php $comments->author(false); ?></a>: <?php $comments->excerpt(35, '...'); ?></li>
+<li><a <?php echo (FindContent($comments->cid)['hidden'] && $this->options->PjaxOption) || (FindContent($comments->cid)['status'] != 'publish' && FindContent($comments->cid)['template'] != 'page-whisper.php' && $this->authorId !== $this->user->uid && !$this->user->pass('editor', true)) ? '' : 'href="'.$comments->permalink.'" ' ?>title="来自: <?php echo (FindContent($comments->cid)['status'] != 'publish' && FindContent($comments->cid)['template'] != 'page-whisper.php' && $this->authorId !== $this->user->uid && !$this->user->pass('editor', true)) ? '此内容被作者隐藏' : $comments->title ?>"><?php $comments->author(false); ?></a>: <?php $comments->excerpt(35, '...'); ?></li>
 <?php endwhile; ?>
 <?php else: ?>
 <li>暂无回复</li>
