@@ -5,7 +5,7 @@
  * 
  * @package Initial
  * @author JIElive
- * @version 2.5.4
+ * @version 2.5.5
  * @link http://www.offodd.com/
  */
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
