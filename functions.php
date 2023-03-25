@@ -248,7 +248,7 @@ function postThumb($obj) {
 function Postviews($archive) {
 	$db = Typecho_Db::get();
 	$cid = $archive->cid;
-	if (!array_key_exists('views', $db->fetchRow($db->select()->from('table.contents')))) {
+	if (!array_key_exists('views', $db->fetchRow($db->select()->from('table.contents')->page(1,1)))) {
 		$db->query('ALTER TABLE `'.$db->getPrefix().'contents` ADD `views` INT(10) DEFAULT 0;');
 	}
 	$exist = $db->fetchRow($db->select('views')->from('table.contents')->where('cid = ?', $cid))['views'];
